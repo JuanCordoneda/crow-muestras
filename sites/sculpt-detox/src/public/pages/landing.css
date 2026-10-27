@@ -1,0 +1,51 @@
+/* landing.css — las landings de publicidad. Una columna, sin menú, el botón siempre a la vista. */
+
+.site.is-landing .site-header{justify-content:space-between}
+.site.is-landing .site-brand{margin-right:0}
+
+.lp-hero{display:grid;gap:26px;padding:26px 0 46px;background:var(--sand)}
+.lp-hero-body{display:flex;flex-direction:column;align-items:flex-start;padding:0 20px}
+.lp-hero-body .eyebrow{margin-top:20px}
+.lp-hero h1{margin-top:12px;font-family:var(--font-display);font-size:clamp(40px,10.6vw,72px);font-weight:600;line-height:1.02;letter-spacing:-.3px;text-wrap:balance}
+.lp-text{margin-top:14px;font-size:17px;line-height:1.6;color:var(--muted);max-width:44ch}
+.lp-cta{margin-top:24px;width:100%;max-width:420px}
+.lp-hero .disclaimer{max-width:520px}
+.lp-hero-photo{padding:0 16px}
+.lp-hero-photo .figure{max-width:560px;margin:0 auto}
+.lp-hero-photo .figure img{height:auto}
+
+.lp-benefits{display:grid;gap:12px;padding:46px 16px 0}
+.benefit{padding:24px 20px;border-radius:var(--radius-lg);background:var(--cream);border:1px solid var(--line)}
+.benefit-icon{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--sage-soft);color:var(--sage-deep)}
+.benefit h2{margin-top:14px;font-family:var(--font-display);font-size:28px;font-weight:600;line-height:1.1}
+.benefit p{margin-top:8px;font-size:15.5px;line-height:1.6;color:var(--muted)}
+
+.lp-review{padding:40px 16px 0}
+.lp-review .review{max-width:720px;margin:0 auto;background:var(--sage-soft);border-color:transparent;text-align:center;align-items:center}
+.lp-review .review blockquote p{font-size:27px}
+
+.lp-steps{padding:56px 0 0}
+.lp-steps h2{padding:0 20px;font-family:var(--font-display);font-size:clamp(34px,8.6vw,48px);font-weight:600}
+
+.landing-footer{display:grid;gap:8px;padding:28px 20px calc(100px + var(--safe-bottom));border-top:1px solid var(--line);background:var(--sand);font-size:14px;color:var(--muted)}
+.landing-footer p{display:flex;align-items:flex-start;gap:8px}
+.landing-footer p svg{margin-top:3px}
+.landing-footer svg{flex:none;color:var(--sage-deep)}
+.landing-footer-legal{flex-wrap:wrap;align-items:center !important;gap:4px 16px !important;margin-top:6px;font-size:13px}
+.landing-footer a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink)}
+
+@media(min-width:761px){
+  .lp-hero-body{padding:0 40px}
+  .lp-benefits{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:64px 40px 0}
+  .lp-steps h2{padding:0 40px}
+  .lp-steps .step-list{margin:26px 40px 0}
+  .landing-footer{padding:32px 40px 40px;grid-template-columns:auto auto 1fr;align-items:center;column-gap:28px}
+  .landing-footer-legal{justify-content:flex-end;margin-top:0}
+}
+
+@media(min-width:1024px){
+  .lp{max-width:1280px;margin:0 auto}
+  .lp-hero{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);align-items:center;gap:56px;padding:64px 40px 72px;border-radius:0 0 40px 40px}
+  .lp-hero-body,.lp-hero-photo{padding:0}
+  .lp-steps{max-width:900px;margin:0 auto}
+}

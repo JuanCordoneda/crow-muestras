@@ -1,0 +1,17 @@
+BIO INSTAGRAM · @ltbconcept
+(máx. 150 caracteres: esta tiene 145; contando los emoji como en el móvil, 148)
+
+Nombre (campo «Nom», aparece en las búsquedas de Instagram, máx. 64):
+LTB Concept | Lissage brésilien Paris
+
+Bio:
+Lissage brésilien & blonds lumineux
+💅 Soins · épilation · esthétique
+📍 Paris 5e & Clichy · FR/PT
+Ex-La Touche Brésilienne
+👇 Réservez sur WhatsApp
+
+Enlace (campo «Site web» / «Liens», el único clicable en la bio):
+https://ltbconcept.fr
+
+Nota: el dominio ltbconcept.fr es provisorio; cambiarlo aquí y en config.js (`url`) cuando esté el definitivo.

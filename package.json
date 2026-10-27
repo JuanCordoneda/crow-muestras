@@ -1,0 +1,12 @@
+{
+  "name": "crow-muestras",
+  "private": true,
+  "type": "module",
+  "description": "Las webs de muestra de Crow Agency, servidas juntas desde un solo servicio de Railway.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "docker:build": "docker build -t crow-muestras .",
+    "docker:run": "docker run --rm -e PORT=8080 -p 8080:8080 crow-muestras"
+  },
+  "engines": { "node": ">=20" }
+}

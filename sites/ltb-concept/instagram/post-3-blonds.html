@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Post 3 · Spécialiste des blonds</title><link rel="stylesheet" href="posts.css">
+<style>
+.post{background:var(--brun-d);color:#fff}
+.photo{position:absolute;inset:0;border-radius:0}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.photo .tag{right:40px;top:48px}
+.post::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,22,17,.55) 0%,rgba(42,22,17,0) 26%,rgba(42,22,17,0) 42%,rgba(42,22,17,.88) 78%,rgba(42,22,17,.96))}
+.top{position:absolute;left:80px;top:72px;z-index:2}
+.top .brand small{opacity:.85}
+.body{position:absolute;left:80px;right:80px;bottom:84px;z-index:2}
+.eyebrow{color:#f3cdbd}
+h1{margin:22px 0 0;font-size:118px;line-height:.9}
+h1 em{font-style:italic;color:#f3cdbd}
+p{font-size:30px;line-height:1.4;color:rgba(255,255,255,.88);margin:28px 0 0;max-width:780px}
+.chips{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+.chips span{font-size:22px;padding:11px 22px;border-radius:999px;border:1.5px solid rgba(255,255,255,.45)}
+.chips span.gold{background:var(--or);border-color:var(--or);color:var(--brun-d);font-weight:600}
+</style></head>
+<body><div class="post">
+  <div class="photo ph"><img src="../img/blonds-1400.webp" alt=""><span class="tag">Photo à remplacer</span></div>
+  <div class="top"><div class="brand"><span class="mono" data-brand="mono">LTB</span><div><b data-brand="logo">LTB <span class="script">Concept</span></b><small data-brand="tagline">by La Touche Brésilienne</small></div></div></div>
+  <div class="body">
+    <span class="eyebrow">Mèches &amp; balayage</span>
+    <h1 class="serif">Spécialiste des <em>blonds lumineux</em></h1>
+    <p>Balayage fondu, blond polaire ou doré : un blond sur mesure, qui respecte vos cheveux.</p>
+    <div class="chips"><span class="gold">★ Notre signature</span><span>Paris 5e</span><span>Clichy</span><span>L'Oréal · Schwarzkopf</span></div>
+  </div>
+</div>
+<script src="../config.js"></script><script src="brand.js"></script></body></html>

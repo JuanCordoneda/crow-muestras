@@ -1,0 +1,658 @@
+/* admin.css — panel de El Puerto.
+   Todo va con el prefijo `adm-`: el panel y la web viven en la misma app y, tras pasar de una a
+   otra, las dos hojas de estilo quedan cargadas a la vez. Un `.card` aquí pisaría la web.
+   Se diseña para el móvil (360–430 px) y a partir de 900 px la barra de pestañas pasa a columna. */
+
+.adm{
+  --adm-top:56px;
+  --adm-tabs:64px;
+  --adm-side:248px;
+  --adm-pad:16px;
+  --adm-left:max(var(--adm-pad),env(safe-area-inset-left,0px));
+  --adm-right:max(var(--adm-pad),env(safe-area-inset-right,0px));
+  min-height:100vh;
+  min-height:100dvh;
+  font-size:16px;
+  color:var(--ink);
+  background:var(--paper);
+}
+.adm-kicker{display:block;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--faint)}
+.adm-muted{font-size:14.5px;color:var(--muted);line-height:1.5}
+.adm-muted>svg{vertical-align:-3px;margin-right:4px}
+.adm-translations{display:grid;gap:14px}
+.adm-translations>summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-weight:700;color:var(--indigo-ink)}
+.adm-spin{animation:spin .9s linear infinite}
+.adm-link-btn{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;font-size:15px;font-weight:700;color:var(--indigo);text-decoration:underline;text-underline-offset:3px}
+
+/* Botones de base, a la medida del dedo: en el panel nada baja de 44 px. */
+.adm .btn-sm{min-height:44px;font-size:14.5px}
+.adm-btn-danger-ghost{background:transparent;color:var(--danger);border:1.5px solid #e9c3ba}
+.adm-btn-danger-ghost:hover{background:var(--danger-soft)}
+.adm-icon-btn{display:inline-grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;color:var(--muted);transition:background .15s,color .15s}
+.adm-icon-btn:hover{background:var(--sand)}
+.adm-icon-btn:active{background:var(--sand-deep)}
+.adm-icon-btn:disabled{opacity:.35;cursor:not-allowed;background:none}
+.adm-icon-btn.is-outline{border:1.5px solid var(--line);background:#fff;color:var(--indigo)}
+.adm-icon-btn.is-off{color:var(--faint)}
+.adm-icon-btn.is-danger{color:var(--danger)}
+.adm-icon-btn.is-spinning svg{animation:spin .9s linear infinite}
+
+/* ---------- barra superior (móvil) ---------- */
+.adm-top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:6px;height:calc(var(--adm-top) + var(--safe-top));padding:var(--safe-top) max(6px,env(safe-area-inset-right,0px)) 0 max(12px,env(safe-area-inset-left,0px));background:var(--indigo);color:#fff;box-shadow:0 2px 12px rgba(20,16,56,.18)}
+.adm-top-brand{display:flex;align-items:center;min-width:0;min-height:44px;margin-right:auto;color:inherit;text-decoration:none}
+.adm-top .adm-icon-btn{color:#fff}
+.adm-top .adm-icon-btn:hover,.adm-top .adm-icon-btn:active{background:rgba(255,255,255,.14)}
+.adm-brand{display:inline-flex;align-items:center;gap:9px;min-width:0}
+.adm-brand-mark{display:grid;place-items:center;flex:none;width:34px;height:34px;border-radius:10px;background:#fff;color:var(--indigo)}
+.adm-brand-mark svg{width:23px;height:23px}
+.adm-brand-text{overflow:hidden;font-family:var(--font-display);font-size:18px;font-weight:600;white-space:nowrap;text-overflow:ellipsis}
+.adm-brand-text small{font-family:var(--font-body);font-size:13.5px;font-weight:600;opacity:.78}
+
+.adm-save{display:inline-flex;align-items:center;gap:6px;flex:none;min-height:32px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.14);color:#fff;font-size:12.5px;font-weight:700;white-space:nowrap}
+.adm-save svg{flex:none}
+.adm-save.is-saved svg{color:#9be3b8}
+.adm-save.is-offline{background:var(--saffron);color:var(--indigo-ink)}
+.adm-save.is-error{background:#ffd9d0;color:#7a2e22}
+/* En los teléfonos más estrechos el estado se queda en icono: el texto completo está en el aviso. */
+@media(max-width:379px){
+  .adm-top .adm-save{width:32px;padding:0;justify-content:center}
+  .adm-top .adm-save-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+}
+
+/* ---------- navegación: barra inferior en el móvil, columna en el ordenador ---------- */
+.adm-nav{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:0 env(safe-area-inset-right,0px) var(--safe-bottom) env(safe-area-inset-left,0px);background:var(--indigo-deep);color:#fff;box-shadow:0 -6px 24px rgba(20,16,56,.18)}
+/* Se reparte entre las pestañas que haya: con la agenda apagada son dos, no tres. */
+.adm-nav ul{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;height:var(--adm-tabs);margin:0;padding:0;list-style:none}
+.adm-nav-brand,.adm-nav-foot{display:none}
+.adm-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;color:rgba(255,255,255,.74);font-size:12.5px;font-weight:700;letter-spacing:.2px;text-decoration:none}
+.adm-tab-icon{position:relative;display:grid;place-items:center;width:60px;height:32px;border-radius:999px;transition:background .18s,color .18s}
+.adm-tab.is-on{color:#fff}
+.adm-tab.is-on .adm-tab-icon{background:var(--saffron);color:var(--indigo-ink)}
+.adm-badge{position:absolute;top:-5px;right:4px;min-width:21px;height:21px;padding:0 5px;border-radius:999px;background:#e5573b;color:#fff;font-size:12px;font-weight:800;line-height:21px;text-align:center;box-shadow:0 0 0 2px var(--indigo-deep)}
+
+.adm-main{padding:0 var(--adm-right) calc(var(--adm-tabs) + var(--safe-bottom) + 28px) var(--adm-left)}
+/* AGENDA: hueco extra para el botón flotante de la agenda, mientras estuvo encendida. */
+.adm-on-reservas .adm-main{padding-bottom:calc(var(--adm-tabs) + var(--safe-bottom) + 100px)}
+
+/*
+ * Con el teclado abierto, en los Android que encogen la ventana la barra de pestañas subiría a
+ * tapar el campo que se está escribiendo: mientras el teclado está fuera, la barra y el botón
+ * flotante se retiran (`is-typing` lo pone `useKeyboardOpen`).
+ */
+@media(max-width:899px){
+  .adm.is-typing .adm-nav,.adm.is-typing .adm-fab{display:none}
+}
+
+@media(min-width:900px){
+  .adm-top{display:none}
+  .adm-nav{top:0;right:auto;width:var(--adm-side);display:flex;flex-direction:column;padding:24px 14px calc(20px + var(--safe-bottom)) max(14px,env(safe-area-inset-left,0px));box-shadow:none}
+  .adm-nav-brand{display:block;padding:0 8px 28px}
+  .adm-nav-brand .adm-brand-text{font-size:20px}
+  .adm-nav ul{display:flex;flex-direction:column;gap:4px;height:auto}
+  .adm-tab{flex-direction:row;justify-content:flex-start;gap:10px;height:52px;padding:0 10px 0 6px;border-radius:14px;font-size:15.5px}
+  .adm-tab:hover{background:rgba(255,255,255,.08);color:#fff}
+  .adm-tab.is-on{background:rgba(255,255,255,.1)}
+  .adm-tab-icon{width:48px;height:36px}
+  .adm-badge{right:0}
+  .adm-nav-foot{display:grid;gap:8px;margin-top:auto;padding:0 6px}
+  .adm-nav-foot .adm-save{justify-self:start;white-space:normal;min-height:34px;padding:4px 12px}
+  .adm-nav-link{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 6px;border-radius:12px;color:rgba(255,255,255,.8);font-weight:700;text-decoration:none}
+  .adm-nav-link:hover{color:#fff;background:rgba(255,255,255,.08)}
+  .adm-main,.adm-on-reservas .adm-main{margin-left:var(--adm-side);padding:24px 40px 120px}
+  .adm-main>*{max-width:960px;margin-left:auto;margin-right:auto}
+}
+
+/* ---------- avisos del panel ---------- */
+.adm-banner{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 10px 10px 14px;border:1px solid #f1d7a8;border-radius:14px;background:var(--warn-soft);color:#6d420b}
+.adm-banner svg{flex:none}
+.adm-banner p{flex:1;min-width:0;font-size:14px;font-weight:600;line-height:1.4}
+.adm-banner.is-error{border-color:#efc4b9;background:var(--danger-soft);color:#7a2e22}
+.adm-banner .btn{flex:none}
+
+.adm .toast-stack{bottom:calc(var(--adm-tabs) + var(--safe-bottom) + 12px)}
+/* AGENDA: idem para los avisos, que no debían taparlo. */
+.adm-on-reservas .toast-stack{bottom:calc(var(--adm-tabs) + var(--safe-bottom) + 86px)}
+.adm .toast{font-size:15px;line-height:1.35}
+/* «Deshacer» es la salida de un toque equivocado en plena cena: no baja de 44 px como el resto. */
+.adm .toast-undo{min-height:44px;padding:0 12px;font-size:14px}
+.adm .toast-close{width:44px;height:44px}
+@media(min-width:900px){
+  .adm .toast-stack{left:calc(50% + var(--adm-side) / 2);bottom:24px}
+  .adm-on-reservas .toast-stack{bottom:100px}
+}
+
+.adm .empty-state{margin-top:8px;border:1.5px dashed var(--line);border-radius:18px;background:#fff}
+.adm .modal-footer .outline-btn,.adm .modal-footer .danger-btn,.adm .modal-footer .primary-btn{min-height:50px;padding:0 18px;font-size:15px}
+@media(max-width:760px){
+  .adm .modal-footer>button{flex:1}
+  .adm .modal h2{font-size:22px}
+}
+.adm .dropdown-panel{min-width:220px}
+.adm .dropdown-panel button{font-size:15px}
+.adm .dropdown-panel button:disabled{opacity:.4;cursor:not-allowed;background:none}
+.adm .dropdown-panel .adm-danger-item{color:var(--danger)}
+
+/* ---------- cabecera de cada vista ---------- */
+.adm-view{padding-top:16px}
+.adm-view-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}
+.adm-view-head h1{font-family:var(--font-display);font-size:30px;font-weight:600;letter-spacing:-.3px;color:var(--indigo-ink)}
+.adm-updated{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;margin-top:3px;font-size:14px;color:var(--muted)}
+
+.adm-search{display:flex;align-items:center;gap:8px;min-height:52px;margin-bottom:14px;padding:0 4px 0 14px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--faint)}
+.adm-search:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.adm-search input{flex:1;min-width:0;height:48px;border:0;outline:0;background:none;font-size:16px;color:var(--ink)}
+.adm-search input:focus-visible{outline:none}
+.adm-search input::-webkit-search-cancel-button{display:none}
+
+.adm-filters,.adm-jump{display:flex;gap:8px;margin:0 calc(-1 * var(--adm-pad)) 14px;padding:2px var(--adm-pad);overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+.adm-filters::-webkit-scrollbar,.adm-jump::-webkit-scrollbar{display:none}
+/*
+ * El índice de Ajustes se queda bajo la barra: la pantalla es larga y en el móvil, a la cuarta
+ * tarjeta, ya no se sabe por dónde se va ni hay forma de saltar sin subir del todo.
+ */
+.adm-jump.is-sticky{position:sticky;top:calc(var(--adm-top) + var(--safe-top));z-index:15;margin-bottom:12px;padding-top:10px;padding-bottom:10px;background:var(--paper);box-shadow:0 10px 12px -10px rgba(20,16,56,.28)}
+@media(min-width:900px){.adm-jump.is-sticky{top:0;padding-top:12px}}
+.adm-filter{display:inline-flex;align-items:center;gap:6px;flex:none;min-height:44px;padding:0 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:14.5px;font-weight:700;white-space:nowrap}
+.adm-filter span{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.adm-filter.is-on{border-color:var(--indigo);background:var(--indigo);color:#fff}
+.adm-filter.is-on span{color:rgba(255,255,255,.8)}
+@media(min-width:900px){.adm-filters,.adm-jump{margin-left:0;margin-right:0;padding-left:0;padding-right:0;flex-wrap:wrap}}
+
+.adm-skeleton{border-radius:18px;background:linear-gradient(90deg,var(--sand) 0%,#f8f3ea 50%,var(--sand) 100%);background-size:200% 100%;animation:adm-shimmer 1.2s ease-in-out infinite}
+.adm-skeleton-card{height:150px;margin-bottom:10px}
+.adm-skeleton-row{height:76px;margin-bottom:10px}
+@keyframes adm-shimmer{from{background-position:100% 0}to{background-position:-100% 0}}
+
+/* ---------- formularios ---------- */
+.adm-form{display:grid;gap:16px}
+.adm-form-row{display:grid;gap:16px}
+@media(min-width:560px){.adm-form-row.is-two{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.adm-field{display:grid;align-content:start;gap:6px;min-width:0}
+.adm-label{font-size:14px;font-weight:700;color:var(--ink)}
+.adm-hint{font-size:13px;line-height:1.45;color:var(--muted)}
+.adm-error{font-size:13.5px;font-weight:600;line-height:1.45;color:var(--danger)}
+
+.adm-field>input,.adm-field>select,.adm-field>textarea,
+.adm-price-input input,.adm-time-range input,.adm-option>input,.adm-password input,.adm-slot-custom input{
+  width:100%;min-width:0;min-height:48px;padding:0 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:16px;outline:none;
+  -webkit-appearance:none;appearance:none;transition:border-color .15s,box-shadow .15s
+}
+.adm-field>textarea{min-height:88px;padding:11px 14px;line-height:1.5;resize:vertical}
+.adm-field>select{padding-right:42px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%232f2590' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center}
+.adm-field>input:focus,.adm-field>select:focus,.adm-field>textarea:focus,
+.adm-price-input input:focus,.adm-time-range input:focus,.adm-option>input:focus,.adm-password input:focus,.adm-slot-custom input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.adm-field>input:focus-visible,.adm-field>select:focus-visible,.adm-field>textarea:focus-visible,
+.adm-price-input input:focus-visible,.adm-time-range input:focus-visible,.adm-option>input:focus-visible,.adm-password input:focus-visible,.adm-slot-custom input:focus-visible{outline:none}
+.adm-field input:disabled{background:var(--sand);color:var(--muted)}
+.adm-field.has-error>input,.adm-field.has-error>select,.adm-field.has-error>textarea{border-color:var(--danger)}
+.adm input::placeholder,.adm textarea::placeholder{color:#aaa6b6}
+/* iOS centra el texto de fechas y horas y deja el campo vacío sin altura. */
+.adm input[type=date],.adm input[type=time]{display:block}
+.adm-field>input::-webkit-date-and-time-value{text-align:left}
+/*
+ * Y en iPhone, además, no centra el valor en vertical: un campo de texto sí lo hace, pero el de
+ * fecha u hora pinta su valor en una caja propia pegada arriba, y en un campo alto la hora se ve
+ * levantada. Lo que Safari sí respeta es una altura fija con la línea igual de alta: el valor
+ * queda en medio. Altura menos los dos bordes de 1,5 px.
+ *
+ * Solo los campos que se ven: el selector de día de la agenda es un campo invisible estirado
+ * sobre su botón, y una altura fija lo encogería.
+ */
+.adm-time-range input,.adm-field>input[type=date],.adm-field>input[type=time]{height:48px;padding-top:0;padding-bottom:0;line-height:45px}
+.adm-time-range input::-webkit-date-and-time-value,
+.adm-field>input[type=date]::-webkit-date-and-time-value,
+.adm-field>input[type=time]::-webkit-date-and-time-value{min-height:0;margin:0;line-height:inherit}
+
+.adm-switch{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;min-height:58px;padding:8px 14px;border:1.5px solid var(--line);border-radius:14px;background:#fff;text-align:left}
+.adm-switch:disabled{opacity:.5;cursor:not-allowed}
+.adm-switch-text{display:grid;gap:1px;min-width:0}
+.adm-switch-text strong{display:flex;align-items:center;gap:6px;font-size:15.5px;font-weight:700}
+.adm-switch-text small{font-size:13px;line-height:1.4;color:var(--muted)}
+.adm-switch-track{position:relative;flex:none;width:52px;height:32px;border-radius:999px;background:#cfcadc;transition:background .18s}
+.adm-switch-track i{position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .18s}
+.adm-switch.is-on .adm-switch-track{background:var(--ok)}
+.adm-switch.is-on .adm-switch-track i{transform:translateX(20px)}
+
+.adm-stepper{display:flex;align-items:stretch;width:100%;max-width:240px;height:50px;overflow:hidden;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+.adm-stepper button{display:grid;place-items:center;flex:none;width:50px;color:var(--indigo)}
+.adm-stepper button:active{background:var(--indigo-soft)}
+.adm-stepper button:disabled{color:var(--faint);opacity:.45;cursor:not-allowed}
+.adm-stepper-value{display:flex;align-items:center;justify-content:center;flex:1;min-width:0;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.adm-stepper-value input{width:100%;min-width:0;height:100%;padding:0;border:0;outline:0;background:none;color:var(--ink);font-size:18px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums}
+.adm-stepper-value input:focus-visible{outline:none}
+.adm-stepper:focus-within{border-color:var(--indigo);box-shadow:0 0 0 3px var(--indigo-soft)}
+.adm-stepper-value small{padding-right:10px;font-size:13px;color:var(--muted)}
+
+.adm-seg{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:4px;padding:4px;border-radius:14px;background:var(--sand)}
+.adm-seg button{min-width:0;min-height:44px;padding:0 6px;overflow:hidden;border-radius:10px;color:var(--muted);font-size:14px;font-weight:700;white-space:nowrap;text-overflow:ellipsis;transition:background .15s,color .15s}
+.adm-seg button.is-on{background:#fff;color:var(--indigo-ink);box-shadow:0 1px 3px rgba(28,22,96,.14)}
+.adm-seg button.is-on.tone-ok{background:var(--ok);color:#fff}
+.adm-seg button.is-on.tone-warn{background:var(--saffron);color:var(--indigo-ink)}
+.adm-seg button.is-on.tone-muted{background:#5e5b72;color:#fff}
+.adm-seg button.is-on.tone-indigo{background:var(--indigo);color:#fff}
+
+.adm-chips{display:flex;flex-wrap:wrap;gap:8px}
+.adm-chip{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:14.5px;font-weight:600}
+.adm-chip.is-on{border-color:var(--indigo);background:var(--indigo);color:#fff}
+.adm-chip.is-on::before{content:'\2713';font-weight:800}
+
+.adm-langs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:4px;border-radius:14px;background:var(--indigo-soft)}
+.adm-langs button{position:relative;min-height:44px;border-radius:10px;color:var(--indigo);font-size:14.5px;font-weight:800;letter-spacing:.6px}
+.adm-langs button.is-on{background:var(--indigo);color:#fff}
+.adm-dot{position:absolute;top:7px;right:calc(50% - 23px);width:8px;height:8px;border-radius:50%;background:var(--saffron-deep);box-shadow:0 0 0 2px var(--indigo-soft)}
+.adm-langs button.is-on .adm-dot{background:var(--saffron);box-shadow:0 0 0 2px var(--indigo)}
+
+.adm-time-range{display:flex;align-items:center;gap:8px;color:var(--muted)}
+.adm-time-range input{flex:1;max-width:132px;padding:0 8px;text-align:center;font-variant-numeric:tabular-nums}
+.adm-price-input{position:relative;display:block}
+.adm-price-input input{padding-right:38px;font-variant-numeric:tabular-nums}
+.adm-price-input>span{position:absolute;top:50%;right:14px;transform:translateY(-50%);color:var(--muted);font-weight:700;pointer-events:none}
+.adm-password{position:relative;display:block}
+.adm-password input{padding-right:54px}
+.adm-password .adm-icon-btn{position:absolute;top:50%;right:2px;transform:translateY(-50%)}
+
+/* Barra de botones de los formularios en hoja: siempre a la vista al pie, aunque el formulario sea largo. */
+.adm-sheet-bar{position:sticky;bottom:-22px;z-index:3;display:flex;align-items:center;justify-content:flex-end;gap:10px;margin:4px -22px -22px;padding:14px 22px 22px;border-top:1px solid var(--line);background:var(--paper)}
+.adm-sheet-bar .btn{min-height:50px}
+.adm-sheet-bar .btn-primary{flex:1;max-width:260px}
+.adm-bar-delete{display:inline-flex;align-items:center;gap:6px;min-height:50px;margin-right:auto;padding:0 12px;border-radius:12px;color:var(--danger);font-weight:700}
+.adm-bar-delete:hover{background:var(--danger-soft)}
+@media(max-width:760px){
+  /* El pegajoso se mide contra el borde interior del panel: el desplazamiento negativo lo baja hasta el filo. */
+  .adm-sheet-bar{bottom:calc(-18px - var(--safe-bottom));margin:4px -16px calc(-18px - var(--safe-bottom));padding:12px 16px calc(12px + var(--safe-bottom))}
+  .adm-sheet-bar .btn-primary{max-width:none}
+  .adm-sheet-bar .btn-white{padding:0 16px}
+}
+@media(max-width:480px){
+  .adm-bar-delete{padding:0 10px}
+  .adm-bar-delete span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+}
+
+/* ---------- entrada ---------- */
+.adm-login{display:grid;place-items:center;min-height:100vh;min-height:100dvh;padding:calc(24px + var(--safe-top)) 16px calc(24px + var(--safe-bottom));background:radial-gradient(120% 80% at 50% 0%,var(--indigo) 0%,var(--indigo-deep) 62%,var(--indigo-ink) 100%)}
+.adm-login-card{display:grid;gap:14px;width:min(420px,100%);padding:28px 22px 18px;border-radius:24px;background:var(--paper);box-shadow:var(--shadow-lg)}
+.adm-login-mark{display:grid;place-items:center;width:60px;height:60px;border-radius:18px;background:var(--indigo);color:#fff}
+.adm-login-mark svg{width:38px;height:38px}
+.adm-login-card h1{margin-top:-8px;font-family:var(--font-display);font-size:30px;font-weight:600;color:var(--indigo-ink)}
+.adm-login-card>p{font-size:15px;line-height:1.5;color:var(--muted)}
+.adm-login-error{padding:10px 12px;border-radius:12px;background:var(--danger-soft);color:#7a2e22;font-size:14.5px;font-weight:700}
+.adm-login-back{justify-self:center;display:inline-flex;align-items:center;min-height:44px;color:var(--indigo);font-size:15px;font-weight:700}
+
+/* ---------- reservas ---------- */
+.adm-pending{margin-bottom:16px;padding:14px 12px 10px;border:1px solid #f3d9a8;border-radius:18px;background:var(--saffron-soft)}
+.adm-pending h2{display:flex;align-items:center;gap:8px;margin:0 2px 10px;color:#6d420b;font-size:16px;font-weight:800}
+.adm-count{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 7px;border-radius:999px;background:var(--saffron);color:var(--indigo-ink);font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
+.adm-count.is-muted{background:var(--sand-deep);color:var(--muted)}
+.adm-pending ul{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.adm-pending li button{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:10px;width:100%;min-height:52px;padding:0 8px 0 12px;border-radius:12px;background:#fff;font-size:15px;text-align:left;box-shadow:0 1px 2px rgba(109,66,11,.08)}
+.adm-pending li button svg{color:var(--faint)}
+.adm-pending-when{color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.adm-pending-when b{color:var(--ink);font-weight:800}
+.adm-pending-name{overflow:hidden;font-weight:700;white-space:nowrap;text-overflow:ellipsis}
+.adm-pending-party{color:var(--muted);font-size:14px;white-space:nowrap}
+
+/* La tira de días se queda pegada bajo la barra: con la lista larga se cambia de día sin volver arriba. */
+.adm-days{position:sticky;top:calc(var(--adm-top) + var(--safe-top));z-index:10;display:flex;align-items:stretch;gap:8px;margin:0 calc(-1 * var(--adm-right)) 0 calc(-1 * var(--adm-left));padding:10px var(--adm-right) 10px var(--adm-left);border-bottom:1px solid var(--line);background:var(--paper)}
+.adm-days-strip{position:relative;display:flex;flex:1;gap:8px;min-width:0;margin:-3px;padding:3px;overflow-x:auto;scrollbar-width:none;overscroll-behavior-x:contain}
+.adm-days-strip::-webkit-scrollbar{display:none}
+.adm-day{display:grid;justify-items:center;align-content:center;gap:5px;flex:none;min-width:66px;height:66px;padding:0 8px;border:1.5px solid var(--line);border-radius:14px;background:#fff}
+.adm-day-name{color:var(--ink);font-size:13.5px;font-weight:700;white-space:nowrap}
+.adm-day-count{min-width:28px;height:22px;padding:0 6px;border-radius:999px;background:var(--sand);color:var(--muted);font-size:13px;font-weight:800;line-height:22px;text-align:center;font-variant-numeric:tabular-nums}
+.adm-day-count.has-some{background:var(--indigo-soft);color:var(--indigo)}
+.adm-day.is-closed{border-style:dashed;background:transparent;opacity:.55}
+.adm-day.is-on{border-color:var(--indigo);background:var(--indigo);opacity:1}
+.adm-day.is-on .adm-day-name{color:#fff}
+.adm-day.is-on .adm-day-count{background:rgba(255,255,255,.22);color:#fff}
+.adm-day-jump{position:relative;display:grid;place-items:center;flex:none;width:52px;border:1.5px solid var(--line);border-radius:14px;background:#fff;color:var(--indigo)}
+.adm-day-jump.is-on{border-color:var(--indigo);background:var(--indigo);color:#fff}
+.adm-day-jump input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px}
+@media(min-width:900px){.adm-days{top:0;margin-left:0;margin-right:0;padding-left:0;padding-right:0}}
+
+.adm-day-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:16px 0 10px}
+.adm-day-head h2{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--indigo-ink)}
+.adm-day-hours{font-size:14px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.adm-day-hours.is-closed{color:var(--danger)}
+
+.adm-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:20px}
+.adm-summary>div{display:grid;align-content:start;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.adm-summary>div>strong{font-family:var(--font-display);font-size:28px;font-weight:600;line-height:1.1;color:var(--indigo-ink);font-variant-numeric:tabular-nums}
+.adm-summary>div>span{font-size:13px;font-weight:600;color:var(--muted)}
+.adm-summary>div.is-warn{border-color:#f3d9a8;background:var(--saffron-soft)}
+.adm-summary>.adm-summary-rice{grid-column:1 / -1}
+.adm-summary .adm-summary-rice-title{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:12.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.adm-summary-rice ul{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 2px;padding:0;list-style:none}
+.adm-summary-rice li{padding:5px 11px;border-radius:999px;background:var(--saffron-soft);color:var(--indigo-ink);font-size:15px}
+.adm-summary-rice .adm-muted{margin-top:4px}
+@media(min-width:700px){
+  .adm-summary{grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,2fr)}
+  .adm-summary>.adm-summary-rice{grid-column:auto}
+}
+
+.adm-service{margin-bottom:20px}
+.adm-service-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:0 2px 8px;color:var(--indigo);font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.adm-service-head small{color:var(--muted);font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;font-variant-numeric:tabular-nums}
+.adm-service-load.is-full{color:var(--danger)}
+.adm-service-count{color:var(--muted);font-size:13px;letter-spacing:0;text-transform:none;white-space:nowrap}
+.adm-service-toggle{display:flex;align-items:center;gap:8px;width:100%;min-height:48px;padding:0 4px;color:var(--muted);font-size:15px;font-weight:700}
+.adm-service-toggle svg{margin-left:auto;transition:transform .18s}
+.adm-service-toggle[aria-expanded=true] svg{transform:rotate(90deg)}
+.adm-results .adm-muted{margin-bottom:10px}
+
+.adm-res-list{display:grid;gap:10px}
+@media(min-width:900px){.adm-res-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}}
+.adm-res{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--shadow-sm);scroll-margin:calc(var(--adm-top) + var(--safe-top) + 96px) 0 calc(var(--adm-tabs) + 24px)}
+.adm-res::before{content:'';position:absolute;top:0;bottom:0;left:0;width:5px;background:var(--line)}
+.adm-res.is-pendiente::before{background:var(--saffron)}
+.adm-res.is-confirmada::before{background:var(--indigo)}
+.adm-res.is-sentada::before{background:var(--ok)}
+.adm-res.is-highlight{box-shadow:0 0 0 3px var(--saffron),var(--shadow);animation:adm-pulse 1.2s ease-out 2}
+@keyframes adm-pulse{50%{box-shadow:0 0 0 6px rgba(242,169,59,.35),var(--shadow)}}
+.adm-res-body{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;width:100%;padding:14px 14px 12px 18px;text-align:left}
+.adm-res-time{display:grid;align-content:start;min-width:66px;font-family:var(--font-display);font-size:26px;font-weight:600;line-height:1;color:var(--indigo-ink);font-variant-numeric:tabular-nums}
+.adm-res-time small{margin-bottom:5px;font-family:var(--font-body);font-size:12px;font-weight:800;letter-spacing:.4px;color:var(--muted)}
+.adm-res-info{display:grid;gap:7px;min-width:0}
+.adm-res-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.adm-res-name{min-width:0;font-size:17px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.adm-res-party{display:flex;align-items:center;gap:6px;color:var(--ink);font-size:15px;font-weight:600}
+.adm-res-party svg{flex:none;color:var(--muted)}
+.adm-res-tags{display:flex;flex-wrap:wrap;gap:6px}
+.adm-tag{display:inline-flex;align-items:center;gap:5px;min-height:26px;padding:0 9px;border-radius:999px;background:var(--sand);color:var(--muted);font-size:13px;font-weight:700}
+.adm-tag.is-new{background:#e5573b;color:#fff}
+.adm-tag.is-paella{background:var(--saffron-soft);color:#6d420b}
+.adm-tag.is-lang{letter-spacing:.6px}
+.adm-res-note{padding:6px 10px;border-left:3px solid var(--sand-deep);border-radius:0 8px 8px 0;background:var(--paper);color:var(--ink);font-size:14.5px;line-height:1.45;white-space:pre-wrap;overflow-wrap:anywhere}
+.adm-res.is-off{background:var(--paper);box-shadow:none}
+.adm-res.is-off .adm-res-name{color:var(--muted);text-decoration:line-through}
+.adm-res.is-off .adm-res-time{color:var(--faint)}
+
+.adm-status{display:inline-flex;align-items:center;flex:none;min-height:26px;padding:0 10px;border-radius:999px;font-size:12.5px;font-weight:800;letter-spacing:.2px;white-space:nowrap}
+.adm-status.is-pendiente{background:var(--saffron);color:var(--indigo-ink)}
+.adm-status.is-confirmada{background:var(--indigo-soft);color:var(--indigo)}
+.adm-status.is-sentada{background:var(--ok-soft);color:var(--ok)}
+.adm-status.is-cancelada,.adm-status.is-no-vino{background:var(--sand);color:var(--faint);text-decoration:line-through}
+
+.adm-res-actions{display:grid;grid-auto-columns:minmax(0,1fr);grid-auto-flow:column;gap:1px;border-top:1px solid var(--line);background:var(--line)}
+.adm-act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:58px;background:#fff;color:var(--indigo);font-size:12.5px;font-weight:700;text-decoration:none;transition:background .15s}
+.adm-act span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.adm-act:active{background:var(--indigo-soft)}
+.adm-act.is-primary{background:var(--saffron);color:var(--indigo-ink)}
+.adm-act.is-primary:active{background:var(--saffron-deep)}
+.adm-act.is-soft{background:var(--ok-soft);color:var(--ok)}
+.adm-res.is-off .adm-act{background:var(--paper)}
+
+.adm-fab{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(var(--adm-tabs) + var(--safe-bottom) + 14px);z-index:24;display:inline-flex;align-items:center;gap:8px;min-height:56px;padding:0 22px 0 18px;border-radius:999px;background:var(--saffron);color:var(--indigo-ink);font-size:16px;font-weight:800;box-shadow:0 10px 26px rgba(220,143,28,.42),0 2px 6px rgba(20,16,56,.18);transition:transform .12s}
+.adm-fab:active{transform:scale(.96)}
+@media(min-width:900px){.adm-fab{right:40px;bottom:32px}}
+
+/* ---------- ficha y formulario de reserva ---------- */
+.adm-sheet-meta{display:flex;margin-top:6px}
+.adm-sheet-details{display:grid;gap:10px;margin:0 0 16px;padding:0;list-style:none}
+.adm-sheet-details li{display:flex;align-items:flex-start;gap:12px;font-size:15.5px;line-height:1.45}
+.adm-sheet-details li>span:last-child{min-width:0;padding-top:5px;overflow-wrap:anywhere}
+.adm-sheet-details a{color:var(--indigo);font-weight:700}
+.adm-sheet-ico{display:grid;place-items:center;flex:none;width:32px;height:32px;border-radius:10px;background:var(--indigo-soft);color:var(--indigo)}
+.adm-sheet-note{white-space:pre-wrap}
+.adm-sheet-contact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:18px}
+.adm-sheet-label{margin-bottom:8px}
+.adm-sheet-status{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.adm-sheet-btn{display:flex;align-items:center;gap:10px;min-width:0;min-height:56px;padding:0 12px;border:1.5px solid var(--line);border-radius:14px;background:#fff;font-size:15px;font-weight:700;text-align:left}
+.adm-sheet-btn svg{flex:none}
+.adm-sheet-btn.tone-primary{border-color:var(--saffron);background:var(--saffron);color:var(--indigo-ink)}
+.adm-sheet-btn.tone-ok{color:var(--ok)}
+.adm-sheet-btn.tone-danger{color:var(--danger)}
+.adm-sheet-btn.tone-warn{color:var(--warn)}
+.adm-sheet-btn.tone-muted{color:var(--muted)}
+.adm-sheet-btn.is-current{border-color:var(--sand);background:var(--sand);color:var(--muted);cursor:default}
+.adm-sheet-foot{display:flex;justify-content:space-between;gap:10px;margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.adm-sheet-foot>*{flex:1;max-width:220px}
+.adm-sheet-foot .danger-btn{min-height:48px;font-size:15px}
+
+.adm-slots{display:grid;gap:6px;margin-bottom:8px}
+.adm-slots-label{color:var(--muted);font-size:13px;font-weight:700}
+.adm-slots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:6px}
+.adm-slot{min-height:46px;padding:0 10px;border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-size:15.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.adm-slot.is-on{border-color:var(--indigo);background:var(--indigo);color:#fff}
+.adm-slot-custom{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.adm-slot-custom input{flex:1;max-width:170px}
+.adm-inline-warn{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;background:var(--danger-soft);color:#7a2e22;font-size:14px;font-weight:600;line-height:1.4}
+.adm-inline-warn svg{flex:none}
+.adm-form-failure{padding:12px 14px;border-radius:12px;background:var(--danger-soft);color:#7a2e22;font-size:14.5px;font-weight:700;line-height:1.45}
+
+/* ---------- carta ---------- */
+.adm-menu .adm-view-head .btn{flex:none}
+.adm-cats{display:grid;gap:12px}
+.adm-cat{border:1px solid var(--line);border-radius:18px;background:#fff}
+.adm-cat.is-hidden{border-style:dashed;background:var(--paper)}
+.adm-cat-head{display:flex;align-items:center;gap:2px;padding:4px 4px 4px 0}
+.adm-cat-toggle{display:flex;flex:1;align-items:center;gap:8px;min-width:0;min-height:60px;padding:0 6px 0 12px;text-align:left}
+.adm-cat-toggle:disabled{cursor:default}
+.adm-cat-toggle strong{display:block;font-size:17px;font-weight:800;line-height:1.25;overflow-wrap:anywhere}
+.adm-cat-toggle small{display:block;margin-top:1px;color:var(--muted);font-size:13.5px}
+.adm-chevron{flex:none;color:var(--muted);transform:rotate(-90deg);transition:transform .18s}
+.adm-cat-toggle[aria-expanded=true] .adm-chevron{transform:none}
+.adm-cat-body{padding:2px 12px 12px;border-top:1px solid var(--line)}
+.adm-cat-empty{padding:14px 2px 4px}
+.adm-reorder-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 4px;padding:6px 6px 6px 12px;border-radius:12px;background:var(--indigo-soft);color:var(--indigo);font-size:14.5px;font-weight:700}
+
+.adm-dishes{margin:0;padding:0;list-style:none}
+.adm-dish{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 4px;padding:10px 0;border-bottom:1px solid var(--line)}
+.adm-dish:last-child{border-bottom:0}
+.adm-dish-main{display:flex;align-items:center;gap:12px;min-width:0;min-height:56px;text-align:left}
+.adm-dish-thumb{display:grid;place-items:center;flex:none;width:56px;height:56px;overflow:hidden;border-radius:12px;background:var(--sand);color:var(--faint)}
+.adm-dish-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.adm-dish-text{display:grid;gap:2px;min-width:0}
+.adm-dish-text strong{font-size:16px;font-weight:700;line-height:1.3;overflow-wrap:anywhere}
+.adm-dish-text small{color:var(--muted);font-size:14px;font-variant-numeric:tabular-nums}
+.adm-dish.is-agotado .adm-dish-text strong{color:var(--muted);text-decoration:line-through}
+.adm-dish.is-oculto .adm-dish-main{opacity:.5}
+.adm-dish-status{grid-column:1 / -1}
+.adm-dish-move{display:flex;gap:6px}
+.adm-star{display:grid;place-items:center;width:48px;height:48px;border-radius:12px;color:#c5c1d0}
+.adm-star:active{background:var(--sand)}
+.adm-star.is-on{color:var(--saffron-deep)}
+.adm-star.is-on svg{fill:var(--saffron)}
+@media(min-width:700px){
+  .adm-dish{grid-template-columns:minmax(0,1fr) auto minmax(0,300px)}
+  .adm-dish.is-reorder{grid-template-columns:minmax(0,1fr) auto}
+  .adm-dish-status{grid-column:auto}
+}
+.adm-add-row{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;margin:10px 0 4px;border:1.5px dashed var(--indigo-line);border-radius:12px;color:var(--indigo);font-size:15px;font-weight:700}
+.adm-add-row:active{background:var(--indigo-soft)}
+
+.adm-option{display:grid;grid-template-columns:minmax(0,1fr) 108px 44px;align-items:center;gap:8px;margin-bottom:8px}
+.adm-price-input.is-small input{padding:0 30px 0 10px}
+.adm-price-input.is-small>span{right:10px}
+.adm-add-option{justify-self:start}
+.adm-star-inline{color:var(--saffron-deep);fill:var(--saffron)}
+
+.adm-photo{display:grid;gap:10px}
+.adm-photo-main{display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px}
+.adm-photo-preview{flex:none;width:140px;aspect-ratio:4 / 3;overflow:hidden;border-radius:14px;background:var(--sand)}
+.adm-photo-preview img{display:block;width:100%;height:100%;object-fit:cover}
+.adm-photo-preview.is-empty{display:grid;place-items:center;border:1.5px dashed var(--line);background:transparent;color:var(--faint);font-size:13.5px;font-weight:700}
+.adm-photo-preview.is-empty span{display:grid;justify-items:center;gap:4px}
+.adm-photo-actions{display:grid;flex:1;gap:8px;min-width:170px}
+.adm-photo-actions .btn{justify-content:flex-start}
+.adm-photo .btn-ghost.is-on{background:var(--indigo-soft)}
+.adm-progress{display:grid;gap:6px}
+.adm-progress small{color:var(--muted);font-size:13px;overflow-wrap:anywhere}
+.adm-progress-bar{position:relative;height:6px;overflow:hidden;border-radius:999px;background:var(--indigo-soft)}
+.adm-progress-bar i{position:absolute;top:0;bottom:0;left:-40%;width:40%;border-radius:999px;background:var(--indigo);animation:adm-indeterminate 1.1s ease-in-out infinite}
+@keyframes adm-indeterminate{from{left:-40%}to{left:100%}}
+.adm-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.adm-gallery button{position:relative;aspect-ratio:4 / 3;overflow:hidden;border-radius:12px;background:var(--sand)}
+.adm-gallery img{display:block;width:100%;height:100%;object-fit:cover}
+.adm-gallery button.is-on{box-shadow:0 0 0 3px var(--saffron)}
+.adm-gallery-check{position:absolute;top:6px;right:6px;display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--saffron);color:var(--indigo-ink)}
+@media(min-width:560px){.adm-gallery{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* ---------- ajustes ---------- */
+.adm-card{margin-bottom:16px;padding:16px;border:1px solid var(--line);border-radius:20px;background:#fff;scroll-margin-top:calc(var(--adm-top) + var(--safe-top) + 12px)}
+.adm-card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.adm-card-ico{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:12px;background:var(--indigo-soft);color:var(--indigo)}
+.adm-card-head h2{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--indigo-ink)}
+.adm-card-head p{margin-top:2px;color:var(--muted);font-size:14px;line-height:1.45}
+.adm-card .adm-field>input,.adm-card .adm-field>select,.adm-card .adm-field>textarea,.adm-card .adm-switch,.adm-card .adm-stepper,.adm-card .adm-time-range input{background-color:var(--paper)}
+@media(min-width:900px){.adm-card{padding:22px 24px}.adm-card{scroll-margin-top:16px}}
+
+.adm-week{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.adm-weekday{display:grid;gap:6px;padding:6px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+.adm-card .adm-weekday .adm-switch{min-height:52px;padding:4px 8px;border:0;background:transparent}
+.adm-weekday.is-closed .adm-switch-text strong{color:var(--muted)}
+.adm-weekday-body{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:0 8px 8px}
+.adm-card .adm-weekday .adm-time-range input{background-color:#fff}
+.adm-weekday-body .adm-error{flex-basis:100%}
+
+.adm-closed-add{display:flex;align-items:flex-end;gap:10px;margin-bottom:12px}
+.adm-closed-add .adm-field{flex:1}
+.adm-closed-add .btn{min-height:48px;flex:none}
+.adm-closed-list{display:grid;gap:6px;margin:0 0 6px;padding:0;list-style:none}
+.adm-closed-list li{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:52px;padding:0 4px 0 14px;border-radius:12px;background:var(--danger-soft);color:#7a2e22;font-weight:700}
+.adm-closed-list li .adm-icon-btn{color:inherit}
+.adm-closed-list li.is-past{background:var(--sand);color:var(--faint)}
+.adm-closed-list li.is-past span{text-decoration:line-through}
+
+/* ---------- Tarjetas plegables de la Carta ---------- */
+/*
+ * El cabezal es el botón entero: de borde a borde y 64 px de alto. Un triángulo de 20 px en la
+ * esquina se falla con el pulgar, y estas dos tarjetas se abren y se cierran todo el día.
+ */
+.adm-panel{padding:0;overflow:hidden}
+.adm-panel-h2{margin:0}
+.adm-panel-head{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 14px;text-align:left;color:var(--ink)}
+.adm-panel-head:hover{background:var(--paper)}
+.adm-panel-text{display:grid;gap:2px;flex:1;min-width:0}
+.adm-panel-text strong{font-family:var(--font-display);font-size:19px;font-weight:600;line-height:1.2}
+/* Plegada, el resumen es el dato: no puede ir en el gris de un pie de foto. */
+.adm-panel-text small{font-size:13.5px;line-height:1.4;color:var(--muted)}
+.adm-panel:not(.is-open) .adm-panel-text small{font-weight:700;color:var(--ink)}
+.adm-panel-head .adm-chevron{flex:none;color:var(--faint);transition:transform .18s ease}
+.adm-panel.is-open .adm-panel-head .adm-chevron{transform:rotate(180deg)}
+.adm-panel-body{display:grid;gap:12px;padding:2px 14px 14px}
+@media(min-width:900px){
+  .adm-panel-head{padding:14px 20px}
+  .adm-panel-body{padding:2px 20px 20px}
+}
+
+/* ---------- El aviso de Google ---------- */
+/* Queda pendiente hasta que se dice que está hecho, así que se ve pero no grita: ámbar, no rojo. */
+.adm-google-todo{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;padding:10px 12px;border-radius:12px;border:1.5px solid #efd9ab;background:var(--warn-soft);color:var(--warn);font-size:14.5px;font-weight:700}
+.adm-google-todo>span{flex:1;min-width:0}
+.adm-google-todo .adm-link-btn{min-height:auto;color:var(--warn)}
+.adm-modal-ico{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:12px;background:var(--indigo-soft);color:var(--indigo)}
+.adm-google-body{display:grid;gap:12px;padding:0 20px 4px;font-size:15.5px;line-height:1.6;color:var(--ink)}
+.adm-google-body b{font-weight:800}
+.adm-google-steps{display:grid;gap:6px;padding-left:20px;list-style:decimal;color:var(--muted)}
+.adm-google-foot{flex-wrap:wrap}
+.adm-google-foot .primary-btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none}
+/* En el ordenador, «Ya está hecho» se separa de «Luego» para no tocarlo sin querer. */
+@media(min-width:761px){.adm-google-done{margin-left:auto}}
+
+/* ---------- Horario, arriba de la Carta ---------- */
+/* Es lo primero que se mira al abrir el panel, así que el estado de hoy va en grande y con color. */
+.adm-hours .adm-panel-body{gap:14px}
+
+/* Hoy, en grande: es lo que se mira al abrir el panel y lo que se toca para cerrar. */
+.adm-today{display:grid;gap:12px;padding:14px;border-radius:16px;border:1.5px solid var(--line);background:var(--paper)}
+.adm-today-head{display:flex;align-items:center;gap:12px}
+.adm-today-text{display:grid;gap:3px;min-width:0}
+.adm-today-text>b{font-size:17px;font-weight:800;color:var(--ink);line-height:1.2}
+.adm-today-state{display:inline-flex;align-items:center;gap:7px;font-size:14.5px;font-weight:700;line-height:1.35;color:var(--muted)}
+.adm-today-state i{flex:none;width:9px;height:9px;border-radius:50%;background:currentColor}
+/* El color lo pone el estado real, no si está cerrado: «cierra en 20 min» también avisa. */
+.adm-today.is-open{border-color:#bfe0cd;background:var(--ok-soft)}
+.adm-today.is-open .adm-today-state{color:var(--ok)}
+.adm-today.is-soon,.adm-today.is-later{border-color:#efd9ab;background:var(--warn-soft)}
+.adm-today.is-soon .adm-today-state,.adm-today.is-later .adm-today-state{color:var(--warn)}
+.adm-today.is-closed{border-color:#e9c3ba;background:var(--danger-soft)}
+.adm-today.is-closed .adm-today-state{color:var(--danger)}
+.adm-today.is-open .adm-hours-date{background:#cfe6da}
+.adm-today.is-closed .adm-hours-date{background:#f0cec6}
+.adm-today.is-soon .adm-hours-date,.adm-today.is-later .adm-hours-date{background:#f3e2c0}
+
+/* Los siete días, uno bajo otro: se ven todos sin deslizar, que es de lo que se trata. */
+.adm-hours-days{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.adm-hours-item{border-radius:14px}
+.adm-hours-item.is-open{border:1.5px solid var(--indigo-line);background:var(--paper)}
+.adm-hours-item.is-open>.adm-hours-row{border-color:transparent;background:transparent}
+.adm-hours-state .adm-chevron{color:var(--faint);transition:transform .15s ease}
+.adm-hours-item.is-open .adm-chevron{transform:rotate(180deg)}
+.adm-hours-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;width:100%;min-height:60px;padding:8px 12px 8px 8px;border-radius:14px;border:1.5px solid var(--line);background:var(--white);text-align:left;color:var(--ink)}
+.adm-hours-row:hover{border-color:var(--indigo-line);background:var(--paper)}
+
+/* El número del día, como en un calendario: se busca por número, no por nombre. */
+.adm-hours-date{display:grid;justify-items:center;gap:0;flex:none;width:44px;padding:4px 0;border-radius:10px;background:var(--sand);color:var(--ink)}
+.adm-hours-date.is-big{width:54px;padding:7px 0;border-radius:12px}
+.adm-hours-date.is-big b{font-size:23px}
+.adm-hours-date b{font-size:18px;font-weight:800;line-height:1.15}
+.adm-hours-date small{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--faint)}
+
+.adm-hours-row-text{display:grid;gap:1px;min-width:0}
+.adm-hours-row-text strong{font-size:15.5px;font-weight:800}
+.adm-hours-row-text small{font-size:13.5px;color:var(--muted)}
+/* La hora, en negrita y con cifras de ancho fijo: se lee de un vistazo y no baila entre renglones. */
+.adm-hours-time{display:block;font-size:16.5px;font-weight:800;font-style:normal;letter-spacing:.2px;color:var(--ink);font-variant-numeric:tabular-nums}
+.adm-hours-time span{margin:0 2px;color:var(--faint)}
+.adm-hours-row.is-weekly .adm-hours-time{color:var(--muted)}
+
+/* El editor de un día: las horas de esa jornada de la semana, sin salir de la pantalla. */
+.adm-hours-edit{display:grid;gap:10px;padding:0 12px 12px}
+.adm-hours-edit-body{display:grid;gap:8px}
+.adm-hours-edit-title{font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--faint)}
+/* «Partido» no es un turno como el almuerzo o la cena: es una forma del día, y se ve distinto. */
+.adm-chip-split{border-style:dashed}
+
+.adm-hours-edit-note{display:flex;align-items:center;gap:7px;font-size:13px;line-height:1.45;color:var(--muted)}
+.adm-hours-edit-note svg{flex:none}
+/* Las horas que se editan, en grande: se tocan con el pulgar y se leen a un brazo de distancia. */
+.adm-hours-range input{max-width:none;min-height:52px;height:52px;line-height:49px;font-size:19px;font-weight:800;color:var(--ink)}
+.adm-today .adm-hours-edit-body{padding-top:2px;border-top:1px solid rgba(29,27,51,.09)}
+.adm-today .adm-hours-range input{background-color:#fff}
+
+/* El estado, a la derecha: es lo que se recorre con la vista de arriba abajo. */
+.adm-hours-state{display:inline-flex;align-items:center;gap:6px;flex:none}
+.adm-hours-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;font-size:12.5px;font-weight:800;letter-spacing:.2px;background:var(--ok-soft);color:var(--ok)}
+.adm-hours-pill.is-punctual{background:var(--danger);color:#fff}
+.adm-hours-pill.is-weekly{background:transparent;color:var(--faint);padding-left:2px;padding-right:2px}
+
+
+.adm-hours-row.is-punctual{border-color:#e9c3ba;background:var(--danger-soft)}
+.adm-hours-row.is-punctual .adm-hours-date{background:#f0cec6}
+.adm-hours-row.is-punctual .adm-hours-row-text small{color:var(--danger)}
+
+/* El descanso semanal no se cambia desde aquí: apagado y en gris para que no se intente. */
+.adm-hours-row.is-weekly{background:var(--sand);border-style:dashed;border-color:var(--sand-deep)}
+.adm-hours-row.is-weekly .adm-hours-date{background:var(--sand-deep);color:var(--muted)}
+.adm-hours-row.is-weekly .adm-hours-row-text strong{color:var(--muted)}
+
+.adm-hours-more{justify-self:start;gap:6px;text-decoration:none}
+.adm-hours-more:hover{text-decoration:underline}
+
+/* Un renglón de explicación bajo el título de una pantalla o dentro de una tarjeta. */
+.adm-lead{margin-top:6px;font-size:14.5px;line-height:1.5;color:var(--muted);max-width:60ch}
+.adm-lead b{color:var(--ink);font-weight:800}
+
+/* Los turnos, tal como se leen en la web: lo que se mira antes de tocar las horas. */
+.adm-turnos-preview{display:grid;gap:6px;margin-bottom:4px;padding:12px;border:1.5px dashed var(--line);border-radius:14px;background:var(--paper)}
+.adm-turnos-line{font-size:16px;line-height:1.5}
+.adm-turnos-line b{font-weight:800}
+
+/* Cuántas ofertas salen ahora mismo en la portada. */
+.adm-specials-lead{margin:-2px 0 2px}
+
+/* Fotos de la web: una lista de huecos, cada uno con su foto y sus botones. */
+.adm-slots{display:grid;gap:18px}
+.adm-slots-title{font-size:13px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--faint);margin-top:6px}
+.adm-slots-title:first-child{margin-top:0}
+
+.adm-notice-preview{display:grid;gap:8px;margin-bottom:16px;padding:12px;border:1.5px dashed var(--line);border-radius:14px;background:var(--paper)}
+.adm-notice-line{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:10px;background:var(--indigo);color:#fff;font-size:14.5px;font-weight:600;line-height:1.4;overflow-wrap:anywhere}
+.adm-notice-line svg{flex:none;margin-top:2px;color:var(--saffron)}
+
+.adm-actions-list{display:grid;gap:10px}
+.adm-actions-list .btn{white-space:normal;text-align:center}
+
+/* ---------- sugerencias ---------- */
+.adm-specials .adm-seg{margin-bottom:6px}
+.adm-specials .adm-dish{grid-template-columns:minmax(0,1fr) auto}
+.adm-specials .adm-dish.is-oculto .adm-dish-main{opacity:.55}

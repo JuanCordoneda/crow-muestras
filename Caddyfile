@@ -1,0 +1,37 @@
+# Servidor estático de las muestras. Railway da el puerto en $PORT (8080 si se arranca sin él).
+{
+	admin off
+	auto_https off
+	persist_config off
+}
+
+:{$PORT:8080} {
+	root * /srv
+	encode zstd gzip
+
+	# Muestras para clientes: ningún buscador las indexa hasta que se publiquen en su dominio.
+	header X-Robots-Tag "noindex, nofollow"
+
+	# Lo que Vite deja en assets/ lleva hash en el nombre: caché para siempre. El HTML, siempre fresco.
+	@hashed path */assets/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+	@html path / */ *.html
+	header @html Cache-Control "no-cache"
+
+	# /comptoir → /comptoir/: sin la barra final, las rutas relativas (img/…) apuntarían a la raíz.
+	@bare path_regexp ^/(comptoir|sol-y-luna|sculpt-detox|ltb-concept|atelie-queijos)$
+	redir @bare {path}/ 308
+
+	# Dentro de cada muestra: el fichero, la página prerenderizada (/sitio/en → en/index.html) y,
+	# si no existe, la 404 de la web o su portada (las apps de una sola página se enrutan solas).
+	@site path_regexp site ^/(comptoir|sol-y-luna|sculpt-detox|ltb-concept|atelie-queijos)/
+	handle @site {
+		try_files {path} {path}/index.html /{re.site.1}/404.html /{re.site.1}/index.html
+		file_server
+	}
+
+	handle {
+		try_files {path} {path}/index.html
+		file_server
+	}
+}

@@ -1,0 +1,30 @@
+/* links.css — la página de la bio de Instagram. Una columna, botones grandes, nada más. */
+
+.links{position:relative;display:flex;flex-direction:column;align-items:center;min-height:calc(100svh - 60px);max-width:520px;margin:0 auto;padding:8px 16px calc(40px + var(--safe-bottom));text-align:center;overflow:hidden}
+.links-head{display:flex;flex-direction:column;align-items:center}
+.links-avatar{width:112px;height:112px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 0 0 2px var(--butter),var(--shadow)}
+.links-head h1{margin-top:16px;font-family:var(--font-display);font-size:27px;font-weight:600;letter-spacing:-.3px;color:var(--ink)}
+.links-handle{display:inline-flex;align-items:center;gap:5px;margin-top:4px;font-size:14.5px;color:var(--muted)}
+.links-handle a{font-weight:800;color:var(--wine);text-decoration:none}
+.links-bio{margin-top:8px;font-family:var(--font-display);font-size:17px;font-style:italic;color:var(--olive-deep)}
+
+.links-list{display:grid;gap:12px;width:100%;margin-top:26px}
+.links-btn{display:grid;grid-template-columns:44px 1fr 20px;align-items:center;gap:12px;min-height:64px;padding:10px 14px 10px 10px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-sm);color:var(--ink);text-decoration:none;text-align:left;transition:transform .15s,box-shadow .2s}
+.links-btn:active{transform:scale(.98)}
+.links-btn:hover{box-shadow:var(--shadow)}
+.links-btn>svg{color:var(--faint)}
+.links-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--wine-soft);color:var(--wine)}
+.links-label{display:grid;gap:2px;min-width:0}
+.links-label b{font-size:16.5px;font-weight:800;line-height:1.25}
+.links-label small{font-size:13px;font-weight:600;line-height:1.35;color:var(--muted)}
+/* El de reservar manda: bordó, más alto y con la próxima sesión debajo. */
+.links-btn.is-main{min-height:78px;background:var(--wine);border-color:var(--wine);color:#fff;box-shadow:0 12px 30px rgba(122,46,58,.3)}
+.links-btn.is-main .links-icon{background:rgba(255,255,255,.14);color:var(--butter)}
+.links-btn.is-main small{color:#f3dfd9}
+.links-btn.is-main>svg{color:#fff}
+.links-btn.is-soon{border-style:dashed;background:var(--cream)}
+.links-btn.is-soon .links-icon{background:var(--olive-soft);color:var(--olive-deep)}
+.links-btn.is-whatsapp .links-icon{background:#e3f1e4;color:#1f7a3d}
+
+.links-site{display:inline-flex;align-items:center;min-height:44px;margin-top:20px;font-size:15px;font-weight:700;color:var(--wine);text-underline-offset:4px}
+.links-art{margin-top:18px;color:var(--butter-deep);opacity:.45}

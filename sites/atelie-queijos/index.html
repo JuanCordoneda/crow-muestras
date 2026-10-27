@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Ateliê de queijos em Paris com Janaína | PariSabor</title>
+    <meta name="description" content="Degustação de queijos artesanais franceses em Paris: 1h30, máximo 8 pessoas, 98 €. Aprenda a cortar, harmonizar e monte sua tábua. Reserve sua vaga." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+
+    <!--
+      La barra del navegador en el crema de la marca. Solo tema claro: la web está pensada sobre
+      crema y bordó, y sin esto algunos Android la oscurecen por su cuenta y la dejan irreconocible.
+      Sin `format-detection telephone=no`: aquí el teléfono tiene que poder tocarse.
+    -->
+    <meta name="theme-color" content="#faf6ef" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="application-name" content="PariSabor" />
+    <meta name="apple-mobile-web-app-title" content="PariSabor" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link id="canonical" rel="canonical" href="https://atelie.parisabor.com/" />
+
+    <!--
+      Lo que ven WhatsApp, Instagram y Facebook al compartir el enlace. Ninguno ejecuta JavaScript:
+      tiene que estar escrito aquí tal cual. `scripts/pages.mjs` lo ajusta para cada página e idioma.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PariSabor" />
+    <meta property="og:title" content="Ateliê de queijos em Paris com Janaína | PariSabor" />
+    <meta property="og:description" content="Degustação de queijos artesanais franceses em Paris: 1h30, máximo 8 pessoas, 98 €. Aprenda a cortar, harmonizar e monte sua tábua. Reserve sua vaga." />
+    <meta id="og-url" property="og:url" content="https://atelie.parisabor.com/" />
+    <meta property="og:image" content="https://atelie.parisabor.com/og.jpg?v=1" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Tábua de queijos artesanais franceses montada no ateliê da Janaína, em Paris" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ateliê de queijos em Paris com Janaína | PariSabor" />
+    <meta name="twitter:description" content="Degustação de queijos artesanais franceses em Paris: 1h30, máximo 8 pessoas, 98 €. Aprenda a cortar, harmonizar e monte sua tábua. Reserve sua vaga." />
+    <meta name="twitter:image" content="https://atelie.parisabor.com/og.jpg?v=1" />
+
+    <!--
+      Solo se precarga lo que pinta el primer pantallazo: el texto, los titulares y la cursiva, que
+      está en el titular del héroe («artesanais franceses») y sin precarga se pintaba un instante
+      en redonda y luego saltaba. Ni una petición a terceros: quien llega desde Instagram lo hace con
+      datos móviles, y cada dominio nuevo es un segundo más en blanco.
+    -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Manrope-400-800-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Fraunces-500-700-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Fraunces-500-700-italic-latin.woff2" crossorigin />
+
+    <!--
+      La foto de la portada: es lo más grande del primer pantallazo (el LCP) y, precargada, llega
+      a la vez que el CSS. Solo en la portada: `scripts/pages.mjs` la quita de las demás páginas.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/img/atelie/tabua-queijos.webp"
+      imagesrcset="/img/atelie/tabua-queijos-480.webp 480w, /img/atelie/tabua-queijos-720.webp 720w, /img/atelie/tabua-queijos-900.webp 900w, /img/atelie/tabua-queijos-1200.webp 1200w, /img/atelie/tabua-queijos.webp 1440w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
+    <!-- La ficha de Google (schema.org) la escribe `scripts/pages.mjs` para cada página e idioma. -->
+    <!--jsonld-->
+  </head>
+  <body>
+    <!-- El contenido de cada página lo escribe el build (`scripts/pages.mjs`); en `npm run dev` llega vacío. -->
+    <div id="root"><!--app--></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

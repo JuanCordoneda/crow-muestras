@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Miniatura para WhatsApp / redes (1200×630). Se renderiza con build-og.sh → ../public/og.jpg -->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,500&family=DM+Sans:wght@700&display=block">
+<style>
+:root{--ink:#141210;--white:#fffbf4;--gold:#c9a24a;--gold-l:#e3c67e}
+*{box-sizing:border-box;margin:0}
+html,body{width:1200px;height:630px;overflow:hidden;background:var(--ink)}
+.card{position:relative;width:1200px;height:630px;color:var(--white);display:grid;place-items:center;text-align:center;font-variant-numeric:lining-nums}
+.card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 55%;transform:scale(1.04)}
+/* oscurece el centro para el texto y deja respirar el plato en los bordes */
+.card::before{content:"";position:absolute;inset:0;z-index:1;background:
+  radial-gradient(ellipse 52% 72% at 50% 50%,rgba(20,18,16,.92) 0%,rgba(20,18,16,.78) 52%,rgba(20,18,16,.35) 100%),
+  linear-gradient(180deg,rgba(20,18,16,.35) 0%,rgba(20,18,16,0) 30%,rgba(20,18,16,0) 70%,rgba(20,18,16,.55) 100%)}
+.card::after{content:"";position:absolute;z-index:2;inset:18px;border:2px solid rgba(201,162,74,.6);border-radius:22px;pointer-events:none}
+.c{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center}
+.logo{width:74px;height:74px;color:var(--gold)}
+.eyebrow{margin-top:18px;font:700 19px/1 "DM Sans",sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-l)}
+h1{font:600 118px/.95 "Cormorant Garamond",Georgia,serif;letter-spacing:.01em;text-transform:uppercase;margin-top:16px;text-shadow:0 6px 30px rgba(0,0,0,.45)}
+.tag{font:italic 500 58px/1 "Cormorant Garamond",Georgia,serif;color:var(--gold);margin-top:6px}
+.pill{margin-top:26px;display:inline-flex;align-items:center;gap:12px;padding:13px 26px;border-radius:999px;background:var(--gold);color:var(--ink);font:700 21px/1 "DM Sans",sans-serif;letter-spacing:.03em}
+.pill i{width:6px;height:6px;border-radius:50%;background:var(--ink);opacity:.55}
+</style>
+</head>
+<body>
+<div class="card">
+  <img src="../public/img/comptoir/ceviche-agrumes.webp" alt="">
+  <div class="c">
+    <svg class="logo" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22.5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width=".8" stroke-dasharray="1.4 2.2"/><g fill="currentColor"><circle cx="24" cy="24" r="6.4"/><path d="M24 8.6l1.7 5.6h-3.4zM24 39.4l-1.7-5.6h3.4zM8.6 24l5.6-1.7v3.4zM39.4 24l-5.6 1.7v-3.4zM13.1 13.1l5.15 2.75-2.4 2.4zM34.9 34.9l-5.15-2.75 2.4-2.4zM13.1 34.9l2.75-5.15 2.4 2.4zM34.9 13.1l-2.75 5.15-2.4-2.4z"/></g><g fill="#141210"><circle cx="21.7" cy="23.2" r=".95"/><circle cx="26.3" cy="23.2" r=".95"/><path d="M21.6 26.2h4.8a2.4 2.4 0 0 1-4.8 0z"/></g></svg>
+    <div class="eyebrow">Cuisine péruvienne · Paris 15e · depuis 2019</div>
+    <h1>Le Comptoir</h1>
+    <p class="tag">du Pérou</p>
+    <div class="pill">Ceviche <i></i> Causa <i></i> Pisco sour <i></i> Réservez en 30 s</div>
+  </div>
+</div>
+</body>
+</html>

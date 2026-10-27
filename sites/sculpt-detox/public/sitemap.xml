@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Las páginas que tienen que posicionar, cada una con su versión en el otro idioma. Las landings de
+  publicidad (/lipedema-ibiza, /maderoterapia-ibiza y sus versiones en inglés) no están: llevan
+  noindex para no competir con /lipedema y la portada.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://sculptdetox.com/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sculptdetox.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sculptdetox.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sculptdetox.com/" />
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://sculptdetox.com/en</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sculptdetox.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sculptdetox.com/en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sculptdetox.com/" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sculptdetox.com/lipedema</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sculptdetox.com/lipedema" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sculptdetox.com/en/lipedema" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sculptdetox.com/lipedema" />
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://sculptdetox.com/en/lipedema</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sculptdetox.com/lipedema" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sculptdetox.com/en/lipedema" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sculptdetox.com/lipedema" />
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sculptdetox.com/privacidad</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sculptdetox.com/privacidad" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sculptdetox.com/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sculptdetox.com/privacidad" />
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://sculptdetox.com/en/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://sculptdetox.com/privacidad" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://sculptdetox.com/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://sculptdetox.com/privacidad" />
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+</urlset>

@@ -1,0 +1,198 @@
+/* public.css — armazón de la web pública: cabecera, cajón, pie, botón flotante y piezas comunes.
+   Se escribe para el móvil primero; las pantallas grandes solo añaden aire y columnas. */
+
+.site{--header-h:64px;min-height:100vh;display:flex;flex-direction:column;background:var(--paper)}
+.site-main{flex:1;padding-top:calc(var(--header-h) + var(--safe-top))}
+.site.is-home .site-main{padding-top:0}
+.skip-link{position:fixed;left:12px;top:-60px;z-index:80;background:var(--indigo);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;text-decoration:none}
+.skip-link:focus{top:calc(10px + var(--safe-top))}
+
+/* ---------- piezas comunes ---------- */
+.eyebrow{display:inline-block;font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--terracotta)}
+.text-link{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:15.5px;font-weight:700;color:var(--indigo);text-decoration:none}
+.text-link:hover{text-decoration:underline;text-underline-offset:4px}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+/* La marca del grupo: el sol y «Mexi-and-Co» con su línea debajo. Hereda el color del sitio donde va. */
+.logo{display:inline-flex;align-items:center;gap:9px;flex:none;line-height:1;color:inherit}
+.logo-sun{flex:none;width:38px;height:38px;color:var(--indigo)}
+.logo-words{display:grid;gap:3px}
+.logo-words b{font-family:var(--font-display);font-size:23px;font-weight:400;letter-spacing:-.2px;white-space:nowrap}
+.logo-words b i{font-style:italic;color:var(--terracotta)}
+.logo-words small{font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.7;white-space:nowrap}
+.tag{display:inline-flex;align-items:center;gap:4px;min-height:24px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:700;background:var(--sand);color:var(--muted);white-space:nowrap}
+
+.page-head{padding:26px 18px 6px;max-width:760px}
+.page-head h1{font-family:var(--font-display);font-weight:600;font-size:clamp(34px,9.5vw,52px);letter-spacing:-.8px;margin-top:6px;color:var(--indigo-ink)}
+.page-head p{font-size:16px;line-height:1.6;color:var(--muted);margin-top:10px;max-width:56ch}
+
+.site-notice{margin:12px 14px 0;padding:12px 14px;border-radius:14px;background:var(--saffron-soft);border:1px solid #f1d79c;color:#6a4508;font-size:14.5px;font-weight:600;line-height:1.5}
+
+/* «Abierto ahora»: el punto verde late despacio, que se vea sin molestar. */
+.open-status{display:inline-flex;align-items:center;gap:8px;min-height:30px;padding:0 12px;border-radius:999px;font-size:13.5px;font-weight:700;background:var(--ok-soft);color:var(--ok);line-height:1.2}
+.open-status i{flex:none;width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor}
+.open-status.is-open i{animation:pulse 2.4s ease-out infinite}
+.open-status.is-soon,.open-status.is-later{background:var(--warn-soft);color:var(--warn)}
+.open-status.is-closed{background:var(--danger-soft);color:var(--danger)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,122,82,.45)}70%{box-shadow:0 0 0 8px rgba(46,122,82,0)}100%{box-shadow:0 0 0 0 rgba(46,122,82,0)}}
+
+/* ---------- cabecera ---------- */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;gap:10px;height:calc(var(--header-h) + var(--safe-top));padding:var(--safe-top) max(10px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left));background:rgba(251,243,228,.94);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line);transition:background .25s,border-color .25s,color .25s}
+.site-header.is-overlay{background:transparent;border-bottom-color:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;color:#fff}
+.site-brand{display:flex;align-items:center;gap:10px;min-width:0;min-height:48px;margin-right:auto;text-decoration:none;color:var(--indigo-ink)}
+.site-header.is-overlay .site-brand{color:#fff}
+/* El logo manda en la cabecera: azul noche sobre el crema y blanco sobre la foto del héroe. */
+.site-logo{color:var(--indigo-ink)}
+.site-header.is-overlay .site-logo{color:#fff}
+.site-header.is-overlay .logo-words b i{color:var(--saffron)}
+.site-header.is-overlay .logo-sun{color:var(--indigo-ink)}
+.site-nav{display:none}
+.site-header-actions{display:flex;align-items:center;gap:4px;flex:none}
+.header-call,.header-menu{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;color:inherit;text-decoration:none}
+.header-call{color:var(--indigo)}
+.site-header.is-overlay .header-call{color:#fff}
+.header-call:active,.header-menu:active{background:rgba(31,42,68,.08)}
+
+/* En el móvil la línea de debajo del nombre no cabe junto al FR | ES: se queda solo el nombre. */
+@media(max-width:520px){.site-logo .logo-words small{display:none}.site-logo .logo-sun{width:34px;height:34px}}
+@media(max-width:369px){
+  .site-logo .logo-words b{font-size:20px}
+  .header-call,.header-menu{width:40px}
+}
+.flag{display:block;flex:none;width:22px;height:15px;border-radius:3px;box-shadow:inset 0 0 0 1px rgba(18,26,46,.14)}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lang-option{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 12px;border-radius:14px;border:1px solid var(--line);background:#fff;font-size:15px;font-weight:600;text-align:left}
+.lang-option.active{border-color:var(--indigo);background:var(--indigo-soft);color:var(--indigo);font-weight:800}
+
+/* ---------- cajón de navegación ---------- */
+.drawer-backdrop{position:fixed;inset:0;z-index:40;background:rgba(18,26,46,.48);opacity:0;pointer-events:none;transition:opacity .25s}
+.drawer-backdrop.is-open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:41;display:flex;flex-direction:column;width:min(88vw,390px);background:var(--paper);box-shadow:var(--shadow-lg);overflow-y:auto;overscroll-behavior:contain;transform:translateX(104%);visibility:hidden;transition:transform .3s cubic-bezier(.3,.7,.2,1),visibility .3s}
+.drawer.is-open{transform:none;visibility:visible}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:calc(10px + var(--safe-top)) 12px 10px 18px;border-bottom:1px solid var(--line)}
+.drawer-logo{color:var(--indigo-ink)}
+.drawer-close{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--sand)}
+.drawer-links{display:flex;flex-direction:column;padding:8px 18px}
+.drawer-links a{display:flex;align-items:center;justify-content:space-between;min-height:62px;border-bottom:1px solid var(--line);font-family:var(--font-display);font-size:25px;font-weight:600;color:var(--indigo-ink);text-decoration:none}
+.drawer-links a:last-child{border-bottom:0}
+.drawer-links a svg{color:var(--faint)}
+.drawer-links a.active{color:var(--terracotta)}
+.drawer-links a.active svg{color:var(--terracotta)}
+.drawer-contact{display:grid;gap:8px;margin:6px 14px 0;padding:14px;border-radius:20px;background:#fff;border:1px solid var(--line)}
+.drawer-row{display:flex;align-items:center;gap:12px;min-height:52px;text-decoration:none;color:var(--ink)}
+.drawer-row>span:last-child{display:grid;min-width:0}
+.drawer-row small{font-size:12px;color:var(--muted);font-weight:600}
+.drawer-row b{font-size:15.5px;font-weight:700;overflow-wrap:anywhere}
+.drawer-icon{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;background:var(--indigo-soft);color:var(--indigo)}
+.drawer-icon.is-whatsapp{background:#e3f6e8;color:#1f8a43}
+.drawer-foot{display:grid;gap:10px;margin-top:auto;padding:18px 14px calc(18px + var(--safe-bottom))}
+.drawer-label{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint)}
+
+/* ---------- pie ---------- */
+.site-footer{position:relative;background:var(--indigo-ink);color:#e2dccf;padding:58px 18px calc(110px + var(--safe-bottom))}
+.footer-brand{max-width:520px}
+.footer-logo{color:#fff}
+.footer-logo .logo-sun{width:46px;height:46px;color:var(--indigo-ink)}
+.footer-logo .logo-words b{font-size:28px}
+.footer-logo .logo-words b i{color:var(--saffron)}
+.footer-brand p{font-size:14.5px;line-height:1.6;margin-top:16px;color:#c9c2b3}
+.footer-grid{display:grid;gap:26px;margin-top:30px}
+.footer-grid section{display:grid;align-content:start}
+.footer-grid .footer-hours{margin-top:8px}
+.footer-muted{display:flex;align-items:center;gap:10px;min-height:44px;font-size:15px;color:#c9c2b3}
+.footer-muted svg{flex:none;color:#a9a395}
+.footer-grid h2{font-size:12px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase;color:var(--saffron);margin-bottom:10px}
+.footer-grid a{display:flex;align-items:center;gap:10px;min-height:44px;color:#fff;text-decoration:none;font-size:15px}
+.footer-grid a svg{flex:none;color:#a9a395}
+.footer-hours{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14.5px}
+.footer-hours li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(255,255,255,.12);padding-bottom:6px}
+.footer-hours li span:first-child{text-transform:none}
+.footer-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-top:30px;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);font-size:13px;color:#a9a395}
+.footer-bottom a{display:inline-flex;align-items:center;gap:6px;min-height:44px;color:#e2dccf;text-decoration:none}
+
+/* ---------- páginas de información ---------- */
+.info-page{padding-bottom:30px}
+.info-page.is-narrow{max-width:760px}
+
+.not-found-actions{display:grid;gap:10px;padding:18px 18px 0;max-width:420px}
+.legal{display:grid;gap:18px;padding:14px 18px 20px}
+.legal h2{font-family:var(--font-display);font-size:21px;font-weight:600;color:var(--indigo-ink);margin-bottom:6px}
+.legal p{font-size:15.5px;line-height:1.7;color:var(--muted)}
+
+/* ---------- pantallas medianas ---------- */
+@media(min-width:761px){
+  .site{--header-h:72px}
+  .site-header{padding-left:28px;padding-right:22px}
+  .page-head{padding:44px 32px 10px;margin:0 auto;max-width:1080px;width:100%}
+  .site-notice{max-width:1080px;margin:16px auto 0;width:calc(100% - 64px)}
+  .info-page{max-width:1080px;margin:0 auto;width:100%}
+  .info-page.is-narrow{max-width:820px}
+  .legal{padding:18px 32px 30px}
+  .site-footer{padding:72px 32px 100px}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ---------- escritorio ---------- */
+@media(min-width:1024px){
+  .site-nav{display:flex;align-items:center;gap:4px;margin-right:12px}
+  .site-nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;font-size:15px;font-weight:700;color:inherit;text-decoration:none;opacity:.86}
+  .site-nav a:hover{opacity:1;background:rgba(31,42,68,.07)}
+  .site-header.is-overlay .site-nav a:hover{background:rgba(255,255,255,.14)}
+  .site-nav a.active{opacity:1;color:var(--indigo)}
+  .site-header.is-overlay .site-nav a.active{color:#fff;text-decoration:underline;text-underline-offset:6px}
+  .site-nav a.is-cta{background:var(--saffron);color:var(--indigo-ink);opacity:1;margin-left:6px}
+  .site-nav a.is-cta:hover{background:#f6c452}
+  .header-menu{display:none}
+  .site-footer{padding:84px max(40px,calc((100% - 1160px) / 2)) 48px}
+  .footer-grid{grid-template-columns:1.25fr 1fr 1fr .9fr;gap:40px}
+}
+
+/* ---------- versión moderna: movimiento y detalles ---------- */
+/* Entrada al hacer scroll. Solo la reciben los elementos que estaban fuera de pantalla. */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.is-in{opacity:1;transform:none}
+
+/* Antetítulos con una raya amarilla delante: el mismo gesto en todas las secciones. */
+.section-head .eyebrow,.page-head .eyebrow{display:inline-flex;align-items:center;gap:10px}
+.section-head .eyebrow::before,.page-head .eyebrow::before{content:'';width:22px;height:2px;border-radius:2px;background:var(--saffron)}
+
+
+/* Toques con respuesta: todo lo que se pulsa se hunde un poco. */
+.dish-card,.quick-item,.day-chip,.slot{transition:transform .15s ease,background .2s,border-color .2s,box-shadow .2s}
+.dish-card:active,.day-chip:active,.slot:active{transform:scale(.97)}
+
+.site-credit{display:inline-flex;align-items:center;gap:6px;opacity:.85}
+.site-credit img{display:block;height:auto}
+
+/* ---------- interruptor de idioma (FR | ES) ---------- */
+.lang-switch{display:inline-flex;align-items:center;padding:3px;border-radius:999px;border:1px solid var(--line);background:#fff}
+.lang-switch button{min-width:38px;min-height:34px;padding:0 9px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.6px;color:var(--muted)}
+.lang-switch button.is-on{background:var(--indigo);color:#fff}
+.lang-switch.is-light{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.38);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.lang-switch.is-light button{color:rgba(255,255,255,.85)}
+.lang-switch.is-light button.is-on{background:#fff;color:var(--indigo-ink)}
+@media(max-width:369px){.lang-switch button{min-width:32px;padding:0 6px}}
+
+/* ---------- papel picado ---------- */
+/* Banderitas recortadas colgando de un cordel. Sutil: una tira fina en el borde de lo que celebra. */
+.papel-picado{position:absolute;left:0;right:0;top:0;height:38px;pointer-events:none;opacity:.92;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='168' height='38' viewBox='0 0 168 38'%3E%3Cpath d='M0 3 Q42 9 84 3 T168 3' fill='none' stroke='%23e2dccf' stroke-width='1.2'/%3E%3Cg%3E%3Cpath d='M8 5h36v22l-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4z' fill='%23c2502e'/%3E%3Ccircle cx='26' cy='14' r='3.2' fill='%23121a2e' opacity='.55'/%3E%3Cpath d='M17 21l3-3 3 3-3 3zM29 21l3-3 3 3-3 3z' fill='%23121a2e' opacity='.45'/%3E%3C/g%3E%3Cg%3E%3Cpath d='M64 5h36v22l-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4z' fill='%23f2b632'/%3E%3Cpath d='M82 10l4 4-4 4-4-4z' fill='%23121a2e' opacity='.5'/%3E%3Ccircle cx='73' cy='21' r='2' fill='%23121a2e' opacity='.45'/%3E%3Ccircle cx='91' cy='21' r='2' fill='%23121a2e' opacity='.45'/%3E%3C/g%3E%3Cg%3E%3Cpath d='M120 5h36v22l-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4-3 4-3-4z' fill='%23fbf3e4'/%3E%3Cpath d='M131 12h4v4h-4zM141 12h4v4h-4zM136 19l2-2 2 2-2 2z' fill='%23c2502e' opacity='.7'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 0/168px 38px}
+.papel-picado.is-footer{opacity:.55}
+
+/* ---------- botón flotante de WhatsApp ---------- */
+.wa-fab{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:calc(14px + var(--safe-bottom));z-index:35;display:inline-flex;align-items:center;gap:9px;min-height:54px;padding:0 20px 0 16px;border-radius:999px;background:var(--whatsapp-deep);color:#fff;font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 14px 34px rgba(10,60,32,.34),0 0 0 3px rgba(255,255,255,.75);transition:transform .2s,opacity .2s,background .2s}
+.wa-fab:hover{background:#0f7a41}
+.wa-fab:active{transform:scale(.96)}
+.wa-fab.is-hidden{opacity:0;pointer-events:none;transform:translateY(20px)}
+@media(max-width:760px){.wa-fab.is-waiting{opacity:0;pointer-events:none;transform:translateY(calc(100% + 30px))}}
+@media(min-width:761px){.wa-fab{right:24px;bottom:24px}}
+
+/* ---------- cartel de «photos à venir» ---------- */
+/* Rayos de sol sobre el color de la casa, el sol y el nombre, como en un cartel de fiesta. */
+.photo-soon{--ray-y:46%;position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:100%;padding:18px;text-align:center;color:#fff;background:radial-gradient(circle at 50% var(--ray-y),rgba(242,182,50,.34),transparent 42%),var(--indigo);overflow:hidden}
+/* Los rayos del sol, como en los carteles de lotería: franjas que salen del centro del sol. */
+.photo-soon::before{content:'';position:absolute;inset:0;z-index:-1;background:repeating-conic-gradient(from -4deg at 50% var(--ray-y),rgba(255,255,255,.075) 0deg 8deg,transparent 8deg 20deg)}
+.photo-soon.is-terracota{background:radial-gradient(circle at 50% var(--ray-y),rgba(255,207,107,.42),transparent 44%),var(--terracotta)}
+.photo-soon .papel-picado.is-soon{top:6px;opacity:.85}
+.photo-soon-sun{width:64px;height:64px;color:var(--indigo-ink);filter:drop-shadow(0 6px 18px rgba(242,182,50,.45))}
+.photo-soon.is-terracota .photo-soon-sun{color:var(--terracotta-deep);--sun:#ffd36b}
+.photo-soon b{font-family:var(--font-display);font-size:clamp(30px,8vw,44px);font-weight:400;line-height:1.05;text-shadow:0 2px 14px rgba(0,0,0,.25)}
+.photo-soon small{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;background:rgba(0,0,0,.18);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;opacity:.9}

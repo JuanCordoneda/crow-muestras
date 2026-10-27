@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Cada página existe en francés y en castellano con ?lang=fr|es. La dirección sin parámetro no tiene
+  idioma fijo: se abre en el del teléfono (o en el que el visitante eligió la última vez), así que es
+  la x-default. Cada versión se declara con todas sus hermanas.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.mexiandco.fr/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/?lang=fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/?lang=es</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/el-sol-la-luna</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/el-sol-la-luna?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/el-sol-la-luna?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/el-sol-la-luna" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/el-sol-la-luna?lang=fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/el-sol-la-luna?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/el-sol-la-luna?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/el-sol-la-luna" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/el-sol-la-luna?lang=es</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/el-sol-la-luna?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/el-sol-la-luna?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/el-sol-la-luna" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/mexi-and-co</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/mexi-and-co?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/mexi-and-co?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/mexi-and-co" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/mexi-and-co?lang=fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/mexi-and-co?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/mexi-and-co?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/mexi-and-co" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/mexi-and-co?lang=es</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/mexi-and-co?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/mexi-and-co?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/mexi-and-co" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/reserver</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/reserver?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/reserver?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/reserver" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/reserver?lang=fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/reserver?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/reserver?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/reserver" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/reserver?lang=es</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/reserver?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/reserver?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/reserver" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/confidentialite</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/confidentialite?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/confidentialite?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/confidentialite" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/confidentialite?lang=fr</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/confidentialite?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/confidentialite?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/confidentialite" />
+  </url>
+  <url>
+    <loc>https://www.mexiandco.fr/confidentialite?lang=es</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.mexiandco.fr/confidentialite?lang=fr" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.mexiandco.fr/confidentialite?lang=es" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.mexiandco.fr/confidentialite" />
+  </url>
+</urlset>

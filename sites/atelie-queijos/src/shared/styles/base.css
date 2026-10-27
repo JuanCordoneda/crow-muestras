@@ -1,0 +1,195 @@
+@import url('./fonts.css');
+
+/* base.css — tokens, tipografía y primitivas de la web.
+   Paleta de PariSabor: crema de mantel francés de fondo, bordó de vino para la marca y para lo
+   único que se tiene que ver siempre —reservar—, amarillo manteca/queso para los detalles y verde
+   oliva para lo secundario. Texto casi negro, cálido. */
+:root{
+  --cream:#faf6ef;
+  --paper:#faf6ef;
+  --sand:#f2eadb;
+  --sand-deep:#e7dbc4;
+  --white:#fff;
+  --wine:#7a2e3a;
+  --wine-deep:#5f2230;
+  --wine-ink:#3d1820;
+  --wine-soft:#f4e6e4;
+  --butter:#e9c46a;
+  --butter-deep:#b98d22;
+  --butter-ink:#7a5a10;
+  --butter-soft:#faefd2;
+  --olive:#6b705c;
+  --olive-deep:#4e5242;
+  --olive-soft:#e9e9e0;
+  --ink:#2a2622;
+  --muted:#5e574f;
+  --faint:#6d655c;
+  --line:#e6dccb;
+  --line-strong:#d3c4aa;
+  --ok:#3f6b45;
+  --ok-soft:#e3eee1;
+  --warn:#8a5a1c;
+  --warn-soft:#f7ecd9;
+  --danger:#a5402c;
+  --danger-soft:#f6e2dc;
+  /* Los nombres de la plantilla, para los componentes compartidos (modal, avisos, galería). */
+  --indigo:var(--wine);
+  --indigo-deep:var(--wine-deep);
+  --indigo-ink:var(--ink);
+  --indigo-soft:var(--wine-soft);
+  --indigo-line:var(--line);
+  --saffron:var(--butter);
+  --saffron-deep:var(--butter-deep);
+  --saffron-soft:var(--butter-soft);
+  --sea:var(--olive);
+  --radius-sm:10px;
+  --radius:14px;
+  --radius-lg:22px;
+  --shadow-sm:0 2px 12px rgba(42,38,34,.05);
+  --shadow:0 14px 34px rgba(42,38,34,.10);
+  --shadow-lg:0 24px 60px rgba(42,30,26,.24);
+  --font-display:'Fraunces',Georgia,'Times New Roman',serif;
+  --font-body:Manrope,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:var(--paper);
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth}
+body{margin:0;min-width:320px;background:var(--paper);overflow-x:clip;line-height:1.5}
+img{max-width:100%}
+h1,h2,h3,h4{margin:0;line-height:1.15}
+p{margin:0}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+a{color:inherit}
+input,select,textarea{font:inherit;color:inherit}
+/* El destello azul de Android sobre cada toque delata que esto es una web y no una app. */
+button,a,input,select,textarea,label{-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--wine);outline-offset:2px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+}
+@media(max-width:760px){
+  /* Por debajo de 16px, iOS hace zoom al enfocar un campo y ya no vuelve. */
+  input,select,textarea{font-size:16px}
+}
+
+/* ---------- botones ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:700;letter-spacing:.1px;text-decoration:none;white-space:nowrap;transition:background .18s,color .18s,border-color .18s,transform .12s,box-shadow .18s;user-select:none}
+.btn:active{transform:scale(.97)}
+.btn svg{flex:none}
+.btn-primary{background:var(--wine);color:#fff;box-shadow:0 8px 22px rgba(122,46,58,.26)}
+.btn-primary:hover{background:var(--wine-deep)}
+.btn-butter{background:var(--butter);color:var(--ink);box-shadow:0 8px 22px rgba(185,141,34,.28)}
+.btn-butter:hover{background:#f0d185}
+.btn-wine-ghost{background:transparent;color:var(--wine);border:1.5px solid var(--wine)}
+.btn-wine-ghost:hover{background:var(--wine-soft)}
+.btn-indigo{background:var(--indigo);color:#fff}
+.btn-indigo:hover{background:var(--indigo-deep)}
+.btn-ghost{background:transparent;color:var(--indigo);border:1.5px solid var(--indigo-line)}
+.btn-ghost:hover{border-color:var(--indigo);background:var(--indigo-soft)}
+.btn-light{background:rgba(255,255,255,.14);color:#fff;border:1.5px solid rgba(255,255,255,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.btn-light:hover{background:rgba(255,255,255,.24)}
+.btn-white{background:#fff;color:var(--indigo-ink);border:1px solid var(--line)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-block{width:100%}
+.btn-lg{min-height:56px;font-size:16px;padding:0 24px}
+.btn-sm{min-height:38px;padding:0 14px;font-size:13.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Botones heredados que usan los componentes compartidos. */
+.primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:var(--indigo);color:#fff;border-radius:12px;padding:0 16px;font-size:14px;font-weight:700;white-space:nowrap}
+.primary-btn:hover{background:var(--indigo-deep)}
+.outline-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:#fff;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:0 14px;font-size:14px;font-weight:600}
+.danger-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;background:var(--danger);color:#fff;border-radius:12px;padding:0 16px;font-size:14px;font-weight:700}
+.danger-btn.ghost{background:transparent;color:var(--danger);border:1px solid #e9c3ba}
+.icon-btn{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;color:var(--muted)}
+.icon-btn:hover{background:var(--sand)}
+.link-btn{color:var(--indigo);font-weight:700;text-decoration:underline;text-underline-offset:3px}
+
+/* ---------- modal ---------- */
+.modal-backdrop{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:20px;background:rgba(42,30,26,.46);animation:fade-in .18s ease-out}
+.modal{width:min(520px,100%);max-height:calc(100dvh - 40px);overflow:auto;overscroll-behavior:contain;background:var(--paper);border-radius:var(--radius-lg);padding:22px;box-shadow:var(--shadow-lg);animation:pop-in .2s ease-out}
+.modal-wide{width:min(720px,100%)}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:18px}
+.modal-head-main{display:flex;align-items:center;gap:12px;min-width:0}
+.modal-head-text{min-width:0}
+.modal h2{font-family:var(--font-display);font-size:24px;font-weight:600;margin-top:2px}
+.modal-footer{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:9px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.kicker{font-size:11.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint)}
+.confirm-text{font-size:15px;line-height:1.6;color:var(--muted)}
+@media(max-width:760px){
+  /* En el móvil los diálogos suben desde abajo, donde llega el pulgar. */
+  .modal-backdrop{place-items:end stretch;padding:0}
+  .modal{width:100%;max-height:92dvh;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + var(--safe-bottom));animation:sheet-up .26s cubic-bezier(.3,.7,.2,1)}
+  /*
+   * En el móvil los botones del pie van uno por línea y a todo el ancho: en una fila, tres botones
+   * se parten por donde quieren y el importante acaba en la esquina, que es la peor de acertar.
+   * `column-reverse` deja arriba el último del HTML, que es siempre el principal.
+   */
+  .modal-footer{flex-direction:column-reverse;gap:10px}
+  .modal-footer>*{width:100%}
+  .modal-footer .primary-btn,.modal-footer .outline-btn,.modal-footer .danger-btn{min-height:50px;font-size:15.5px}
+}
+
+/* ---------- avisos ---------- */
+.toast-stack{position:fixed;left:50%;bottom:calc(20px + var(--safe-bottom));transform:translateX(-50%);z-index:60;display:grid;gap:8px;width:min(420px,calc(100% - 28px))}
+.toast{display:flex;align-items:center;gap:10px;background:var(--indigo-ink);color:#faf6ef;border-radius:14px;padding:12px 14px;font-size:14px;box-shadow:var(--shadow-lg);animation:pop-in .2s ease-out}
+.toast>span{flex:1}
+.toast.error{background:#7a2e22}
+.toast svg{flex:none;color:var(--saffron)}
+.toast.error svg{color:#ffd2c7}
+.toast-undo{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);border-radius:8px;padding:6px 9px;font-size:12.5px;font-weight:700}
+.toast-close{display:grid;place-items:center;opacity:.7;padding:2px}
+
+/* ---------- desplegables ---------- */
+.dropdown{position:relative}
+.dropdown-panel{position:absolute;top:calc(100% + 6px);left:0;z-index:30;display:flex;flex-direction:column;min-width:190px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:6px;animation:pop-in .16s ease-out}
+.dropdown-panel.to-right{left:auto;right:0}
+.dropdown-panel.to-top{top:auto;bottom:calc(100% + 6px)}
+.dropdown-panel button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:0 12px;border-radius:10px;text-align:left;font-size:14.5px;color:var(--ink)}
+.dropdown-panel button:hover{background:var(--sand)}
+.dropdown-panel button.active{background:var(--indigo-soft);color:var(--indigo);font-weight:700}
+
+/* ---------- estado vacío ---------- */
+.empty-state{display:grid;justify-items:center;text-align:center;gap:8px;padding:40px 20px}
+.empty-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--indigo-soft);color:var(--indigo);margin-bottom:4px}
+.empty-state strong{font-size:16px}
+.empty-state p{font-size:14px;color:var(--muted);max-width:340px;line-height:1.6;margin-bottom:8px}
+
+/* ---------- galería a pantalla completa ---------- */
+.lightbox{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;padding:calc(14px + var(--safe-top)) 14px calc(14px + var(--safe-bottom))}
+.lightbox-close{position:absolute;top:calc(10px + var(--safe-top));right:12px;z-index:2;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff}
+.lightbox-stage{flex:1;position:relative;min-height:0;overflow:hidden;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.lightbox-track{display:flex;height:100%;will-change:transform;transition:transform .28s cubic-bezier(.22,.61,.36,1)}
+.lightbox-track.is-dragging{transition:none}
+.lightbox-frame{flex:none;position:relative;width:100%;height:100%;padding:0 6px}
+.lightbox-frame img{position:absolute;inset:0 6px;width:calc(100% - 12px);height:100%;object-fit:contain;border-radius:8px;-webkit-user-drag:none}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.16);color:#fff}
+.lightbox-nav.left{left:8px}
+.lightbox-nav.right{right:8px}
+.lightbox-foot{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:12px;color:#efe6d6}
+.lightbox-count{font-size:12px;font-weight:700;letter-spacing:1px}
+.lightbox-caption{font-size:14px;color:#fff;text-align:center}
+.lightbox-strip{display:flex;gap:6px;max-width:100%;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;overscroll-behavior-x:contain}
+.lightbox-strip::-webkit-scrollbar{display:none}
+.lightbox-strip button{flex:none;width:58px;height:42px;border-radius:6px;overflow:hidden;opacity:.5}
+.lightbox-strip button.active{opacity:1;box-shadow:0 0 0 2px var(--saffron)}
+.lightbox-strip img{width:100%;height:100%;object-fit:cover;display:block}
+@media(hover:none){.lightbox-nav{display:none}}
+
+/* ---------- espera de un trozo de la app ---------- */
+.route-loading{min-height:70vh;display:grid;place-items:center}
+.route-spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--indigo-soft);border-top-color:var(--indigo);animation:spin .8s linear infinite}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes pop-in{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}

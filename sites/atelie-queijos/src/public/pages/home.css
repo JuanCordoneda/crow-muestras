@@ -1,0 +1,248 @@
+/* home.css — la portada del ateliê. Móvil primero: casi todo el que llega viene de Instagram. */
+
+/* ---------- héroe ---------- */
+.hero{position:relative;display:flex;align-items:flex-end;min-height:100vh;min-height:100svh;max-height:940px;color:#fff;background:var(--wine-ink);overflow:hidden;isolation:isolate}
+.hero-media{position:absolute;inset:0;z-index:-1}
+.hero-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.hero-shot.is-on{animation:kenburns 14s ease-out both}
+@keyframes kenburns{from{transform:scale(1.12)}to{transform:scale(1.02)}}
+/* Degradado arriba para que se lea la cabecera y abajo para el texto; en medio, la tábua limpia. */
+.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,22,20,.6) 0%,rgba(38,22,20,0) 22%,rgba(38,22,20,.08) 34%,rgba(38,22,20,.8) 56%,rgba(30,16,16,.96) 100%)}
+.hero-content{position:relative;width:100%;padding:0 18px 40px;display:flex;flex-direction:column;align-items:flex-start}
+.hero-byline{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:4px 12px 4px 4px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.26);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:13.5px;font-weight:700;text-decoration:none}
+.hero-byline img{width:34px;height:34px;border-radius:50%;object-fit:cover;border:1.5px solid var(--butter)}
+.hero-byline small{font-size:12.5px;font-weight:600;opacity:.8}
+.hero-byline small::before{content:'· '}
+.verified{flex:none;display:inline-block;vertical-align:-2px}
+.hero h1{font-family:var(--font-display);font-weight:600;font-size:clamp(36px,11vw,86px);line-height:.98;letter-spacing:-1.6px;margin-top:16px;text-wrap:balance}
+.hero h1 em{display:block;font-style:italic;font-weight:500;color:var(--butter)}
+.hero-text{font-size:16.5px;line-height:1.55;color:rgba(255,255,255,.9);margin-top:14px;max-width:40ch}
+.hero-chips{list-style:none;display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 0;padding:0}
+.hero-chips li{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 12px;border-radius:999px;background:rgba(250,246,239,.14);border:1px solid rgba(250,246,239,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-size:14px;font-weight:700;white-space:nowrap}
+.hero-chips svg{color:var(--butter)}
+.hero-actions{display:grid;grid-template-columns:1fr;gap:10px;width:100%;max-width:460px;margin-top:20px}
+.hero-next{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-top:14px;padding:6px 2px;color:rgba(255,255,255,.88);font-size:14px;text-align:left}
+.hero-next svg{color:var(--butter)}
+.hero-next b{color:#fff}
+.hero-next em{font-style:normal;font-weight:800;color:var(--butter);text-decoration:underline;text-underline-offset:3px}
+/* El titular entra por partes al abrir la web. */
+.hero-byline,.hero h1,.hero-text,.hero-chips,.hero-actions,.hero-next{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.1s}.hero-text{animation-delay:.18s}.hero-chips{animation-delay:.24s}.hero-actions{animation-delay:.3s}.hero-next{animation-delay:.36s}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* ---------- encabezado de sección ---------- */
+.section-head{padding:0 18px;max-width:660px}
+.section-head .eyebrow{color:var(--olive-deep)}
+.section-head .eyebrow svg{flex:none}
+.section-head h2{font-family:var(--font-display);font-weight:600;font-size:clamp(32px,8.6vw,48px);letter-spacing:-.6px;line-height:1.05;margin-top:8px;color:var(--ink);text-wrap:balance}
+.section-head p{font-size:16px;line-height:1.6;color:var(--muted);margin-top:10px}
+.section-head.is-light .eyebrow{color:var(--butter)}
+.section-head.is-light h2{color:#fff}
+.section-head.is-light p{color:#efe2d0}
+.section-foot{padding:20px 18px 0}
+/* Los antetítulos llevan su raya en manteca, el mismo gesto en todas las secciones. */
+.section-head .eyebrow::before{background:var(--butter-deep)}
+.section-head.is-light .eyebrow::before{background:var(--butter)}
+
+/* ---------- o que você vai viver ---------- */
+.live{padding:56px 0 20px}
+.live-list{list-style:none;display:grid;gap:12px;margin:0;padding:22px 14px 0}
+.live-item{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:start;padding:16px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.live-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:var(--butter-soft);color:var(--wine);border:1px solid #f0dca4}
+.live-item h3,.groups-list h3{font-family:var(--font-display);font-size:19.5px;font-weight:600;line-height:1.2;color:var(--ink)}
+.live-item p,.groups-list p{margin-top:5px;font-size:15px;line-height:1.55;color:var(--muted)}
+.live-photos{display:grid;grid-template-columns:1.3fr 1fr;gap:10px;align-items:end;padding:22px 14px 0}
+.live-photo{display:block;padding:0;border-radius:var(--radius-lg);text-align:left;transition:transform .2s}
+.live-photo .figure{height:100%;box-shadow:var(--shadow)}
+.live-photo.is-a{aspect-ratio:3/4}
+.live-photo.is-b{aspect-ratio:3/4;transform:translateY(-22px)}
+.live-photo:active{transform:scale(.98)}
+.live-photo.is-b:active{transform:translateY(-22px) scale(.98)}
+.live-gallery{grid-column:1/-1;justify-self:start;display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:-8px;padding:0 4px;font-size:14.5px;font-weight:800;color:var(--wine)}
+.partner-line{display:flex;align-items:center;gap:10px;margin:4px 18px 0;padding:14px 16px;border-radius:16px;background:var(--olive-soft);color:var(--olive-deep);font-size:15px;font-weight:700;line-height:1.4}
+.partner-line svg{flex:none}
+
+/* ---------- com quem ---------- */
+.host{padding:52px 0 10px}
+.host-photo{margin:0 14px}
+.host-photo .figure{aspect-ratio:4/5}
+.host-photo .figure img{object-position:50% 30%}
+.host-body{padding-top:26px}
+.host-role{padding:0 18px;margin-top:12px;font-family:var(--font-display);font-size:20px;font-style:italic;font-weight:500;line-height:1.45;color:var(--wine)}
+.host-text{padding:0 18px;margin-top:12px;font-size:16px;line-height:1.65;color:var(--muted)}
+.host-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:20px 14px 0}
+.host-card{display:flex;flex-direction:column;gap:3px;padding:16px 14px;border-radius:20px;background:#fff;border:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.host-card b{font-family:var(--font-display);font-size:30px;font-weight:600;line-height:1;color:var(--wine)}
+.host-card span{font-size:13.5px;font-weight:700;line-height:1.35}
+.host-card small{display:inline-flex;align-items:center;gap:5px;margin-top:auto;padding-top:6px;font-size:12.5px;color:var(--muted)}
+.host-card.is-partner{grid-column:1/-1;background:var(--olive-soft);border-color:transparent}
+.host-card.is-post span{display:inline-flex;align-items:center;gap:4px;color:var(--wine)}
+.host-post-thumb{position:relative;display:block;width:46px;height:58px;margin-bottom:8px;border-radius:10px;overflow:hidden}
+.host-post-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.host-post-thumb svg{position:absolute;right:4px;bottom:4px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.host-card.is-partner svg{color:var(--olive-deep);margin-bottom:4px}
+
+/* ---------- próximas datas ---------- */
+.dates{padding:56px 0 10px}
+.section-head .dates-tz{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:4px 11px;border-radius:999px;background:var(--olive-soft);color:var(--olive-deep);font-size:13px;font-weight:800;line-height:1.5}
+.dates-list{list-style:none;display:grid;gap:10px;margin:0;padding:22px 14px 0}
+.date-card{display:grid;grid-template-columns:64px 1fr auto;align-items:center;gap:14px;padding:12px 12px 12px 12px;border-radius:20px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.date-day{display:grid;justify-items:center;gap:1px;padding:8px 0;border-radius:14px;background:var(--wine-soft);color:var(--wine)}
+.date-day small{font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase}
+.date-day b{font-family:var(--font-display);font-size:28px;font-weight:600;line-height:1}
+.date-body{display:grid;gap:3px;min-width:0}
+.date-body strong{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+.date-left{font-size:13.5px;font-weight:700;color:var(--olive-deep)}
+.date-card.is-low .date-left{color:var(--wine)}
+.seats{display:flex;gap:3px;margin-top:3px}
+.seats i{width:9px;height:9px;border-radius:50%;background:var(--line-strong)}
+.seats i.is-free{background:var(--butter);box-shadow:inset 0 0 0 1px var(--butter-deep)}
+.date-card.is-full{opacity:.7;box-shadow:none}
+.date-card.is-full .date-day{background:var(--sand);color:var(--muted)}
+.date-card.is-full .date-left{color:var(--muted)}
+.date-card .btn-sm{min-height:44px;padding:0 16px}
+.dates-none{margin:22px 18px 0;padding:18px;border-radius:18px;background:var(--sand);color:var(--muted);font-size:15.5px;line-height:1.55}
+.dates-other{display:flex;flex-wrap:wrap;align-items:center;gap:0 10px;margin:14px 18px 0;font-size:15px;color:var(--muted)}
+.dates-other .text-link{color:var(--wine)}
+
+/* ---------- reserva ---------- */
+.booking{position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:'head' 'how' 'card' 'aside';padding:56px 0 10px}
+.booking-head{grid-area:head}
+.booking-how{grid-area:how}
+.booking-card{grid-area:card}
+.booking-aside{grid-area:aside}
+.booking-subtitle{margin:26px 18px 0;font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--olive-deep)}
+.booking-steps{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 14px 0;padding:0}
+.booking-steps li{position:relative;display:grid;justify-items:center;gap:6px;text-align:center}
+.booking-steps li:not(:last-child)::before{content:'';position:absolute;left:calc(50% + 22px);right:calc(-50% + 18px);top:16px;height:2px;background:var(--line)}
+.booking-steps b{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--wine);color:#fff;font-size:15px;font-weight:800}
+.booking-steps strong{display:block;font-size:13.5px;line-height:1.3}
+.booking-steps p{display:none;margin-top:2px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.booking-included{margin:18px 14px 0;padding:4px 16px 18px;border-radius:20px;background:var(--butter-soft)}
+.booking-included .booking-subtitle{margin:14px 0 0;color:var(--butter-ink)}
+.booking-included ul{list-style:none;display:grid;gap:8px;margin:12px 0 0;padding:0}
+.booking-included li{display:flex;gap:9px;align-items:flex-start;font-size:15px;line-height:1.45}
+.booking-included li svg{flex:none;margin-top:2px;color:var(--wine)}
+.booking-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin-top:14px;padding-top:12px;border-top:1px dashed #e4cf93}
+.booking-price b{font-family:var(--font-display);font-size:32px;font-weight:600;line-height:1;color:var(--wine)}
+.booking-price span{font-size:14px;font-weight:700;color:var(--butter-ink)}
+.booking-art{display:none;color:var(--butter-deep);opacity:.55}
+.booking-card{margin:18px 12px 0;padding:20px 16px;border-radius:24px;box-shadow:var(--shadow)}
+
+/* ---------- vale-presente ---------- */
+.gift{margin:60px 0 0;padding:52px 0 54px;background:radial-gradient(120% 70% at 100% 0%,rgba(233,196,106,.2),transparent 60%),var(--wine-deep);color:#fff;overflow:hidden}
+.gift-inner{position:relative}
+.gift-art{position:absolute;right:-30px;top:-34px;color:var(--butter);opacity:.22;pointer-events:none}
+.gift .eyebrow{display:inline-flex;align-items:center;gap:8px}
+.gift-points{list-style:none;display:grid;gap:10px;margin:20px 18px 0;padding:0}
+.gift-points li{display:flex;gap:10px;align-items:flex-start;font-size:15.5px;line-height:1.5;color:#f6ecdf}
+.gift-points svg{flex:none;margin-top:2px;color:var(--butter)}
+.gift-order{display:grid;grid-template-columns:1fr;gap:8px;margin:24px 18px 0}
+.gift-order>span{font-size:14px;font-weight:800}
+.gift-order small{font-size:14px;color:#efe2d0;text-align:right}
+.gift .btn-block{width:calc(100% - 36px);margin:14px 18px 0}
+.gift .todo-tag{border-color:var(--butter);background:rgba(233,196,106,.15);color:var(--butter)}
+
+/* ---------- grupos ---------- */
+.groups{padding:60px 0 10px}
+.groups-list{list-style:none;display:grid;gap:10px;margin:0;padding:22px 14px 0}
+.groups-list li{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center;padding:14px 16px;border-radius:20px;background:var(--sand)}
+.groups-list .live-icon{background:#fff}
+
+/* ---------- outras experiências ---------- */
+.more{padding:60px 0 10px}
+.more-list{list-style:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 14px;margin:0;padding:22px 14px 8px;scrollbar-width:none;overscroll-behavior-x:contain}
+.more-list::-webkit-scrollbar{display:none}
+.more-card{position:relative;flex:none;display:flex;flex-direction:column;gap:8px;width:min(78vw,300px);padding:20px 18px 12px;border-radius:22px;background:#fff;border:1px dashed var(--line-strong);scroll-snap-align:start}
+.more-card h3{margin-top:6px;font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ink)}
+.more-card p{font-size:15px;line-height:1.55;color:var(--muted)}
+.more-card .text-link{margin-top:auto;color:var(--wine);font-size:15px}
+.more-soon{position:absolute;top:16px;right:16px;padding:3px 10px;border-radius:999px;background:var(--olive);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.more-card .live-icon{background:var(--olive-soft);border-color:transparent;color:var(--olive-deep)}
+
+/* ---------- depoimentos ---------- */
+.reviews{padding:60px 0 10px}
+.reviews-list{list-style:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 14px;margin:0;padding:22px 14px 8px;scrollbar-width:none;overscroll-behavior-x:contain}
+.reviews-list::-webkit-scrollbar{display:none}
+.reviews-list .review{flex:none;width:min(82vw,320px);scroll-snap-align:start}
+.review{position:relative;display:grid;gap:12px;padding:20px 18px 18px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.review.is-todo{border-style:dashed;border-color:var(--line-strong);background:linear-gradient(180deg,#fff,var(--cream))}
+.review-mark{color:var(--butter-deep)}
+.review blockquote{margin:0;font-family:var(--font-display);font-size:18px;font-style:italic;font-weight:500;line-height:1.5;color:var(--ink)}
+.review.is-todo blockquote{color:var(--faint)}
+.review footer{display:grid;gap:1px}
+.review footer b{font-size:15px}
+.review footer small{font-size:13px;color:var(--muted)}
+.review .todo-tag{position:absolute;top:18px;right:16px}
+
+/* ---------- perguntas frequentes ---------- */
+.faq{padding:60px 0 60px}
+.faq-list{display:grid;margin:20px 14px 0;border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-item summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:60px;padding:12px 4px;font-size:16.5px;font-weight:700;line-height:1.4;cursor:pointer;list-style:none}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary svg{flex:none;color:var(--wine);transition:transform .2s}
+.faq-item[open] summary svg{transform:rotate(180deg)}
+.faq-item p{padding:0 4px 18px;font-size:15.5px;line-height:1.65;color:var(--muted)}
+.faq-more{display:grid;justify-items:start;gap:10px;margin:24px 18px 0;padding:20px 18px;border-radius:20px;background:var(--sand)}
+.faq-more strong{font-family:var(--font-display);font-size:22px;font-weight:600}
+
+/* ---------- pantallas medianas ---------- */
+@media(min-width:761px){
+  .hero{min-height:min(100svh,880px)}
+  .hero-content{padding:0 40px 80px;max-width:1160px;margin:0 auto}
+  .hero-actions{display:flex;width:auto;max-width:none}
+  .hero-actions .btn{padding:0 28px}
+  .section-head{padding:0 32px}
+  .section-foot{padding:24px 32px 0}
+  .live,.host,.dates,.booking,.groups,.more,.reviews,.faq{max-width:1160px;margin:0 auto;width:100%}
+  .live{display:grid;grid-template-columns:1.1fr .9fr;column-gap:28px;padding-top:84px}
+  .live .section-head{grid-column:1/-1}
+  .live-list{padding:28px 0 0 32px}
+  .live-photos{padding:28px 32px 0 0;align-self:start;position:sticky;top:100px}
+  .partner-line{grid-column:1/-1;margin:28px 32px 0;justify-content:center}
+  .host{display:grid;grid-template-columns:.9fr 1.1fr;gap:36px;align-items:center;padding-top:80px}
+  .host-photo{margin:0 0 0 32px}
+  .host-body{padding:0 32px 0 0}
+  .host-body .section-head,.host-role,.host-text{padding-left:0;padding-right:0}
+  .host-cards{grid-template-columns:repeat(3,1fr);padding:24px 0 0}
+  .host-card.is-partner{grid-column:auto}
+  .dates{padding-top:80px}
+  .dates-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:28px 32px 0}
+  .dates-other{margin:18px 32px 0}
+  .booking{grid-template-columns:.85fr 1.15fr;grid-template-areas:'head card' 'how card' 'aside card';grid-template-rows:auto auto 1fr;column-gap:32px;align-items:start;padding-top:80px}
+  .booking-card{align-self:start;position:sticky;top:96px}
+  .booking-steps{grid-template-columns:1fr;gap:0;margin:12px 32px 0}
+  .booking-steps li{grid-template-columns:34px 1fr;justify-items:start;gap:12px;padding:0 0 16px;text-align:left}
+  .booking-steps li:not(:last-child)::before{left:16px;right:auto;top:34px;bottom:2px;width:2px;height:auto}
+  .booking-steps strong{padding-top:6px;font-size:16px}
+  .booking-steps p{display:block}
+  .booking-subtitle{margin-left:32px;margin-right:32px}
+  .booking-included{margin:12px 0 0 32px}
+  .booking-included .booking-subtitle{margin-left:0}
+  .booking-art{display:block;margin:34px 0 0 32px}
+  .booking-card{margin:0 32px 0 0;padding:28px 26px}
+  .gift{margin-top:84px;padding:72px 0}
+  .gift-inner{max-width:760px;margin:0 auto}
+  .gift-art{right:-80px;top:-60px}
+  .gift-points{margin:22px 32px 0}
+  .gift-order{grid-template-columns:auto 240px auto;align-items:center;gap:16px;margin:28px 32px 0}
+  .gift .btn-block{width:auto;margin:20px 32px 0;padding:0 34px}
+  .groups{padding-top:84px}
+  .groups-list{grid-template-columns:repeat(3,1fr);gap:14px;padding:28px 32px 0}
+  .groups-list li{grid-template-columns:1fr;align-items:start;padding:20px}
+  .more{padding-top:84px}
+  .more-list{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;gap:14px;padding:28px 32px 0}
+  .more-card{width:auto}
+  .reviews{padding-top:84px}
+  .reviews-list{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;gap:14px;padding:28px 32px 0}
+  .reviews-list .review{width:auto}
+  .faq{max-width:860px;padding:84px 0 90px}
+  .faq-list{margin:24px 32px 0}
+  .faq-more{margin:28px 32px 0;grid-template-columns:1fr auto;align-items:center}
+}
+
+@media(min-width:1024px){
+  .hero-content{padding-bottom:100px}
+  .hero h1{max-width:13ch}
+}

@@ -1,0 +1,35 @@
+{
+  "id": "/",
+  "name": "Mexi-and-Co · Restaurants latinos du Quartier Latin",
+  "short_name": "Mexi-and-Co",
+  "description": "El Sol & La Luna, Mexi & Co et Le 1492 : cuisine colombienne et mexicaine au cœur du Quartier Latin. Réservez sans commission.",
+  "lang": "fr",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbf3e4",
+  "theme_color": "#1f2a44",
+  "categories": ["food"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Réserver une table",
+      "short_name": "Réserver",
+      "description": "El Sol & La Luna, Mexi & Co ou Le 1492",
+      "url": "/reserver",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "El Sol & La Luna",
+      "short_name": "El Sol",
+      "description": "Carte, horaires et accès",
+      "url": "/el-sol-la-luna",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Restaurants latinos Quartier Latin Paris 5e | El Sol &amp; La Luna · Mexi &amp; Co</title>
+    <meta name="description" content="Cuisine colombienne et mexicaine au cœur du Quartier Latin : bandeja paisa, empanadas, burritos et margaritas. Réservez en ligne, sans commission." />
+
+    <!--
+      La barra del navegador y la del sistema, en el azul noche del grupo: la web se lee como una app
+      desde el primer fotograma, a juego con la pantalla de arranque.
+      Sin `format-detection telephone=no`: aquí los teléfonos tienen que poder tocarse.
+      Solo tema claro: la carta y las fotos están pensadas sobre papel, y sin esto algunos
+      navegadores de Android oscurecen la web por su cuenta y la dejan irreconocible.
+    -->
+    <meta name="theme-color" content="#1f2a44" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="application-name" content="Mexi-and-Co" />
+    <meta name="apple-mobile-web-app-title" content="Mexi-and-Co" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/icons/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <link id="canonical" rel="canonical" href="https://www.mexiandco.fr/" />
+
+    <!--
+      Lo que ven WhatsApp, Instagram y Facebook al compartir el enlace. Ninguno ejecuta JavaScript:
+      tiene que estar escrito aquí tal cual.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mexi-and-Co" />
+    <meta property="og:title" content="Restaurants latinos Quartier Latin Paris 5e | El Sol &amp; La Luna · Mexi &amp; Co" />
+    <meta property="og:description" content="Cuisine colombienne et mexicaine au cœur du Quartier Latin : bandeja paisa, empanadas, burritos et margaritas. Réservez en ligne, sans commission." />
+    <meta id="og-url" property="og:url" content="https://www.mexiandco.fr/" />
+    <meta property="og:image" content="https://www.mexiandco.fr/og.jpg?v=1" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="3 adresses latines au cœur du Quartier Latin : El Sol &amp; La Luna, Mexi &amp; Co et Le 1492" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Restaurants latinos Quartier Latin Paris 5e | El Sol &amp; La Luna · Mexi &amp; Co" />
+    <meta name="twitter:description" content="Cuisine colombienne et mexicaine au cœur du Quartier Latin : bandeja paisa, empanadas, burritos et margaritas. Réservez en ligne, sans commission." />
+    <meta name="twitter:image" content="https://www.mexiandco.fr/og.jpg?v=1" />
+    <meta name="twitter:image:alt" content="3 adresses latines au cœur du Quartier Latin : El Sol &amp; La Luna, Mexi &amp; Co et Le 1492" />
+
+    <!--
+      Solo se precarga lo que pinta el primer pantallazo: el cuerpo de texto y los titulares.
+      La cursiva llega cuando hace falta. Ni una petición a terceros: en la calle con una rayita de
+      cobertura, cada dominio nuevo es un segundo más en blanco.
+    -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Manrope-400-800-latin.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/DMSerifDisplay-400-latin.woff2" crossorigin />
+
+    <!--
+      La foto de la portada la pinta la app, así que el navegador no la ve en el HTML y la pedía dos
+      segundos tarde: hasta entonces, azul liso. Precargada llega con el resto y el visitante ve el
+      restaurante en cuanto se pinta. Es la foto de serie: si el panel pone otra en el primer hueco
+      de la portada, esta precarga deja de servir para nada (unos kB de más en la primera visita, la
+      web se ve igual). Si esa otra foto se queda, conviene traer aquí su dirección.
+    -->
+    <link
+      rel="preload"
+      as="image"
+      href="/img/grupo/sol-interieur-lustre.webp"
+      imagesrcset="/img/grupo/sol-interieur-lustre-480.webp 480w, /img/grupo/sol-interieur-lustre-900.webp 900w, /img/grupo/sol-interieur-lustre-1200.webp 1200w"
+      imagesizes="100vw"
+      fetchpriority="high"
+    />
+
+    <!--
+      La carta se pide aquí, antes del CSS: son 10 kB que no compiten con nada y quitan del camino
+      un viaje entero al servidor. El panel pide la suya aparte, con contraseña y con lo oculto.
+      `#/admin` es la dirección antigua con almohadilla, que el router sigue entendiendo.
+      Bajo una subcarpeta (monorepo de muestras) no hay servidor: se pinta la carta empaquetada.
+    -->
+    <script>
+      if ('%BASE_URL%' === '/' && !/^\/admin(\/|$)/.test(location.pathname) && !/^#\/admin(\/|$)/.test(location.hash)) {
+        window.__menu = fetch('/api/menu')
+          .then(function (response) { return response.ok ? response.json() : null })
+          .catch(function () { return null })
+      }
+    </script>
+
+    <!--
+      Pantalla de arranque en línea: se pinta con el HTML, antes de bajar el CSS y el JS.
+      Nadie ve un blanco y nadie piensa que la web está rota. El sol del grupo sale al instante; la
+      ruedita, solo si la carga pasa de un tercio de segundo. Georgia y no DM Serif: la tipografía
+      de la marca aún no ha llegado y un hueco vacío donde va el nombre se ve peor.
+    -->
+    <style>
+      #boot{position:fixed;inset:0;z-index:9999;display:grid;place-content:center;justify-items:center;gap:12px;padding:24px max(16px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:#1f2a44;color:#fff;text-align:center;font-family:Manrope,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;transition:opacity .28s ease}
+      #boot[hidden]{display:none}
+      #boot.is-done{opacity:0;pointer-events:none}
+      #boot svg{display:block;width:76px;height:76px;margin:0 0 2px}
+      #boot strong{font-family:Georgia,'Times New Roman',serif;font-size:34px;font-weight:400;letter-spacing:-.3px}
+      #boot strong em{color:#f2b632}
+      #boot span{font-size:11px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:rgba(255,255,255,.74)}
+      #boot i{display:block;width:32px;height:32px;margin-top:18px;border-radius:50%;border:2.5px solid rgba(255,255,255,.2);border-top-color:#f2b632;opacity:0;animation:boot-spin .8s linear infinite,boot-in .25s ease .35s forwards}
+      #boot p{margin:10px 0 0;max-width:280px;font-size:14px;line-height:1.45;color:rgba(255,255,255,.86)}
+      #boot p:empty{display:none}
+      #boot button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:12px;padding:0 24px;border:0;border-radius:999px;background:#f2b632;color:#121a2e;font:inherit;font-size:15px;font-weight:700;cursor:pointer;-webkit-tap-highlight-color:transparent}
+      #boot button:focus-visible{outline:3px solid #fff;outline-offset:2px}
+      @keyframes boot-spin{to{transform:rotate(360deg)}}
+      @keyframes boot-in{to{opacity:1}}
+      @media (prefers-reduced-motion:reduce){#boot i{animation:boot-in .25s ease .35s forwards}}
+    </style>
+    <!--
+      Sin JavaScript la pantalla de arranque taparía para siempre el contenido de <noscript>:
+      se esconde, y ese contenido recibe un estilo mínimo para leerse bien en el móvil.
+    -->
+    <noscript>
+      <style>
+        #boot{display:none}
+        body{margin:0;background:#fbf3e4}
+        .nojs{max-width:560px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;line-height:1.55;color:#221d1a;background:#fbf3e4}
+        .nojs h1{margin:12px 0 6px;font-family:Georgia,serif;font-size:32px;line-height:1.1;color:#1f2a44}
+        .nojs h2{margin:28px 0 8px;font-size:13px;letter-spacing:1.6px;text-transform:uppercase;color:#685d55}
+        .nojs p,.nojs address,.nojs ul{margin:0 0 8px;font-style:normal}
+        .nojs ul{padding:0;list-style:none}
+        .nojs a{color:#c2502e;font-weight:700}
+        .nojs .nojs-note{margin:18px 0;padding:12px 14px;border-radius:12px;background:#fdf0d1;color:#121a2e;font-weight:700}
+        .nojs .nojs-btn{display:flex;align-items:center;justify-content:center;min-height:48px;margin:0 0 10px;border-radius:999px;background:#128c4b;color:#fff;text-decoration:none}
+      </style>
+    </noscript>
+
+    <!--
+      El mismo index.html sirve todas las páginas, así que la dirección canónica se ajusta a la que
+      se ha abierto: si no, Google entendería que la página de cada local es una copia de la portada y
+      no la enseñaría. Cada idioma (`?lang=fr|es`) es canónico de sí mismo, como anuncia el
+      sitemap; cualquier otro parámetro (`?source=pwa`, `?fbclid=`) se descarta. Una ruta
+      desconocida pinta la portada y se queda con la portada como canónica.
+      Va antes de pintar nada y no pesa ni un kilobyte.
+    -->
+    <script>
+      (function () {
+        var path = location.pathname.replace(/\/+$/, '') || '/'
+        if (!/^\/(el-sol-la-luna|mexi-and-co|reserver|confidentialite)?$/.test(path)) return
+        var lang = /[?&]lang=(es|fr)(?:&|$)/i.exec(location.search)
+        var href = 'https://www.mexiandco.fr' + path + (lang ? '?lang=' + lang[1].toLowerCase() : '')
+        var canonical = document.getElementById('canonical')
+        var ogUrl = document.getElementById('og-url')
+        if (canonical) canonical.setAttribute('href', href)
+        if (ogUrl) ogUrl.setAttribute('content', href)
+        if (lang) document.documentElement.lang = lang[1].toLowerCase()
+      })()
+    </script>
+
+    <!--
+      Las fichas de los restaurantes para Google: una por local, con dirección, teléfono, horario y
+      cocina. La app las rehace al arrancar desde `src/public/venues.ts` (structured-data.ts); esta
+      copia es la que lee quien no ejecuta JavaScript. Le 1492 va solo con lo que se sabe.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.mexiandco.fr/#groupe",
+            "name": "Mexi-and-Co",
+            "url": "https://www.mexiandco.fr/",
+            "logo": "https://www.mexiandco.fr/icons/icon-512.png"
+          },
+          {
+            "@type": "Restaurant",
+            "@id": "https://www.mexiandco.fr/el-sol-la-luna#restaurant",
+            "name": "El Sol & La Luna",
+            "description": "Un coin de Colombie au Quartier Latin : assiettes généreuses, empanadas maison, bonne musique et accueil chaleureux.",
+            "url": "https://www.mexiandco.fr/el-sol-la-luna",
+            "image": [
+              "https://www.mexiandco.fr/img/grupo/sol-facade.webp",
+              "https://www.mexiandco.fr/img/grupo/sol-interieur-lustre.webp"
+            ],
+            "telephone": "+33143544156",
+            "priceRange": "€€",
+            "servesCuisine": [
+              "Colombienne",
+              "Mexicaine",
+              "Latino-américaine"
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "31 rue Saint-Jacques",
+              "postalCode": "75005",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 48.8512811,
+              "longitude": 2.345938
+            },
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Monday",
+                "opens": "17:00",
+                "closes": "23:00"
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday"
+                ],
+                "opens": "11:30",
+                "closes": "23:00"
+              }
+            ],
+            "hasMenu": "https://www.mexiandco.fr/el-sol-la-luna#carte",
+            "acceptsReservations": "https://www.mexiandco.fr/reserver?local=el-sol-la-luna",
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": 4.4,
+              "reviewCount": 622,
+              "bestRating": 5
+            },
+            "parentOrganization": {
+              "@id": "https://www.mexiandco.fr/#groupe"
+            }
+          },
+          {
+            "@type": "Restaurant",
+            "@id": "https://www.mexiandco.fr/mexi-and-co#restaurant",
+            "name": "Mexi & Co",
+            "description": "Le Mexique en version restaurant et épicerie : burritos, tacos, options végétariennes pour chaque plat, et tous les produits pour cuisiner mexicain chez vous.",
+            "url": "https://www.mexiandco.fr/mexi-and-co",
+            "image": [
+              "https://www.mexiandco.fr/og.jpg"
+            ],
+            "telephone": "+33146341412",
+            "priceRange": "€€",
+            "servesCuisine": [
+              "Mexicaine",
+              "Tex-Mex",
+              "Végétarienne"
+            ],
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "10 rue Dante",
+              "postalCode": "75005",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 48.851126,
+              "longitude": 2.3460443
+            },
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": [
+                  "Monday",
+                  "Tuesday",
+                  "Wednesday",
+                  "Thursday",
+                  "Friday",
+                  "Saturday",
+                  "Sunday"
+                ],
+                "opens": "11:30",
+                "closes": "23:30"
+              }
+            ],
+            "hasMenu": "https://www.mexiandco.fr/mexi-and-co#carte",
+            "acceptsReservations": "https://www.mexiandco.fr/reserver?local=mexi-and-co",
+            "parentOrganization": {
+              "@id": "https://www.mexiandco.fr/#groupe"
+            }
+          },
+          {
+            "@type": "Restaurant",
+            "@id": "https://www.mexiandco.fr/#le-1492",
+            "name": "Le 1492",
+            "servesCuisine": [
+              "Latino-américaine"
+            ],
+            "foundingDate": "2005",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Marché Saint-Germain, rue Clément",
+              "postalCode": "75006",
+              "addressLocality": "Paris",
+              "addressCountry": "FR"
+            },
+            "parentOrganization": {
+              "@id": "https://www.mexiandco.fr/#groupe"
+            }
+          }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="boot" role="status" aria-live="polite">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M29.12 15.25 L32.00 3.00 L34.88 15.25 Z M38.52 16.30 L44.50 10.35 L42.34 18.50 Z M45.07 21.13 L57.11 17.50 L47.95 26.11 Z M48.86 29.80 L57.00 32.00 L48.86 34.20 Z M47.95 37.89 L57.11 46.50 L45.07 42.87 Z M42.34 45.50 L44.50 53.65 L38.52 47.70 Z M34.88 48.75 L32.00 61.00 L29.12 48.75 Z M25.48 47.70 L19.50 53.65 L21.66 45.50 Z M18.93 42.87 L6.89 46.50 L16.05 37.89 Z M15.14 34.20 L7.00 32.00 L15.14 29.80 Z M16.05 26.11 L6.89 17.50 L18.93 21.13 Z M21.66 18.50 L19.50 10.35 L25.48 16.30 Z" fill="#f2b632"/><circle cx="32" cy="32" r="14" fill="#f2b632"/><circle cx="32" cy="32" r="9.5" fill="none" stroke="#1f2a44" stroke-width="2.2"/></svg>
+      <strong>Mexi<em>-and-</em>Co</strong>
+      <span>Restaurants latinos · Quartier Latin</span>
+      <i aria-hidden="true"></i>
+      <p></p>
+    </div>
+    <noscript>
+      <main class="nojs">
+        <h1>3 adresses latines au cœur du Quartier Latin</h1>
+        <p>Cuisine colombienne et mexicaine à Paris 5e : bandeja paisa, empanadas, burritos et margaritas.</p>
+        <p class="nojs-note">Activez JavaScript pour voir la carte et réserver en ligne. Vous pouvez aussi réserver directement sur WhatsApp.</p>
+        <a class="nojs-btn" href="https://wa.me/33624438023">Réserver sur WhatsApp</a>
+
+        <h2>El Sol &amp; La Luna</h2>
+        <address>31 rue Saint-Jacques, 75005 Paris</address>
+        <p><a href="tel:+33143544156">01 43 54 41 56</a> · Lundi 17h–23h · Mardi à dimanche 11h30–23h</p>
+
+        <h2>Mexi &amp; Co</h2>
+        <address>10 rue Dante, 75005 Paris</address>
+        <p><a href="tel:+33146341412">01 46 34 14 12</a> · Ouvert 7j/7, 11h30–23h30</p>
+
+        <h2>Le 1492</h2>
+        <address>Marché Saint-Germain, rue Clément, 75006 Paris</address>
+      </main>
+    </noscript>
+    <script>
+      // Si algo va mal (red caída, chunk que no llega), el visitante recibe una salida en vez de
+      // quedarse mirando una ruedita eterna. Un botón de verdad, de 44 px, que se acierta con el dedo.
+      setTimeout(function () {
+        var boot = document.getElementById('boot')
+        if (!boot || boot.classList.contains('is-done')) return
+        var message = boot.querySelector('p')
+        var retry = document.createElement('button')
+        retry.type = 'button'
+        retry.textContent = 'Réessayer'
+        retry.onclick = function () { location.reload() }
+        message.textContent = 'Le chargement prend plus de temps que prévu. Vérifiez votre connexion et réessayez.'
+        message.appendChild(document.createElement('br'))
+        message.appendChild(retry)
+      }, 12000)
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

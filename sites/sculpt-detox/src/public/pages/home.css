@@ -1,0 +1,335 @@
+/* home.css — la portada, la página de lipedema y las piezas que comparten. Móvil primero. */
+
+/* ---------- héroe ---------- */
+/* En el móvil, Michele a pantalla completa con el texto abajo; en escritorio, texto sobre arena y
+   la foto a un lado, con el arco de arriba que se repite en el resto de fotos. */
+.hero{position:relative;display:flex;align-items:flex-end;min-height:100vh;min-height:100svh;max-height:900px;color:#fff;background:var(--sage-ink);overflow:hidden;isolation:isolate}
+.hero-media{position:absolute;inset:0;z-index:-1}
+.hero-shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%;animation:settle 1.6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes settle{from{transform:scale(1.06)}to{transform:none}}
+.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(43,43,43,.5) 0%,rgba(43,43,43,0) 22%,rgba(43,43,43,0) 34%,rgba(40,46,37,.72) 56%,rgba(33,38,31,.94) 100%)}
+.hero-content{position:relative;width:100%;padding:0 20px calc(92px + var(--safe-bottom));display:flex;flex-direction:column;align-items:flex-start}
+.hero-lang{display:inline-flex;align-items:center;gap:6px;margin-bottom:12px;font-size:13px;font-weight:700;color:#fff;text-decoration:underline;text-underline-offset:4px}
+.hero .rating-chip{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.36);color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hero .stars{color:#e8cf9c}
+.hero-eyebrow{margin-top:18px;font-size:11.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:#f1e7da}
+.hero h1{font-family:var(--font-display);font-weight:600;font-size:clamp(44px,12.4vw,92px);line-height:.98;letter-spacing:-.5px;margin-top:10px;text-wrap:balance}
+.hero h1 em{display:block;font-style:italic;font-weight:500;color:#efd4bf}
+.hero-text{font-size:16.5px;line-height:1.6;color:rgba(255,255,255,.9);margin-top:14px;max-width:40ch}
+.hero-actions{display:grid;gap:10px;width:100%;max-width:460px;margin-top:24px}
+/* El titular entra por partes al abrir la web. */
+.hero-eyebrow,.hero h1,.hero-text,.hero-actions{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero h1{animation-delay:.08s}.hero-text{animation-delay:.16s}.hero-actions{animation-delay:.24s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* ---------- encabezado de sección ---------- */
+.section-head{padding:0 20px;max-width:720px}
+.section-head h2{font-family:var(--font-display);font-weight:600;font-size:clamp(36px,9.4vw,56px);letter-spacing:-.3px;line-height:1.04;margin-top:12px;color:var(--ink);text-wrap:balance}
+.section-head p{font-size:16px;line-height:1.65;color:var(--muted);margin-top:12px;max-width:58ch}
+.section-head.is-center{margin:0 auto;text-align:center}
+.section-head.is-center .eyebrow{justify-content:center}
+.section-head.is-center p{margin-left:auto;margin-right:auto}
+
+/* ---------- especialidad: lipedema ---------- */
+.specialty{padding:64px 0 56px;background:var(--sand)}
+.specialty-photo{padding:0 16px}
+.specialty-photo .figure{aspect-ratio:4/5;border-radius:220px 220px 24px 24px}
+.specialty-body{padding-top:34px}
+.specialty-lead{margin:18px 20px 0;font-family:var(--font-display);font-size:22px;font-weight:500;line-height:1.4;color:var(--ink)}
+.specialty-text{margin:14px 20px 0;font-size:16px;line-height:1.7;color:var(--muted)}
+.specialty .ticks,.specialty .disclaimer{margin-left:20px;margin-right:20px}
+.specialty-actions{display:grid;gap:10px;margin:24px 20px 0}
+
+/* ---------- tratamientos ---------- */
+.treatments{padding:72px 0 30px}
+.treatment-grid{display:grid;gap:14px;padding:28px 16px 0}
+.treatment{position:relative;display:flex;flex-direction:column;padding:24px 20px 20px;border-radius:var(--radius-lg);background:var(--cream);border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.treatment-photo{display:block;margin:-24px -20px 18px;aspect-ratio:16/10;overflow:hidden;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.treatment-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.treatment-index{font-family:var(--font-display);font-size:17px;font-style:italic;font-weight:500;color:var(--gold)}
+.treatment h3{margin-top:6px;font-family:var(--font-display);font-size:28px;font-weight:600;line-height:1.1;color:var(--ink)}
+.treatment>p{margin-top:10px;font-size:15px;line-height:1.65;color:var(--muted)}
+.treatment-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:auto;padding-top:18px}
+.treatment-meta{display:flex;gap:18px;margin:0}
+.treatment-meta div{display:grid;gap:2px}
+.treatment-meta dt{font-size:10.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint)}
+.treatment-meta dd{display:flex;align-items:center;gap:5px;margin:0;font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap}
+.treatment-meta dd svg{color:var(--sage)}
+/* Mientras no haya precio ni duración, el dato pendiente se marca en terracota y punteado. */
+.treatment-meta dd[data-todo]{color:var(--terracotta-deep);text-decoration:underline dotted;text-underline-offset:4px}
+.treatment .btn-sm{flex:none}
+.tiers{list-style:none;margin:16px 0 0;padding:0;display:grid;border-top:1px solid var(--line)}
+.tiers li{padding:14px 0 6px;border-bottom:1px solid var(--line)}
+.tiers li:last-child{border-bottom:0}
+.tier-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px}
+.tier-head strong{font-family:var(--font-display);font-size:22px;font-weight:600}
+.tier-meta{font-size:13.5px;font-weight:700;color:var(--terracotta-deep);white-space:nowrap}
+.tiers p{margin-top:4px;font-size:14.5px;line-height:1.55;color:var(--muted)}
+.tiers .text-link{min-height:40px;font-size:14px}
+
+.results{display:grid;gap:22px;margin:42px 16px 0;padding:16px;border-radius:var(--radius-lg);background:var(--sage-soft)}
+.results-photo{overflow:hidden;border-radius:18px;background:var(--sand)}
+.results-photo img{display:block;width:100%;height:auto}
+.results-body{padding:0 6px 8px}
+.results-body h3,.results-body h2{margin-top:10px;font-family:var(--font-display);font-size:34px;font-weight:600;line-height:1.05}
+.results-body p{margin-top:10px;font-size:15px;line-height:1.65;color:var(--muted)}
+
+.facial{padding-top:72px}
+.facial-head{display:grid;gap:24px}
+.facial-photo{margin:0 16px;aspect-ratio:16/10 !important}
+
+/* ---------- cómo funciona ---------- */
+.steps{display:grid;gap:34px;padding:72px 0 64px;background:var(--sand)}
+.step-list{list-style:none;margin:26px 20px 0;padding:0;display:grid;gap:4px;counter-reset:step}
+.step{display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:start;padding:16px 0;border-bottom:1px solid var(--line-strong)}
+.step:last-child{border-bottom:0}
+.step-number{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;border:1px solid var(--gold);font-family:var(--font-display);font-size:26px;font-weight:600;font-style:italic;color:var(--sage-deep)}
+.step h3{font-family:var(--font-display);font-size:25px;font-weight:600;line-height:1.15;padding-top:3px}
+.step p{margin-top:6px;font-size:15px;line-height:1.6;color:var(--muted)}
+.steps-cta{margin:24px 20px 0;width:calc(100% - 40px)}
+.steps-photo{padding:0 16px}
+.steps-photo .figure{aspect-ratio:4/5;border-radius:24px 24px 220px 220px}
+/* Con el arco abajo, el pie de la foto sube arriba: abajo lo cortaría la curva. */
+.steps-photo .figure-note{top:14px;bottom:auto}
+
+/* ---------- Michele ---------- */
+.about{display:grid;gap:40px;padding:80px 0 60px}
+.about-photos{position:relative;padding:0 16px 40px}
+.about-main{width:82%;aspect-ratio:4/5;border-radius:220px 220px 24px 24px}
+.about-second{position:absolute;right:16px;bottom:0;width:44%;aspect-ratio:4/5;border:6px solid var(--paper);box-shadow:var(--shadow)}
+.about-years{position:absolute;left:28px;bottom:14px;display:grid;justify-items:start;padding:12px 16px;border-radius:18px;background:var(--cream);box-shadow:var(--shadow);font-size:12px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.about-years b{font-family:var(--font-display);font-size:34px;font-weight:600;line-height:1;letter-spacing:0;color:var(--terracotta-deep)}
+.about-body{padding:0 20px}
+.about-body h2{margin-top:12px;font-family:var(--font-display);font-size:clamp(42px,11vw,60px);font-weight:600;line-height:1}
+.about-role{margin-top:8px;font-size:13px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--sage-deep)}
+.about-text{margin-top:16px;font-size:16px;line-height:1.75;color:var(--muted)}
+.about-text:first-of-type{font-family:var(--font-display);font-size:22px;line-height:1.45;color:var(--ink)}
+.training{margin-top:26px;padding:18px 18px 8px;border-radius:20px;border:1px solid var(--line);background:var(--cream)}
+.training h3{font-size:11.5px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--sage-deep)}
+.training ul{list-style:none;margin:8px 0 0;padding:0}
+.training li{padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
+.training li:last-child{border-bottom:0}
+.training li[data-todo]{color:var(--terracotta-deep);font-style:italic}
+
+/* ---------- opiniones ---------- */
+.reviews{padding:76px 0 64px;background:var(--sand)}
+.reviews-score{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:22px}
+.reviews-score b{font-family:var(--font-display);font-size:46px;font-weight:600;line-height:1}
+.reviews-score span{font-size:13px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted)}
+.review-grid{display:grid;gap:14px;padding:28px 16px 0}
+.review{display:flex;flex-direction:column;gap:12px;margin:0;padding:24px 22px;border-radius:var(--radius-lg);background:var(--cream);border:1px solid var(--line)}
+.review blockquote{margin:0}
+.review blockquote p{font-family:var(--font-display);font-size:23px;font-weight:500;line-height:1.35;color:var(--ink)}
+.review-original{font-size:13.5px;line-height:1.5;color:var(--muted)}
+.review-original span{font-weight:700}
+.review figcaption{margin-top:auto;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--sage-deep)}
+.reviews-actions{display:flex;justify-content:center;padding:26px 16px 0}
+.reviews-actions .btn{white-space:normal;text-align:center}
+
+/* ---------- reserva ---------- */
+.booking{display:grid;gap:28px;padding:76px 0 70px;scroll-margin-top:var(--header-h)}
+.booking-facts{list-style:none;margin:18px 20px 0;padding:0;display:grid;gap:8px;font-size:15px;color:var(--muted)}
+.booking-facts li{display:flex;gap:9px;align-items:flex-start}
+.booking-facts svg{flex:none;margin-top:3px;color:var(--sage-deep)}
+.booking-card{margin:0 12px;padding:22px 18px;border-radius:28px;background:var(--cream);border:1px solid var(--line);box-shadow:var(--shadow)}
+.booking-form{display:grid;gap:18px}
+.field{display:grid;gap:7px;margin:0;padding:0;border:0;min-width:0}
+.field label,.field legend{padding:0;font-size:13px;font-weight:700;letter-spacing:.4px;color:var(--ink)}
+.field select,.field input[type=text],.field input[type=date]{width:100%;min-height:52px;padding:0 14px;border-radius:14px;border:1px solid var(--line-strong);background:#fff;color:var(--ink);appearance:none;-webkit-appearance:none}
+.field select{padding-right:40px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2356684f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.field input[type=date]{display:flex;align-items:center}
+.field input[type=date]::-webkit-date-and-time-value{text-align:left}
+.field select:focus,.field input:focus{outline:none;border-color:var(--sage-deep);box-shadow:0 0 0 3px rgba(86,104,79,.18)}
+.field.is-invalid select,.field.is-invalid input[type=text],.field.is-invalid input[type=date],.field.is-invalid .choice-option{border-color:var(--danger)}
+.field-error{font-size:13.5px;font-weight:600;color:var(--danger)}
+.field-hint{font-size:13.5px;line-height:1.5;color:var(--warn)}
+.choice legend{margin-bottom:7px}
+.choice-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.choice-option{position:relative;display:flex;align-items:center;justify-content:center;min-height:50px;border-radius:14px;border:1px solid var(--line-strong);background:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.choice-option input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.choice-option.is-on{background:var(--sage-deep);border-color:var(--sage-deep);color:#fff}
+.choice-option:has(input:focus-visible){outline:2px solid var(--terracotta-deep);outline-offset:2px}
+.booking-note{font-size:13px;line-height:1.5;text-align:center;color:var(--muted)}
+
+/* ---------- preguntas ---------- */
+.faq{padding:72px 0 56px;background:var(--sand)}
+.faq-list{display:grid;gap:10px;padding:26px 16px 0}
+.faq-item{border-radius:18px;background:var(--cream);border:1px solid var(--line)}
+.faq-item summary{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:60px;padding:14px 18px;cursor:pointer;list-style:none}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item h3{font-size:16px;font-weight:700;line-height:1.4}
+.faq-toggle{position:relative;flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-strong)}
+.faq-toggle::before,.faq-toggle::after{content:'';position:absolute;left:50%;top:50%;width:11px;height:1.5px;margin:-.75px 0 0 -5.5px;background:var(--sage-deep);transition:transform .2s}
+.faq-toggle::after{transform:rotate(90deg)}
+.faq-item[open] .faq-toggle::after{transform:rotate(0)}
+.faq-item p{padding:0 18px 18px;font-size:15.5px;line-height:1.7;color:var(--muted)}
+
+/* ---------- ubicación ---------- */
+.visit{padding:72px 0 64px}
+.visit-grid{display:grid;gap:14px;padding:26px 16px 0}
+.map{position:relative;display:block;aspect-ratio:16/11;overflow:hidden;border-radius:var(--radius-lg);background:var(--sand-deep)}
+.map img{width:100%;height:100%;object-fit:cover;display:block}
+.map-pin{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:48px;height:48px;margin:-56px 0 0 -24px;border-radius:50% 50% 50% 6px;transform:rotate(-45deg);background:var(--cream);border:2px solid var(--sage-deep);box-shadow:0 10px 24px rgba(43,43,43,.25)}
+.map-pin img{width:24px;height:auto;transform:rotate(45deg)}
+.map-credit{position:absolute;right:8px;bottom:6px;padding:1px 6px;border-radius:6px;background:rgba(255,255,255,.85);font-size:10.5px;color:#444}
+.visit-card{display:grid;gap:4px;padding:20px 18px;border-radius:var(--radius-lg);background:var(--cream);border:1px solid var(--line)}
+.visit-row{display:grid;grid-template-columns:24px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.visit-row>svg{margin-top:2px;color:var(--sage-deep)}
+.visit-row h3{font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sage-deep);margin-bottom:6px}
+.visit-row address,.visit-row p{font-style:normal;font-size:15.5px;line-height:1.6}
+.visit-links{list-style:none;margin:0;padding:0}
+.visit-links a{display:flex;align-items:center;gap:9px;min-height:40px;font-size:15px;text-decoration:none;overflow-wrap:anywhere}
+.visit-links a:hover{color:var(--terracotta-deep)}
+.visit-links svg{flex:none;color:var(--sage-deep)}
+.visit-card .btn{margin-top:14px}
+.visit-cabina{aspect-ratio:16/10 !important}
+
+/* ---------- franja final de reserva ---------- */
+.cta-band{margin:30px 12px 50px;padding:44px 22px;border-radius:32px;background:var(--sage-deep);color:#fff;text-align:center}
+.cta-band h2{font-family:var(--font-display);font-size:clamp(36px,9vw,52px);font-weight:600;line-height:1.05}
+.cta-band p{max-width:46ch;margin:12px auto 0;font-size:16px;line-height:1.6;color:#e7ebe2}
+.cta-band .btn{margin-top:24px;white-space:normal;text-align:center}
+.cta-band .btn-primary{box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.cta-band-note{margin-top:18px !important;font-size:13.5px !important;color:#eef1ea !important}
+
+/* ---------- página de lipedema ---------- */
+.article-head{padding:30px 20px 10px;max-width:860px}
+.breadcrumb{display:flex;align-items:center;gap:6px;margin-bottom:22px;font-size:13px;color:var(--muted)}
+.breadcrumb a{color:var(--muted);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
+.breadcrumb a:hover{color:var(--ink);text-decoration:underline}
+.article-head h1{margin-top:12px;font-family:var(--font-display);font-size:clamp(40px,10.4vw,72px);font-weight:600;line-height:1.02;letter-spacing:-.4px;text-wrap:balance}
+.article-lead{margin-top:16px;font-size:17.5px;line-height:1.65;color:var(--muted);max-width:60ch}
+.article-actions{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:24px}
+.article-actions .btn{white-space:normal;text-align:center}
+.article-grid{display:grid;gap:34px;padding:28px 0 0}
+.article-body{padding:0 20px}
+.article-section{padding:26px 0;border-bottom:1px solid var(--line)}
+.article-section:first-child{padding-top:0}
+.article-section h2{font-family:var(--font-display);font-size:clamp(32px,8vw,42px);font-weight:600;line-height:1.08}
+.article-section p{margin-top:14px;font-size:16.5px;line-height:1.75;color:var(--muted)}
+.article-aside{display:grid;gap:14px;padding:0 16px;align-content:start}
+.article-aside .figure{aspect-ratio:4/5;border-radius:200px 200px 24px 24px}
+.aside-card{padding:24px 20px;border-radius:var(--radius-lg);background:var(--sand);border:1px solid var(--line)}
+.aside-card h2{font-family:var(--font-display);font-size:30px;font-weight:600}
+.aside-card p{margin-top:8px;font-size:15px;line-height:1.6;color:var(--muted)}
+.aside-card .btn{margin-top:18px;width:100%;white-space:normal;text-align:center}
+.article-results{display:grid;gap:24px;margin:56px 16px 0;padding:18px;border-radius:28px;background:var(--sage-soft)}
+.results-photo.is-portrait{max-width:520px}
+.article-results .review{margin-top:18px}
+.article-steps,.article-faq{padding:64px 0 0}
+.article-steps h2,.article-faq h2{padding:0 20px;font-family:var(--font-display);font-size:clamp(34px,8.4vw,48px);font-weight:600;line-height:1.05}
+
+/* ---------- pantallas medianas ---------- */
+@media(min-width:761px){
+  .section-head{padding:0 40px}
+  .treatment-grid,.review-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:36px 40px 0}
+  .results{grid-template-columns:1.15fr 1fr;align-items:center;gap:36px;margin:52px 40px 0;padding:22px}
+  .facial-photo{margin:0 40px}
+  .faq-list{padding:32px 40px 0;max-width:900px}
+  .visit-grid{grid-template-columns:1.1fr 1fr;padding:32px 40px 0;gap:18px}
+  .visit-cabina{grid-column:1/-1;aspect-ratio:21/8 !important}
+  .booking-card{margin:0 40px;padding:32px}
+  .booking-intro .booking-facts{margin-left:40px}
+  .steps-cta{margin-left:40px;width:auto}
+  .cta-band{margin:40px 40px 64px;padding:64px 40px}
+  .specialty-actions{display:flex;flex-wrap:wrap}
+  .article-head{padding:56px 40px 10px}
+  .article-body{padding:0 40px}
+  .article-aside{padding:0 40px}
+  .article-results{grid-template-columns:minmax(0,.8fr) 1fr;align-items:center;margin:64px 40px 0;padding:24px}
+  .article-steps h2,.article-faq h2{padding:0 40px}
+  .article-steps .step-list{margin:26px 40px 0}
+}
+
+/* ---------- escritorio ---------- */
+@media(min-width:1024px){
+  .hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:center;gap:56px;min-height:min(100svh,860px);max-height:none;padding:calc(var(--header-h) + 24px) max(40px,calc((100% - 1200px) / 2)) 56px;background:var(--sand);color:var(--ink)}
+  .hero-media{position:relative;inset:auto;z-index:0;order:2;height:min(74svh,700px);border-radius:320px 320px 28px 28px;overflow:hidden;box-shadow:var(--shadow)}
+  .hero-media::after{display:none}
+  .hero-content{order:1;padding:0}
+  .hero-lang{color:var(--sage-deep)}
+  .hero .rating-chip{background:var(--cream);border-color:var(--line);color:var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero .stars{color:var(--gold)}
+  .hero-eyebrow{color:var(--sage-deep)}
+  .hero h1{font-size:clamp(60px,6.4vw,96px)}
+  .hero h1 em{color:var(--terracotta-deep)}
+  .hero-text{color:var(--muted);font-size:18px}
+  .hero-actions{display:flex;flex-wrap:wrap;width:auto;max-width:none}
+  .hero .btn-light{background:transparent;color:var(--ink);border-color:var(--line-strong);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero .btn-light:hover{background:rgba(255,255,255,.5);border-color:var(--sage-deep)}
+
+  .specialty,.steps,.about,.booking{grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:64px;padding-left:max(40px,calc((100% - 1200px) / 2));padding-right:max(40px,calc((100% - 1200px) / 2))}
+  .specialty{display:grid;padding-top:110px;padding-bottom:110px}
+  .specialty-photo,.steps-photo,.about-photos{padding:0}
+  .specialty .section-head,.steps .section-head,.booking .section-head{padding:0}
+  .specialty-lead,.specialty-text,.specialty .ticks,.specialty .disclaimer,.specialty-actions{margin-left:0;margin-right:0}
+  .steps{padding-top:110px;padding-bottom:110px}
+  .step-list,.steps-cta{margin-left:0;margin-right:0}
+  .about{padding-top:120px;padding-bottom:100px}
+  .about-body{padding:0}
+  .booking{align-items:start;padding-top:110px;padding-bottom:110px}
+  .booking-intro{position:sticky;top:120px}
+  .booking-intro .booking-facts{margin-left:0}
+  .booking-card{margin:0;padding:36px}
+
+  .treatments,.reviews,.faq,.visit{padding-left:max(0px,calc((100% - 1280px) / 2));padding-right:max(0px,calc((100% - 1280px) / 2))}
+  .treatments{padding-top:110px}
+  .treatment-grid,.review-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .review-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  /* Diez tarjetas en tres columnas dejarían una suelta: las dos de la casa van a doble ancho. */
+  .treatment-grid.is-corporal #t-drenaje-brasileno,.treatment-grid.is-corporal #t-maderoterapia{grid-column:span 2}
+  .facial-head{grid-template-columns:1.1fr 1fr;align-items:end}
+  .facial-photo{margin:0 40px 0 0}
+  .faq .section-head,.faq-list{margin:0 auto}
+  .faq .section-head{text-align:center}
+  .faq .eyebrow{justify-content:center}
+  .visit-grid{grid-template-columns:1.25fr 1fr 1fr}
+  .visit-cabina{grid-column:auto;aspect-ratio:auto !important;height:100%}
+  .map{aspect-ratio:auto;height:100%;min-height:420px}
+
+  .article{max-width:1280px;margin:0 auto}
+  .article-grid{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:56px;padding:40px 40px 0}
+  .article-body,.article-aside{padding:0}
+  .article-aside{position:sticky;top:110px}
+  .cta-band{max-width:1120px;margin:56px auto 80px}
+}
+
+/* ---------- franja de confianza bajo el héroe ---------- */
+.site-main>.trust{position:relative;z-index:2;margin:-34px 12px 0;border-radius:22px;background:var(--cream);border:1px solid var(--line);box-shadow:0 18px 44px rgba(43,43,43,.12)}
+.site-main>.trust li{padding:15px 16px}
+.site-main>.trust li:nth-child(odd){border-right:1px solid var(--line)}
+.site-main>.trust li:nth-child(-n+2){border-bottom:1px solid var(--line)}
+.hero-content{padding-bottom:72px}
+.specialty{margin-top:-60px;padding-top:120px}
+
+/* ---------- pestañas de tratamientos ---------- */
+.treatment-tabs{display:flex;gap:6px;margin:26px 16px 0;padding:5px;border-radius:999px;background:var(--sand);width:max-content;max-width:calc(100% - 32px)}
+.treatment-tabs button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:700;color:var(--muted);transition:background .2s,color .2s,box-shadow .2s}
+.treatment-tabs button small{display:grid;place-items:center;min-width:24px;height:22px;padding:0 6px;border-radius:999px;background:rgba(255,255,255,.7);font-size:12px;color:var(--muted)}
+.treatment-tabs button.is-on{background:var(--cream);color:var(--ink);box-shadow:0 4px 14px rgba(60,50,40,.1)}
+.treatment-tabs button.is-on small{background:var(--sage-deep);color:#fff}
+.facial{padding-top:30px}
+.facial[hidden],#corporales[hidden]{display:none}
+.treatment{padding:22px 18px 18px}
+.treatment h3{font-size:26px}
+
+/* ---------- índice de la página de lipedema ---------- */
+.article-index{margin-top:28px;padding:16px 18px;border-radius:20px;background:var(--sand);border:1px solid var(--line)}
+.article-index span{font-size:11.5px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--sage-deep)}
+.article-index ul{list-style:none;margin:8px 0 0;padding:0;display:grid}
+.article-index a{display:flex;align-items:center;min-height:40px;font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+.article-index li:last-child a{border-bottom:0}
+.article-index a:hover{color:var(--terracotta-deep)}
+
+@media(min-width:761px){
+  .site-main>.trust{grid-template-columns:repeat(4,minmax(0,1fr));max-width:980px;margin:-44px auto 0}
+  .site-main>.trust li{padding:20px 22px;border-bottom:0 !important;border-right:1px solid var(--line)}
+  .site-main>.trust li:last-child{border-right:0}
+  .treatment-tabs{margin:34px 40px 0}
+  .article-index ul{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:24px}
+}
+@media(min-width:1024px){
+  .site-main>.trust{margin-top:-52px}
+  .hero{padding-bottom:96px}
+  .specialty{margin-top:-70px;padding-top:150px}
+}
