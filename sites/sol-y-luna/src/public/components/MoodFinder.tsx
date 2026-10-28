@@ -126,7 +126,7 @@ export function MoodFinder() {
         <a className="mood-photo" {...linkTo(venuePage)} tabIndex={-1} aria-hidden="true">
           {mood.photo
             ? <Photo src={mood.photo} alt="" sizes="(max-width: 760px) 100vw, 480px" />
-            : <PhotoSoon name={mood.venue.name} label={t.venue.photoSoon} />}
+            : <PhotoSoon name={mood.venue.name} />}
         </a>
         <div className="mood-body">
           <span className="mood-kicker">{t.mood.pick}</span>

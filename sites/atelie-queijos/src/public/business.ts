@@ -43,10 +43,29 @@ export const whatsappUrl = (message = '') =>
 export const SHOW_PHOTO_TODO = true
 
 /**
- * Los textos provisionales (respuestas de las preguntas que Janaína tiene que confirmar, los
- * depoimentos) llevan una etiqueta «a completar». Con `false` se esconde la etiqueta, no el texto.
+ * Los textos provisionales (respuestas de las preguntas que Janaína tiene que confirmar) llevan una
+ * etiqueta «a completar». Con `false` se esconde la etiqueta, no el texto; salvo lo que sería una
+ * promesa sin confirmar (el punto del vale-presente personalizado) y el SIRET de la privacidad, que
+ * se esconden enteros. Apagado: la muestra se enseña al cliente sin etiquetas a la vista.
  */
-export const SHOW_TEXT_TODO = true
+export const SHOW_TEXT_TODO = false
+
+/**
+ * La franja «Presente de Natal → Vale-presente» bajo el héroe, que lleva al bloque del vale-presente.
+ * Para quitarla: `enabled: false`. Se apaga sola el día siguiente a `until` (fecha de París); para
+ * otro año, cambiar `until`.
+ */
+export const CHRISTMAS_BANNER = {
+  enabled: true,
+  until: '2026-12-25',
+}
+
+/** ¿Sale hoy la franja de Natal? Se mira con la fecha de París, igual que la agenda. */
+export function christmasBannerOn() {
+  if (!CHRISTMAS_BANNER.enabled) return false
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+  return today <= CHRISTMAS_BANNER.until
+}
 
 /**
  * Avisa a la analítica (Google Analytics / Meta) de un clic de reserva, si alguna está instalada.

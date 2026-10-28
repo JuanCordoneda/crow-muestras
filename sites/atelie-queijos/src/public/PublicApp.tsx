@@ -142,7 +142,7 @@ export function PublicApp({ route }: Props) {
           observer?.unobserve(element)
         }
       }, { rootMargin: '0px 0px -8% 0px' })
-      const selector = '.section-head, .live-item, .live-photos, .host-photo, .date-card, .booking-card, .gift-inner, .groups-list li, .more-card, .review, .faq-item, .quiz-card, .highlights, .board-draw'
+      const selector = '.section-head, .live-item, .live-photos, .host-photo, .date-card, .booking-card, .gift-inner, .groups-list li, .more-line, .review, .faq-item, .quiz-card, .highlights, .board-draw'
       for (const element of document.querySelectorAll<HTMLElement>(selector)) {
         if (element.classList.contains('rv') || element.getBoundingClientRect().top < window.innerHeight) continue
         element.classList.add('rv')

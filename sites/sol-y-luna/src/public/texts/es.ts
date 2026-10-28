@@ -1,4 +1,5 @@
 import type { Texts } from '../content'
+import { SHOW_LE_1492 } from '../venues'
 
 /** Línea a línea, sin las vacías: así el mensaje de WhatsApp no lleva «Ocasión: » suelto. */
 const lines = (...entries: [string, string][]) => entries.filter(([, value]) => value.trim()).map(([label, value]) => `${label}: ${value}`).join('\n')
@@ -38,12 +39,12 @@ export const es: Texts = {
   },
   hero: {
     eyebrow: 'Barrio Latino · París 5e',
-    titleA: '3 direcciones latinas',
+    titleA: SHOW_LE_1492 ? '3 direcciones latinas' : '2 direcciones latinas',
     titleB: 'en pleno Barrio Latino',
     text: 'Colombia y México a dos pasos de la Sorbona. Abierto todos los días.',
     book: 'Reservar mesa',
     venues: 'Nuestros locales',
-    slides: ['La lámpara de botellas de El Sol & La Luna', 'El comedor de El Sol & La Luna, lleno de objetos latinos', 'Empanadas caseras y guacamole'],
+    slides: ['El comedor de El Sol & La Luna, lleno de objetos latinos', 'La lámpara de botellas de El Sol & La Luna', 'Empanadas caseras y guacamole'],
     photosLabel: 'Fotos de los restaurantes',
     pause: 'Parar el pase de fotos',
     play: 'Reanudar el pase de fotos',
@@ -63,15 +64,16 @@ export const es: Texts = {
     days: '7/7',
     daysText: 'mediodía y noche',
     rating: 'en Google',
+    ratingCount: (count: number) => `${count} reseñas en Google`,
     ratingText: 'El Sol & La Luna',
   },
   venues: {
     eyebrow: 'Nuestros locales',
-    title: 'Tres mesas, una misma familia',
+    title: SHOW_LE_1492 ? 'Tres mesas, una misma familia' : 'Dos mesas, una misma familia',
     text: 'Elige tu ambiente: Colombia, México o los dos.',
     book: 'Reservar',
     menu: 'Ver la carta',
-    rating: (score: string, count: number) => `${score} en Google · ${count} reseñas`,
+    rating: (score: string, count: number) => `${score} · ${count} reseñas en Google`,
     google: 'Nota de Google',
   },
   mood: {
@@ -137,7 +139,7 @@ export const es: Texts = {
     calendarNote: 'Solicitud enviada por WhatsApp, a la espera de la confirmación del restaurante.',
     invite: 'Avisar a mis invitados',
     inviteMessage: (venue: string, when: string, address: string) => `¡Nos vemos en ${venue} el ${when}! ${address}`,
-    hoursSoon: 'Horario por confirmar: te respondemos con las horas disponibles.',
+    hoursSoon: 'Te respondemos por WhatsApp con las horas disponibles.',
     closedThatDay: 'Cerrado ese día',
     unavailable: 'Hora no disponible',
     today: 'Hoy',
@@ -179,7 +181,6 @@ export const es: Texts = {
     bookEyebrow: 'Reservas',
     bookTitle: (name: string) => `Una mesa en ${name}`,
     bookText: 'Elige el día y la hora, te confirmamos por WhatsApp.',
-    photoSoon: 'Fotos próximamente',
     back: 'Todos nuestros locales',
   },
   sol: {
@@ -208,7 +209,7 @@ export const es: Texts = {
     message: '¡Hola! Quisiera reservar una mesa.',
   },
   footer: {
-    tagline: 'Tres direcciones latinas en pleno Barrio Latino, en el 5e y el 6e de París.',
+    tagline: SHOW_LE_1492 ? 'Tres direcciones latinas en pleno Barrio Latino, en el 5e y el 6e de París.' : 'Dos direcciones latinas en pleno Barrio Latino, en el 5e de París.',
     hours: 'Horario',
     every: 'Todos los días',
     monday: 'Lunes',

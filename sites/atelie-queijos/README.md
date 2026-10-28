@@ -7,7 +7,7 @@ inglés en `/en`.
 
 | Dirección | Qué es |
 | --- | --- |
-| `/`, `/fr`, `/en` | La página del ateliê: héroe, qué se vive, Janaína, fechas, reserva, vale-presente, grupos, próximas experiencias, depoimentos y preguntas |
+| `/`, `/fr`, `/en` | La página del ateliê: héroe, franja de Natal, qué se vive, Janaína, fechas, reserva, vale-presente, grupos, la línea «em breve», depoimentos (solo si hay) y preguntas |
 | `/links`, `/fr/links`, `/en/links` | La página «link na bio»: foto, nombre y botones grandes (noindex) |
 | `/privacidade`, `/fr/confidentialite`, `/en/privacy` | Privacidad |
 | `/reservar`, `/presente`, `/fr/reserver`, `/en/book`… | Atajos para stories: llevan al bloque de la portada |
@@ -87,9 +87,13 @@ su código sigue en `src/admin`, pero no se empaqueta y `/admin` contesta 404.
 - **Dominio**: está puesto `atelie.parisabor.com` (business.ts, pages.mjs, server.js, index.html,
   sitemap.xml, robots.txt).
 - **Respuestas marcadas «a completar»** en las preguntas (dirección, vino, cancelación, niños,
-  idioma, cómo llegar) y el punto del vale-presente personalizado: en los tres idiomas. Con
-  `SHOW_TEXT_TODO = false` se esconden las etiquetas.
-- **Depoimentos reales** (con permiso) en `reviews.items`.
+  idioma, cómo llegar), el punto del vale-presente personalizado y el SIRET: en los tres idiomas.
+  `SHOW_TEXT_TODO` está en `false` (sin etiquetas a la vista; el punto del vale y el SIRET no
+  salen); con `true` vuelven a verse marcados.
+- **Depoimentos reales** (con permiso) en `reviews.items`: mientras la lista esté vacía, la sección
+  no sale; con el primero aparece sola.
+- **Franja de Natal** (→ vale-presente): `CHRISTMAS_BANNER` en `business.ts`. Se apaga sola tras
+  `until` (25/12/2026) o con `enabled: false`.
 - **Foto de Janaína**: es la del «Sobre» del blog (2017, metro Trocadéro). Mejor una reciente en el
   ateliê, si la hay.
 - **Enlace de Stripe** si quiere cobrar por adelantado.

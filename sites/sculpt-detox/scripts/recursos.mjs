@@ -28,16 +28,14 @@ const ICONS = join(PUBLIC, 'icons')
 
 /**
  * Las fotos que salen en la web, y nada más. Las de banco de imágenes de la web anterior no se
- * publican (no consta la licencia y no son del centro); las generadas con IA se usan solo donde
- * falta una foto real, y están en la lista de lo que hay que pedirle a Michele.
+ * publican (no consta la licencia y no son del centro), y tampoco las generadas con IA: donde falta
+ * una foto real va otra del centro o ninguna, y está en la lista de lo que hay que pedirle a Michele.
  */
 const FOTOS = [
   'michele-costa-retrato.png',
   'michele-costa-productos-curcuma.png',
   'antes-despues-piernas-cliente.png',
   'antes-despues-lipedema-logo.jpg',
-  'ia-michele-drenaje-piernas.png',
-  'ia-michele-medicion-cintura.png',
 ]
 
 /** Carrer de l'Historiador Josep Clapés, 13 (Eivissa), según OpenStreetMap (vía 323997740). */

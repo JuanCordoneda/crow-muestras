@@ -16,6 +16,10 @@ import { fr } from './texts/fr'
 import { en } from './texts/en'
 
 type Faq = { q: string; a: string; todo?: boolean }
+/** Un depoimento real, con permiso: `{ quote: '…', name: 'Nome', place: 'Cidade · mês do ateliê' }`. */
+export type Review = { quote: string; name: string; place: string }
+/** `todo`: la parte provisional del texto, que solo sale mientras `SHOW_TEXT_TODO` esté encendido. */
+type LegalSection = { title: string; text: string; todo?: string }
 
 const pt = {
   meta: {
@@ -72,6 +76,11 @@ const pt = {
     next: 'Próxima sessão:',
     photoAlt: 'Tábua de queijos franceses com pães, uvas, nozes e damascos, montada no ateliê',
     byline: 'Com a Janaína, do @parisabor',
+  },
+  /** La franja de Natal bajo el héroe (se enciende y se apaga en `CHRISTMAS_BANNER`, en `business.ts`). */
+  christmas: {
+    text: 'Presente de Natal para quem ama Paris',
+    cta: 'Vale-presente',
   },
   stories: {
     label: 'Ver o ateliê em stories',
@@ -149,6 +158,8 @@ const pt = {
     title: 'Próximas datas',
     lead: 'No máximo 8 pessoas por sessão. Escolha a sua data e garanta o seu lugar.',
     left: (left: number, max: number) => (left >= max ? `${left} vagas disponíveis` : left === 1 ? 'resta 1 vaga' : `restam ${left} vagas`),
+    /** La barra de plazas de la próxima sesión, para lectores de pantalla. */
+    taken: (taken: number, max: number) => `${taken} de ${max} vagas já reservadas`,
     full: 'Esgotado',
     waitlist: 'Lista de espera',
     book: 'Reservar',
@@ -234,11 +245,10 @@ const pt = {
     ],
     cta: 'Pedir um orçamento',
   },
+  /** Las próximas experiencias: una sola línea con «avise-me» (los `items` van en el mensaje de WhatsApp). */
   more: {
-    eyebrow: 'Outras experiências',
-    title: 'Em breve com a Janaína',
-    lead: 'O ateliê de queijos é a primeira de uma série de experiências gastronômicas em Paris.',
-    soon: 'Em breve',
+    soon: 'Em breve:',
+    line: 'jantares, etiqueta à mesa e passeios',
     notify: 'Quero ser avisado(a)',
     items: [
       { title: 'Jantares guiados', text: 'Uma noite num restaurante parisiense escolhido a dedo, com a Janaína à mesa.' },
@@ -250,12 +260,12 @@ const pt = {
     eyebrow: 'Depoimentos',
     title: 'Quem já viveu o ateliê',
     lead: 'As palavras de quem já montou a sua tábua com a Janaína.',
-    todo: 'Depoimento a completar',
-    items: [
-      { quote: 'Espaço para o depoimento real de um participante do ateliê, com as palavras dele.', name: 'Nome do participante', place: 'Cidade · data do ateliê' },
-      { quote: 'Espaço para o depoimento real de um participante do ateliê, com as palavras dele.', name: 'Nome do participante', place: 'Cidade · data do ateliê' },
-      { quote: 'Espaço para o depoimento real de um participante do ateliê, com as palavras dele.', name: 'Nome do participante', place: 'Cidade · data do ateliê' },
-    ],
+    /**
+     * PENDIENTE: depoimentos reales (con permiso), en los tres idiomas. Mientras la lista esté
+     * vacía, la sección no sale; con el primero, aparece sola. Ejemplo:
+     * `{ quote: 'As palavras da pessoa…', name: 'Nome', place: 'Cidade · mês do ateliê' }`
+     */
+    items: [] as Review[],
   },
   faq: {
     eyebrow: 'Dúvidas',
@@ -299,12 +309,12 @@ const pt = {
     title: 'Privacidade',
     updated: 'Atualizado em outubro de 2026.',
     sections: [
-      { title: 'Quem somos', text: 'PariSabor é a marca de Janaína Pedroza de Macedo, em Paris. Contato: contato@parisabor.com. Dados da empresa (SIRET): a completar.' },
+      { title: 'Quem somos', text: 'PariSabor é a marca de Janaína Pedroza de Macedo, em Paris. Contato: contato@parisabor.com.', todo: 'Dados da empresa (SIRET): a completar.' },
       { title: 'O que acontece com os seus dados', text: 'O formulário de reserva não envia nada a nenhum servidor: ele apenas abre o WhatsApp com a mensagem pronta. Os dados que você nos envia por lá (nome, telefone, data) servem somente para organizar a sua reserva e não são compartilhados com ninguém.' },
       { title: 'Pagamento online', text: 'Se você pagar online, o pagamento é feito diretamente na plataforma de pagamento (Stripe). Não vemos nem guardamos os dados do seu cartão.' },
       { title: 'Os seus direitos', text: 'Você pode pedir para ver, corrigir ou apagar os seus dados escrevendo para contato@parisabor.com, e reclamar junto à CNIL (cnil.fr).' },
       { title: 'Cookies', text: 'Este site não usa cookies de publicidade nem de estatísticas. Ele só guarda no seu navegador uma cópia do próprio site para carregar mais rápido na próxima visita.' },
-    ],
+    ] as LegalSection[],
   },
   notFound: {
     title: 'Esta página não existe',

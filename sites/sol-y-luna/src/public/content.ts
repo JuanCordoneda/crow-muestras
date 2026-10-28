@@ -3,9 +3,11 @@
  *
  * El francés es la versión de referencia: `Texts` se deduce de `fr`, así que al añadir un texto el
  * compilador obliga a traducirlo también en `texts/es.ts`. Los datos de cada local (dirección,
- * horario, carta) no viven aquí sino en `venues.ts`; Le 1492, en su propio componente.
+ * horario, carta) no viven aquí sino en `venues.ts`; Le 1492, en su propio componente. Los textos
+ * que cuentan las direcciones del grupo cambian con `SHOW_LE_1492`: dos en el 5e, o tres con el 6e.
  */
 import type { Lang } from '../shared/types'
+import { SHOW_LE_1492 } from './venues'
 import { es } from './texts/es'
 
 /** Línea a línea, sin las vacías: así el mensaje de WhatsApp no lleva «Occasion : » suelto. */
@@ -46,12 +48,12 @@ const fr = {
   },
   hero: {
     eyebrow: 'Quartier Latin · Paris 5e',
-    titleA: '3 adresses latines',
+    titleA: SHOW_LE_1492 ? '3 adresses latines' : '2 adresses latines',
     titleB: 'au cœur du Quartier Latin',
     text: 'Colombie et Mexique à deux pas de la Sorbonne. Ouvert tous les jours.',
     book: 'Réserver une table',
     venues: 'Nos adresses',
-    slides: ['Le lustre de bouteilles d’El Sol & La Luna', 'La salle d’El Sol & La Luna, pleine d’objets latinos', 'Empanadas maison et guacamole'],
+    slides: ['La salle d’El Sol & La Luna, pleine d’objets latinos', 'Le lustre de bouteilles d’El Sol & La Luna', 'Empanadas maison et guacamole'],
     photosLabel: 'Photos des restaurants',
     pause: 'Arrêter le défilement des photos',
     play: 'Reprendre le défilement des photos',
@@ -71,15 +73,16 @@ const fr = {
     days: '7j/7',
     daysText: 'midi et soir',
     rating: 'sur Google',
+    ratingCount: (count: number) => `${count} avis Google`,
     ratingText: 'El Sol & La Luna',
   },
   venues: {
     eyebrow: 'Nos adresses',
-    title: 'Trois tables, une même famille',
+    title: SHOW_LE_1492 ? 'Trois tables, une même famille' : 'Deux tables, une même famille',
     text: 'Choisissez votre ambiance : Colombie, Mexique ou les deux.',
     book: 'Réserver',
     menu: 'Voir la carte',
-    rating: (score: string, count: number) => `${score} sur Google · ${count} avis`,
+    rating: (score: string, count: number) => `${score} · ${count} avis Google`,
     google: 'Note Google',
   },
   mood: {
@@ -145,7 +148,8 @@ const fr = {
     calendarNote: 'Demande envoyée sur WhatsApp, en attente de confirmation du restaurant.',
     invite: 'Prévenir mes invités',
     inviteMessage: (venue: string, when: string, address: string) => `On se retrouve chez ${venue} ${when} ! ${address}`,
-    hoursSoon: 'Horaires à confirmer : on vous répond avec les créneaux disponibles.',
+    /** Para un local sin horario en `venues.ts`: se ofrecen todas las horas y se confirma por WhatsApp. */
+    hoursSoon: 'On vous répond sur WhatsApp avec les créneaux disponibles.',
     closedThatDay: 'Fermé ce jour-là',
     unavailable: 'Créneau indisponible',
     today: 'Auj.',
@@ -187,7 +191,6 @@ const fr = {
     bookEyebrow: 'Réservation',
     bookTitle: (name: string) => `Une table chez ${name}`,
     bookText: 'Choisissez le jour et l’heure, on vous confirme sur WhatsApp.',
-    photoSoon: 'Photos à venir',
     back: 'Toutes nos adresses',
   },
   sol: {
@@ -216,7 +219,8 @@ const fr = {
     message: 'Bonjour ! Je souhaite réserver une table.',
   },
   footer: {
-    tagline: 'Trois adresses latines au cœur du Quartier Latin, à Paris 5e et 6e.',
+    // Las dos de página propia están en el 75005; Le 1492, en el 75006.
+    tagline: SHOW_LE_1492 ? 'Trois adresses latines au cœur du Quartier Latin, à Paris 5e et 6e.' : 'Deux adresses latines au cœur du Quartier Latin, à Paris 5e.',
     hours: 'Horaires',
     every: 'Tous les jours',
     monday: 'Lundi',

@@ -9,7 +9,7 @@
  * cuanto el restaurante dé los precios, basta con escribirlos aquí (en euros) y se enseñan solos.
  *
  * Le 1492 no está aquí: vive entero en `components/Le1492.tsx`, para poder quitarlo de un golpe si
- * el local ya no existe.
+ * el local ya no existe. Mientras tanto se enseña o se esconde con `SHOW_LE_1492`, más abajo.
  */
 import type { DayHours, Lang, Settings } from '../shared/types'
 
@@ -23,6 +23,15 @@ export const SITE_URL = 'https://www.mexiandco.fr'
 
 /** El WhatsApp que recibe todas las reservas del grupo (el de El Sol & La Luna). */
 export const BOOKING_WHATSAPP = '33624438023'
+
+/**
+ * LE-1492: el interruptor de Le 1492. Apagado (`false`) porque no hay fotos, ni carta, ni horario:
+ * el local no sale en ninguna parte (portada, menú, pie, reservas, ficha de Google, `index.html` y
+ * `llms.txt`, que limpia `scripts/pages.mjs` en el build) y los textos hablan de dos direcciones en
+ * el 5e. Para enseñarlo otra vez basta con ponerlo a `true` y compilar; para la imagen de compartir,
+ * además, `node scripts/grupo.mjs`. `components/Le1492.tsx` sigue entero.
+ */
+export const SHOW_LE_1492 = false
 
 export type VenueId = 'el-sol-la-luna' | 'mexi-and-co' | 'le-1492'
 
@@ -64,7 +73,7 @@ export type Venue = {
   rating?: { score: number; count: number }
   /** Ficha de Google Maps (o búsqueda que lleva a ella). */
   maps: string
-  /** Foto principal. Vacía = cartel de «photo à venir» con el nombre del local. */
+  /** Foto principal. Vacía = cartel con el sol y el nombre del local, sin aviso de «fotos pendientes». */
   photo?: string
   /**
    * Foto apaisada para el héroe en pantallas anchas. La principal puede ser vertical (la fachada lo
@@ -217,7 +226,8 @@ export const MEXI: Venue = {
   hours: MEXI_HOURS,
   // Sin nota a propósito: la web no la enseña (ver el bloque «Votre avis compte»).
   maps: 'https://www.google.com/maps/search/?api=1&query=Mexi+%26+Co+10+Rue+Dante+Paris',
-  // PLACEHOLDER: sin fotos del local todavía. Se pinta un cartel con el nombre hasta que lleguen.
+  // Sin fotos del local todavía: se pinta el cartel con el nombre (`PhotoSoon`), sin decir que faltan.
+  // No se usan las de El Sol: serían de otro local.
   photo: '',
   menu: [
     {
@@ -246,6 +256,9 @@ export const MEXI: Venue = {
 
 /** Los locales con página propia, en el orden en que se presentan. */
 export const VENUES: Venue[] = [EL_SOL, MEXI]
+
+/** Cuántas direcciones tiene el grupo en la web: las de página propia y Le 1492 si está encendido. */
+export const VENUE_COUNT = VENUES.length + (SHOW_LE_1492 ? 1 : 0)
 
 export const venueById = (id: string | null | undefined) => VENUES.find((venue) => venue.id === id)
 

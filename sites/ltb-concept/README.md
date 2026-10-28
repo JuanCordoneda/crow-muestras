@@ -21,9 +21,10 @@ Todo en **`config.js`**:
 | Qué | Campo |
 | --- | --- |
 | Nombre y bajada | `name`, `tagline` (logo, textos, pie, posts de Instagram) |
-| Precios y duraciones | `services[].price` (€) y `services[].min` (minutos); en `null` se ve «XX» |
+| Precios y duraciones | `services[].price` (€) y `services[].min` (minutos); en `null` se ve «Sur devis» / «Sob consulta» y no se muestra la duración |
+| Tarjetas grandes de servicios | `featured` (ids de `services`); el resto sale solo en la carta de tarifas |
 | Salones, teléfonos, WhatsApp, horarios | `salons[]` |
-| Fotos avant / après | `beforeAfter[].before` / `.after` (ruta de la foto) |
+| Fotos avant / après | `beforeAfter[].before` / `.after` (ruta de la foto); sin ningún par completo el bloque no se muestra |
 | Fotos de Instagram | `instagramPosts[]` |
 | Franja «Proposition pour Dany» | `proposal` (`null` para quitarla) |
 | Dominio | `url` |

@@ -137,25 +137,34 @@ section{scroll-margin-top:var(--head)}
 /* ---------- hero ---------- */
 .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;color:var(--white);background:var(--ink);overflow:hidden}
 .hero .bg,.hero .bg img{position:absolute;inset:0;width:100%;height:100%}
-.hero .bg img{object-fit:cover;object-position:50% 45%;transform:scale(1.06);animation:slowzoom 18s ease-out forwards}
-@keyframes slowzoom{to{transform:scale(1)}}
+/* Ken Burns : zoom lent en aller-retour, contenu par overflow:hidden du hero (sans animation si mouvement réduit) */
+.hero .bg img{object-fit:cover;object-position:50% 45%;transform-origin:50% 45%;will-change:transform;animation:kenburns 20s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.08)}}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,18,16,.6) 0%,rgba(20,18,16,.2) 28%,rgba(20,18,16,.8) 64%,var(--ink) 100%)}
 .hero .wrap{position:relative;z-index:2;padding-top:calc(var(--head) + 40px);padding-bottom:44px}
-.hero .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;display:flex;align-items:center;gap:.5rem;color:var(--gold-l)}
+.hero .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.5rem;color:var(--gold-l);max-width:100%;padding:.42rem .85rem;border-radius:999px;background:rgba(20,18,16,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1px rgba(201,162,74,.28)}
+.hero .eyebrow span{min-width:0}
 .hero .eyebrow svg{flex:none;color:var(--gold)}
 .hero h1{margin:.7rem 0 0;font-family:var(--f-display);font-weight:600;font-size:clamp(3.1rem,13.5vw,7.4rem);line-height:.92;letter-spacing:-.005em;max-width:11ch}
 .hero h1 em{display:block;font-style:italic;font-weight:500;color:var(--gold)}
 .hero p.sub{max-width:34rem;font-size:1.08rem;color:rgba(255,251,244,.88);margin:1.1rem 0 1.5rem}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:.7rem}
 .hero .ctas .btn{flex:1 1 auto}
+/* note Google en grand, à côté des boutons */
+.rate{display:inline-flex;align-items:center;gap:.55rem;text-decoration:none;color:var(--white);align-self:center;padding:.15rem .2rem}
+.rate svg{width:24px;height:24px;flex:none;color:var(--gold)}
+.rate b{font-family:var(--f-display);font-weight:700;font-size:2.4rem;line-height:.8}
+.rate span{font-weight:600;font-size:1rem;color:rgba(255,251,244,.9)}
+.rate span::before{content:"·";margin-right:.55rem;color:var(--gold)}
+.rate:hover span{color:var(--gold-l)}
 .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
 .chip{display:inline-flex;align-items:center;gap:.45rem;font-size:.82rem;font-weight:600;padding:.42rem .8rem;border-radius:999px;background:rgba(255,251,244,.1);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:var(--white);text-decoration:none}
 .chip .dot{width:8px;height:8px;border-radius:50%;background:#9a8f86}
 .chip .dot.on{background:#3ddc84;box-shadow:0 0 0 4px rgba(61,220,132,.2)}
 .chip svg{width:14px;height:14px;color:var(--gold)}
-@media (max-width:479px){.hero .eyebrow{font-size:.68rem;letter-spacing:.1em;gap:.4rem}}
-@media (max-width:639px){.hero .wrap{padding-bottom:92px}}
-@media (min-width:640px){.hero .ctas .btn{flex:0 0 auto}}
+@media (max-width:479px){.hero .eyebrow{font-size:.68rem;letter-spacing:.08em;gap:.4rem;padding:.4rem .7rem}}
+@media (max-width:639px){.hero .wrap{padding-bottom:92px}.hero .ctas .rate{flex:1 1 100%;justify-content:center;margin-top:.2rem}}
+@media (min-width:640px){.hero .ctas .btn{flex:0 0 auto}.hero .ctas .rate{margin-left:.6rem}}
 
 /* ---------- proof (sous le hero) ---------- */
 .proof{display:block;background:var(--gold);color:var(--ink);border-block:2px solid var(--ink);text-decoration:none}
@@ -444,6 +453,16 @@ dialog.st.paused .st-bars i.now b,dialog.st.paused .st-img{animation-play-state:
 .must-list figcaption{padding:12px 2px 0}
 .must-list figcaption b{display:block;font-size:1.02rem}
 .must-list figcaption span{display:block;font-size:.88rem;color:var(--muted);margin-top:2px}
+/* plat star : le favori de la maison, carte typographique (aucune photo de ce plat précis) */
+.star-dish{position:relative;overflow:hidden;margin-top:16px;padding:22px 20px 20px;border-radius:var(--r);background:var(--ink);color:var(--white);display:grid;gap:10px;justify-items:start;box-shadow:0 30px 60px -36px rgba(20,18,16,.7)}
+.star-dish::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0,rgba(201,162,74,.3),transparent 55%),radial-gradient(circle at 0 100%,rgba(180,50,43,.32),transparent 50%);pointer-events:none}
+.star-dish>:not(.sun){position:relative}
+.star-dish .sun{position:absolute;right:-36px;top:-36px;width:150px;height:150px;color:var(--gold);opacity:.16}
+.star-dish h4{margin:0;font-family:var(--f-display);font-style:italic;font-weight:500;font-size:clamp(2.5rem,11vw,3.8rem);line-height:.95;color:var(--gold)}
+.star-meta{margin:0;display:flex;align-items:baseline;gap:.7rem;font-weight:600;color:rgba(255,251,244,.8)}
+.star-meta b{font-family:var(--f-display);font-weight:700;font-size:1.9rem;line-height:1;color:var(--white);font-variant-numeric:lining-nums tabular-nums}
+.star-dish .btn{margin-top:6px}
+@media (min-width:900px){.star-dish{grid-template-columns:1fr auto;column-gap:32px;padding:30px 36px}.star-dish .btn{grid-column:2;grid-row:1 / span 3;align-self:end}}
 @media (min-width:900px){.must-head small{display:none}.must-list{grid-auto-flow:row;grid-template-columns:repeat(4,1fr);overflow:visible;margin:16px 0 0;padding:0}}
 
 /* ---------- réservation : dates rapides et récap ---------- */
@@ -546,10 +565,10 @@ dialog.st.paused .st-bars i.now b,dialog.st.paused .st-img{animation-play-state:
     <div class="ctas">
       <a class="btn btn-gold" href="#reserver" id="heroCta"><svg><use href="#i-cal"/></svg><span>Réserver une table</span></a>
       <a class="btn btn-ghost" href="#carte" data-i18n="cta.menu">Voir la carte</a>
+      <a class="rate" href="#avis" data-i18n-aria="hero.ratingAria" aria-label="4,5/5 sur Google, 710 avis"><svg aria-hidden="true"><use href="#i-star"/></svg><b>4,5</b><span data-i18n="hero.rating">710 avis Google</span></a>
     </div>
     <div class="chips">
       <a class="chip" href="#infos"><span class="dot" data-status-dot></span><span data-status>…</span></a>
-      <a class="chip" href="#avis" aria-label="4,5/5 sur Google, 710 avis"><svg><use href="#i-star"/></svg><span data-i18n="hero.rating">4,5 · 710 avis</span></a>
     </div>
   </div>
 </section>
@@ -662,6 +681,7 @@ dialog.st.paused .st-bars i.now b,dialog.st.paused .st-img{animation-play-state:
     </div>
     <div class="must rv">
       <div class="must-head"><h3 data-i18n="must.title">Les incontournables</h3><small data-i18n="must.hint">Glissez →</small></div>
+      <div class="star-dish" id="starDish"></div>
       <ul class="must-list" id="must"></ul>
     </div>
     <nav class="cat-nav" id="catNav" aria-label="Catégories"></nav>
@@ -839,7 +859,7 @@ fr:{
  "cta.book":"Réserver","cta.bookTable":"Réserver une table","cta.menu":"Voir la carte",
  "hero.eyebrow":"Cuisine péruvienne · Paris 15e · depuis 2019","hero.title":"Le Pérou, <em>sans prendre l'avion.</em>",
  "hero.sub":"Ceviches, causas et poulpe au charbon préparés par des chefs péruviens, rue de la Croix-Nivert. Réservez votre table en 30 secondes, directement chez nous.",
- "hero.rating":"4,5 · 710 avis","hero.alt":"Ceviche du Comptoir du Pérou : poisson mariné, maïs, patate douce et leche de tigre",
+ "hero.rating":"710 avis Google","hero.ratingAria":"4,5/5 sur Google, 710 avis","hero.alt":"Ceviche du Comptoir du Pérou : poisson mariné, maïs, patate douce et leche de tigre",
  "proof.aria":"Nos avis : 4,5 sur Google (710 avis) et 4,7 sur TheFork","proof.google":"sur Google","proof.count":"710 avis","proof.fork":"sur TheFork",
  "concept.kicker":"Notre histoire","concept.title":"Un comptoir <em>liménien</em> à Paris",
  "concept.p1":"Depuis 2019, Le Comptoir du Pérou fait voyager le 15e. En cuisine, des chefs péruviens préparent les grands classiques de Lima : ceviches marinés à la minute, causas, poulpe au charbon.",
@@ -862,7 +882,7 @@ fr:{
  "wa.book":"Bonjour ! Je souhaite réserver une table.\nDate : {date}\nHeure : {time}\nPersonnes : {n}\nNom : {name}\nTél : {tel}",
  "wa":"Bonjour ! Je souhaite réserver une table.","wa.aria":"Réserver sur WhatsApp",
  "cta.lunch":"Réserver pour ce midi","cta.tonight":"Réserver pour ce soir","cta.tomorrow":"Réserver pour demain","cta.day":"Réserver pour {d}","route.aria":"De Lima à Paris 15e : 10 254 km, zéro avion","route.plane":"avion","route.book":"pour réserver","dish.photo":"Voir la photo","st.prev":"Photo précédente","st.next":"Photo suivante","f.errTel":"Vérifiez le numéro de téléphone.","ok.cal":"Ajouter à mon agenda","ics.title":"Table au Comptoir du Pérou ({n} pers.) · à confirmer","ics.desc":"Demande envoyée par WhatsApp au 07 63 94 83 49. Le restaurant vous confirme la table.","i.showMap":"Afficher la carte","i.mapNote":"La carte Google ne se charge que si vous la demandez.","f.other":"Autre date","f.today":"Auj.","f.tomorrow":"Demain","f.recap":"{date} · {time} · {n} pers.",
- "must.title":"Les incontournables","must.hint":"Glissez →","r.all":"Lire les 710 avis sur Google",
+ "must.title":"Les incontournables","must.hint":"Glissez →","star.cta":"Voir nos {n} ceviches","r.all":"Lire les 710 avis sur Google",
  "q.kicker":"Bon à savoir","q.title":"Vos <em>questions</em>",
  "q1.q":"Faut-il réserver ?","q1.a":"C'est plus sûr le soir et le week-end. Réservez en 30 secondes avec le formulaire, ou appelez-nous au 07 63 94 83 49.",
  "q2.q":"Accueillez-vous les groupes et les anniversaires ?","q2.a":"Avec plaisir. Au-delà de 9 personnes, précisez le nombre dans votre message WhatsApp et on prépare la table avec vous.",
@@ -887,7 +907,7 @@ en:{
  "cta.book":"Book","cta.bookTable":"Book a table","cta.menu":"See the menu",
  "hero.eyebrow":"Peruvian cuisine · Paris 15th · since 2019","hero.title":"Peru, <em>no flight required.</em>",
  "hero.sub":"Ceviches, causas and charcoal-grilled octopus made by Peruvian chefs on rue de la Croix-Nivert. Book your table in 30 seconds, directly with us.",
- "hero.rating":"4.5 · 710 reviews","hero.alt":"Ceviche at Le Comptoir du Pérou: cured fish, corn, sweet potato and leche de tigre",
+ "hero.rating":"710 Google reviews","hero.ratingAria":"4.5/5 on Google, 710 reviews","hero.alt":"Ceviche at Le Comptoir du Pérou: cured fish, corn, sweet potato and leche de tigre",
  "proof.aria":"Our reviews: 4.5 on Google (710 reviews) and 4.7 on TheFork","proof.google":"on Google","proof.count":"710 reviews","proof.fork":"on TheFork",
  "concept.kicker":"Our story","concept.title":"A taste of <em>Lima</em> in Paris",
  "concept.p1":"Since 2019, Le Comptoir du Pérou has been taking the 15th arrondissement on a trip. In the kitchen, Peruvian chefs cook Lima's great classics: ceviches cured to order, causas, charcoal-grilled octopus.",
@@ -910,7 +930,7 @@ en:{
  "wa.book":"Hello! I'd like to book a table.\nDate: {date}\nTime: {time}\nGuests: {n}\nName: {name}\nPhone: {tel}",
  "wa":"Hello! I'd like to book a table.","wa.aria":"Book on WhatsApp",
  "cta.lunch":"Book for lunch today","cta.tonight":"Book for tonight","cta.tomorrow":"Book for tomorrow","cta.day":"Book for {d}","route.aria":"From Lima to Paris 15th: 10,254 km, zero flights","route.plane":"flights","route.book":"to book","dish.photo":"See the photo","st.prev":"Previous photo","st.next":"Next photo","f.errTel":"Please check the phone number.","ok.cal":"Add to my calendar","ics.title":"Table at Le Comptoir du Pérou ({n} guests) · to be confirmed","ics.desc":"Request sent on WhatsApp to +33 7 63 94 83 49. The restaurant will confirm your table.","i.showMap":"Show the map","i.mapNote":"The Google map only loads if you ask for it.","f.other":"Other date","f.today":"Today","f.tomorrow":"Tomorrow","f.recap":"{date} · {time} · {n} guests",
- "must.title":"Must-tries","must.hint":"Swipe →","r.all":"Read all 710 reviews on Google",
+ "must.title":"Must-tries","must.hint":"Swipe →","star.cta":"See our {n} ceviches","r.all":"Read all 710 reviews on Google",
  "q.kicker":"Good to know","q.title":"Your <em>questions</em>",
  "q1.q":"Do I need to book?","q1.a":"It's safer in the evening and at weekends. Book in 30 seconds with the form, or call us on +33 7 63 94 83 49.",
  "q2.q":"Do you welcome groups and birthdays?","q2.a":"With pleasure. For more than 9 guests, add the number to your WhatsApp message and we'll set up the table with you.",
@@ -935,7 +955,7 @@ es:{
  "cta.book":"Reservar","cta.bookTable":"Reservar mesa","cta.menu":"Ver la carta",
  "hero.eyebrow":"Cocina peruana · París 15 · desde 2019","hero.title":"El Perú, <em>sin tomar el avión.</em>",
  "hero.sub":"Ceviches, causas y pulpo al carbón preparados por cocineros peruanos en la rue de la Croix-Nivert. Reserva tu mesa en 30 segundos, directamente con nosotros.",
- "hero.rating":"4,5 · 710 reseñas","hero.alt":"Ceviche de Le Comptoir du Pérou: pescado marinado, choclo, camote y leche de tigre",
+ "hero.rating":"710 reseñas en Google","hero.ratingAria":"4,5/5 en Google, 710 reseñas","hero.alt":"Ceviche de Le Comptoir du Pérou: pescado marinado, choclo, camote y leche de tigre",
  "proof.aria":"Nuestras reseñas: 4,5 en Google (710 reseñas) y 4,7 en TheFork","proof.google":"en Google","proof.count":"710 reseñas","proof.fork":"en TheFork",
  "concept.kicker":"Nuestra historia","concept.title":"Un rincón <em>limeño</em> en París",
  "concept.p1":"Desde 2019, Le Comptoir du Pérou hace viajar al distrito 15. En la cocina, cocineros peruanos preparan los grandes clásicos de Lima: ceviches al momento, causas, pulpo al carbón.",
@@ -958,7 +978,7 @@ es:{
  "wa.book":"¡Hola! Quisiera reservar una mesa.\nFecha: {date}\nHora: {time}\nPersonas: {n}\nNombre: {name}\nTel: {tel}",
  "wa":"¡Hola! Quisiera reservar una mesa.","wa.aria":"Reservar por WhatsApp",
  "cta.lunch":"Reservar para hoy al mediodía","cta.tonight":"Reservar para esta noche","cta.tomorrow":"Reservar para mañana","cta.day":"Reservar para el {d}","route.aria":"De Lima a París 15: 10 254 km, cero aviones","route.plane":"aviones","route.book":"para reservar","dish.photo":"Ver la foto","st.prev":"Foto anterior","st.next":"Foto siguiente","f.errTel":"Revisa el número de teléfono.","ok.cal":"Agregar a mi calendario","ics.title":"Mesa en Le Comptoir du Pérou ({n} pers.) · por confirmar","ics.desc":"Solicitud enviada por WhatsApp al +33 7 63 94 83 49. El restaurante te confirma la mesa.","i.showMap":"Ver el mapa","i.mapNote":"El mapa de Google solo se carga si lo pides.","f.other":"Otra fecha","f.today":"Hoy","f.tomorrow":"Mañana","f.recap":"{date} · {time} · {n} pers.",
- "must.title":"Los imprescindibles","must.hint":"Desliza →","r.all":"Leer las 710 reseñas en Google",
+ "must.title":"Los imprescindibles","must.hint":"Desliza →","star.cta":"Ver nuestros {n} ceviches","r.all":"Leer las 710 reseñas en Google",
  "q.kicker":"Bueno saberlo","q.title":"Tus <em>preguntas</em>",
  "q1.q":"¿Hay que reservar?","q1.a":"Es lo más seguro por la noche y el fin de semana. Reserva en 30 segundos con el formulario o llámanos al +33 7 63 94 83 49.",
  "q2.q":"¿Reciben grupos y cumpleaños?","q2.a":"Con gusto. Para más de 9 personas, indica el número en tu mensaje de WhatsApp y armamos la mesa contigo.",
@@ -1085,6 +1105,17 @@ function renderMenu(){
     body.appendChild(sec);
   });
   watchCats();
+}
+/* plat star : le premier plat marqué "fav" dans la carte, mis en avant au-dessus des incontournables */
+function renderStar(){
+  var box=document.getElementById("starDish"),fav,cat;box.innerHTML="";
+  MENU.forEach(function(c){c.items.forEach(function(it){if(!fav&&it.tag==="fav"){fav=it;cat=c;}});});
+  box.hidden=!fav;if(!fav)return;
+  var sun=svgUse("inti");sun.setAttribute("class","sun");sun.setAttribute("aria-hidden","true");box.appendChild(sun);
+  box.appendChild(el("span",{class:"b b-fav",text:t("b.fav")}));
+  box.appendChild(el("h4",{text:L(fav.n)}));
+  box.appendChild(el("p",{class:"star-meta"},[el("span",{text:L(cat.name)}),el("b",{text:euro(fav.p)})]));
+  box.appendChild(el("a",{class:"btn btn-gold",href:"#cat-"+cat.id,text:fill(t("star.cta"),{n:cat.items.length})}));
 }
 function renderMust(){
   var ul=document.getElementById("must");ul.innerHTML="";
@@ -1305,7 +1336,7 @@ function applyLang(l){
   document.querySelectorAll("[data-i18n-aria]").forEach(function(e){e.setAttribute("aria-label",t(e.dataset.i18nAria));});
   document.querySelectorAll("[data-i18n-alt]").forEach(function(e){e.alt=t(e.dataset.i18nAlt);});
   document.querySelectorAll("[data-lang]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.lang===l));});
-  renderMust();renderMenu();renderHours();updateStatus();renderQuick();renderSlots();updateRecap();updateWa();updateHeroCta();
+  renderStar();renderMust();renderMenu();renderHours();updateStatus();renderQuick();renderSlots();updateRecap();updateWa();updateHeroCta();
   try{localStorage.setItem("comptoir-lang",l);}catch(_){}
 }
 document.querySelectorAll("[data-lang]").forEach(function(b){b.addEventListener("click",function(){applyLang(b.dataset.lang);});});

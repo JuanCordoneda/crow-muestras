@@ -7,6 +7,7 @@ import { BUSINESS, directionsUrl, telUrl, whatsappUrl } from '../business'
 import { TREATMENTS, type Treatment, type TreatmentGroup } from '../treatments'
 import { RoundBadge, Stars, WhatsAppIcon } from '../components/Brand'
 import { Figure } from '../components/Figure'
+import { Flag } from '../components/LangPicker'
 import { BookingForm } from '../components/BookingForm'
 import { useSite } from '../site'
 import './home.css'
@@ -56,15 +57,11 @@ export function RatingChip({ className }: { className?: string }) {
 function Hero({ onWhatsApp }: { onWhatsApp: Track }) {
   const { t, lang } = useSite()
   /**
-   * Media clientela es extranjera: a quien tiene el teléfono en otro idioma se le ofrece la web en
-   * inglés con un enlace discreto. Solo en el navegador, y nunca saltando solo: Google lee la
-   * portada en castellano y así tiene que seguir.
+   * Media clientela es extranjera: el otro idioma se ofrece siempre, como una píldora con su bandera
+   * a la vista (en el móvil, sobre la foto). Es un enlace y nunca salta solo: Google lee la portada
+   * en castellano y así tiene que seguir. Va ya en el HTML, así que no mueve nada al cargar.
    */
-  const [hint, setHint] = useState(false)
-  useEffect(() => {
-    const preferred = (navigator.languages?.[0] ?? navigator.language ?? '').slice(0, 2).toLowerCase()
-    setHint(Boolean(preferred) && (lang === 'es' ? !['es', 'ca', 'gl', 'eu'].includes(preferred) : preferred === 'es'))
-  }, [lang])
+  const other = lang === 'es' ? 'en' : 'es'
 
   return (
     <section className="hero" aria-labelledby="hero-title">
@@ -81,7 +78,9 @@ function Hero({ onWhatsApp }: { onWhatsApp: Track }) {
         <RoundBadge text={t.badge} className="hero-badge" />
       </div>
       <div className="hero-content">
-        {hint && <a className="hero-lang" href={withBase(lang === 'es' ? '/en' : '/')} hrefLang={lang === 'es' ? 'en' : 'es'}>{t.hero.langHint} <ArrowRight size={14} /></a>}
+        <a className="hero-lang" href={withBase(other === 'en' ? '/en' : '/')} hrefLang={other} lang={other}>
+          <Flag code={other} /> {t.hero.langHint} <ArrowRight size={14} aria-hidden="true" />
+        </a>
         <RatingChip className="hero-rating" />
         <p className="hero-eyebrow">{t.hero.eyebrow}</p>
         <h1 id="hero-title">
@@ -190,7 +189,7 @@ function Finder() {
               <span className="finder-pick-index" aria-hidden="true">{index + 1}</span>
               <div className="finder-pick-body">
                 <strong>{item.name[lang]}</strong>
-                <span className="finder-pick-meta">{labels.price(item.tiers ? item.tiers[0].price : item.price)} · {labels.minutes(item.tiers ? item.tiers[0].minutes : item.minutes)}</span>
+                <span className="finder-pick-meta">{item.tiers ? labels.line(item.tiers[0].price, item.tiers[0].minutes) : labels.line(item.price, item.minutes)}</span>
               </div>
               <button type="button" className="btn btn-ghost btn-sm" onClick={() => book(item.tiers ? undefined : item.id)} aria-label={t.treatments.bookAria(item.name[lang])}>
                 {t.treatments.book}
@@ -213,7 +212,7 @@ function Specialty() {
   return (
     <section className="specialty" id="especialidad" aria-labelledby="specialty-title">
       <div className="specialty-photo">
-        <Figure src="/img/sculptdetox/ia-michele-drenaje-piernas.webp" alt={copy.photoAlt} note={copy.photoNote} sizes="(min-width: 900px) 44vw, 100vw" width={1103} height={1200} />
+        <Figure src="/img/sculptdetox/antes-despues-lipedema-logo.webp" alt={copy.photoAlt} sizes="(min-width: 900px) 44vw, 100vw" width={1080} height={1350} />
       </div>
       <div className="specialty-body">
         <SectionHead eyebrow={copy.eyebrow} title={copy.title} id="specialty-title" />
@@ -238,9 +237,15 @@ export function usePriceLabels() {
   const { t, lang } = useSite()
   const money = (value: number) =>
     new Intl.NumberFormat(LOCALES[lang], { style: 'currency', currency: 'EUR', minimumFractionDigits: Number.isInteger(value) ? 0 : 2 }).format(value)
+  /** Sin precio en `treatments.ts`: «Consultar precio». En cuanto lo tenga, «Desde 45 €». */
+  const price = (value: number | null) => (value === null ? t.treatments.priceOnRequest : t.treatments.from(money(value)))
+  /** Sin duración no se enseña nada: devuelve `null` y quien la pinta se la salta. */
+  const minutes = (value: number | null) => (value === null ? null : t.treatments.minutes(value))
   return {
-    price: (value: number | null) => (value === null ? t.treatments.priceTodo : t.treatments.from(money(value))),
-    minutes: (value: number | null) => (value === null ? t.treatments.minutesTodo : t.treatments.minutes(value)),
+    price,
+    minutes,
+    /** Precio y duración en una línea («Desde 45 € · 60 min»), sin el punto si falta la duración. */
+    line: (amount: number | null, length: number | null) => [price(amount), minutes(length)].filter(Boolean).join(' · '),
   }
 }
 
@@ -262,7 +267,7 @@ function TreatmentCard({ treatment, index }: { treatment: Treatment; index: numb
             <li key={tier.id}>
               <div className="tier-head">
                 <strong>{tier.name[lang].replace(/^Hydrafacial /, '')}</strong>
-                <span className="tier-meta">{labels.price(tier.price)} · {labels.minutes(tier.minutes)}</span>
+                <span className="tier-meta">{labels.line(tier.price, tier.minutes)}</span>
               </div>
               <p>{tier.text[lang]}</p>
               <button type="button" className="text-link" onClick={() => book(tier.id)} aria-label={t.treatments.bookAria(tier.name[lang])}>
@@ -274,8 +279,10 @@ function TreatmentCard({ treatment, index }: { treatment: Treatment; index: numb
       ) : (
         <div className="treatment-foot">
           <dl className="treatment-meta">
-            <div><dt>{t.treatments.priceLabel}</dt><dd data-todo={treatment.price === null ? 'precio' : undefined}>{labels.price(treatment.price)}</dd></div>
-            <div><dt>{t.treatments.durationLabel}</dt><dd data-todo={treatment.minutes === null ? 'duracion' : undefined}><Clock size={14} aria-hidden="true" /> {labels.minutes(treatment.minutes)}</dd></div>
+            <div><dt>{t.treatments.priceLabel}</dt><dd>{labels.price(treatment.price)}</dd></div>
+            {treatment.minutes !== null && (
+              <div><dt>{t.treatments.durationLabel}</dt><dd><Clock size={14} aria-hidden="true" /> {labels.minutes(treatment.minutes)}</dd></div>
+            )}
           </dl>
           <button type="button" className="btn btn-ghost btn-sm" onClick={() => book(treatment.id)} aria-label={t.treatments.bookAria(name)}>
             {t.treatments.book}
@@ -371,6 +378,10 @@ function Treatments() {
   )
 }
 
+/**
+ * Sin foto a propósito: la que había era una imagen generada con IA. Cuando Michele mande una real
+ * de la evaluación, vuelve a su lado (`.steps-photo`, con el arco abajo).
+ */
 function Steps({ onWhatsApp }: { onWhatsApp: Track }) {
   const { t } = useSite()
   const copy = t.steps
@@ -382,9 +393,6 @@ function Steps({ onWhatsApp }: { onWhatsApp: Track }) {
         <a className="btn btn-primary btn-lg steps-cta" href={whatsappUrl(t.wa.generic)} target="_blank" rel="noopener noreferrer" onClick={onWhatsApp('como-funciona')}>
           <WhatsAppIcon size={20} /> {copy.cta}
         </a>
-      </div>
-      <div className="steps-photo">
-        <Figure src="/img/sculptdetox/ia-michele-medicion-cintura.webp" alt={copy.photoAlt} note={copy.photoNote} sizes="(min-width: 900px) 40vw, 100vw" width={1307} height={1600} />
       </div>
     </section>
   )
@@ -422,12 +430,15 @@ function About() {
         <h2 id="about-title">{copy.title}</h2>
         <p className="about-role">{copy.role}</p>
         {copy.paragraphs.map((paragraph) => <p key={paragraph} className="about-text">{paragraph}</p>)}
-        <div className="training">
-          <h3>{copy.trainingTitle}</h3>
-          <ul>
-            {copy.training.map((item) => <li key={item} data-todo="formacion">{item}</li>)}
-          </ul>
-        </div>
+        {/* La formación sale cuando Michele confirme centro y año: un «(pendiente)» a la vista suena a borrador. */}
+        {!copy.training.some((item) => /pendiente|to be added/i.test(item)) && (
+          <div className="training">
+            <h3>{copy.trainingTitle}</h3>
+            <ul>
+              {copy.training.map((item) => <li key={item}>{item}</li>)}
+            </ul>
+          </div>
+        )}
       </div>
     </section>
   )
@@ -448,6 +459,26 @@ export function ReviewCard({ index }: { index: number }) {
   )
 }
 
+/**
+ * La reseña destacada, en grande: es la que mejor cuenta que las clientas repiten. El texto es el
+ * de la reseña tal cual (en castellano, con el original en inglés debajo) y firma «Reseña de
+ * Google», igual que las demás: la reseña no lleva nombre.
+ */
+function PullQuote({ index }: { index: number }) {
+  const { t } = useSite()
+  const item = t.reviews.items[index]
+  return (
+    <figure className="pull-quote">
+      <span className="pull-quote-mark" aria-hidden="true">“</span>
+      <blockquote><p>{item.quote}</p></blockquote>
+      {item.original && (
+        <p className="review-original"><span>{t.reviews.original}</span> <i lang="en">“{item.original}”</i></p>
+      )}
+      <figcaption><Stars label={t.reviews.stars} size={15} /> {t.reviews.source}</figcaption>
+    </figure>
+  )
+}
+
 function Reviews() {
   const { t, lang } = useSite()
   const copy = t.reviews
@@ -459,8 +490,9 @@ function Reviews() {
         <Stars label={t.hero.ratingAria} size={20} />
         <span>Google</span>
       </div>
+      <PullQuote index={copy.featured} />
       <div className="review-grid">
-        {copy.items.map((_, index) => <ReviewCard key={index} index={index} />)}
+        {copy.items.map((_, index) => index !== copy.featured && <ReviewCard key={index} index={index} />)}
       </div>
       <div className="reviews-actions">
         <a className="btn btn-ghost btn-lg" href={BUSINESS.googleMaps} target="_blank" rel="noopener noreferrer">

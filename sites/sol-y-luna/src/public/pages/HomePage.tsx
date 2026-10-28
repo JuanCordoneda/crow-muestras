@@ -10,16 +10,23 @@ import { PhotoSoon } from '../components/PhotoSoon'
 import { BookingSection } from '../components/BookingForm'
 import { Le1492Card } from '../components/Le1492' // LE-1492
 import { MoodFinder } from '../components/MoodFinder'
-import { BOOKING_WHATSAPP, EL_SOL, MEXI, VENUES, fullAddress, say, scheduleOf, type Venue } from '../venues'
+import { BOOKING_WHATSAPP, EL_SOL, MEXI, SHOW_LE_1492, VENUES, VENUE_COUNT, fullAddress, say, scheduleOf, type Venue } from '../venues'
 import { useSite } from '../site'
 import './home.css'
 
 /**
- * Fotos del héroe, en orden. Primero el lustre de botellas de El Sol & La Luna: es lo que se
- * recuerda del local y, en vertical, el móvil lo recorta justo por el centro. Todas las fotos son
- * de El Sol & La Luna: de Mexi & Co y Le 1492 todavía no hay.
+ * Fotos del héroe, en orden. Primero el techo de El Sol & La Luna con las ollas, el pájaro y los
+ * objetos colgados: es la foto más alegre y la que dice «latino» de un vistazo (la de empanadas,
+ * sobre fondo oscuro, apagaba la portada). Luego el lustre de botellas y un plato. Todas son de El
+ * Sol & La Luna: de los otros locales todavía no hay. Si cambia la primera, cambiar también la
+ * precarga de `index.html`. Los pies van en el mismo orden en `t.hero.slides`.
  */
-const HERO = ['/img/grupo/sol-interieur-lustre.webp', '/img/grupo/sol-interieur-deco.webp', '/img/grupo/sol-empanadas.webp']
+const HERO = ['/img/grupo/sol-interieur-deco.webp', '/img/grupo/sol-interieur-lustre.webp', '/img/grupo/sol-empanadas.webp']
+/**
+ * Dónde mira cada foto cuando el móvil, en vertical, se queda con una franja estrecha: en la del
+ * techo, entre el lustre y el pájaro rojo, y no solo la cesta del centro. Sin entrada, al centro.
+ */
+const HERO_FOCUS: Record<string, string> = { '/img/grupo/sol-interieur-deco.webp': '32% 50%' }
 
 /** Los platos con foto de la portada: todas de El Sol & La Luna, que es de donde hay fotos. */
 const DISHES = [
@@ -84,7 +91,15 @@ function Hero() {
       <div className="hero-media">
         {HERO.map((src, index) =>
           seen.includes(index) ? (
-            <Photo key={src} src={src} alt={t.hero.slides[index] ?? ''} className={cx('hero-shot', index === slide && 'is-on')} sizes="100vw" priority={index === 0} />
+            <Photo
+              key={src}
+              src={src}
+              alt={t.hero.slides[index] ?? ''}
+              className={cx('hero-shot', index === slide && 'is-on')}
+              style={HERO_FOCUS[src] ? { objectPosition: HERO_FOCUS[src], backgroundPosition: HERO_FOCUS[src] } : undefined}
+              sizes="100vw"
+              priority={index === 0}
+            />
           ) : null,
         )}
       </div>
@@ -102,7 +117,7 @@ function Hero() {
               </a>
             </li>
           ))}
-          <li><a {...linkTo(publicRoute({ view: 'inicio', section: 'le-1492' }))}>Le 1492</a></li>{/* LE-1492 */}
+          {SHOW_LE_1492 && <li><a {...linkTo(publicRoute({ view: 'inicio', section: 'le-1492' }))}>Le 1492</a></li>}{/* LE-1492 */}
         </ul>
         <div className="hero-actions">
           <a className="btn btn-primary btn-lg" {...linkTo(publicRoute({ view: 'reserver' }))}>
@@ -169,18 +184,21 @@ function QuickInfo() {
   )
 }
 
-/** Tres datos grandes que venden solos: cuántas direcciones, todos los días y la nota de Google. */
+/**
+ * Tres datos grandes que venden solos: cuántas direcciones, todos los días y la nota de Google con
+ * su número de reseñas al lado (las dos cifras están en `venues.ts`; sin número, solo la nota).
+ */
 function Facts() {
   const { t, lang } = useSite()
   const rating = EL_SOL.rating
   return (
     <ul className="facts" aria-label={t.facts.label}>
-      <li><b>3</b><small>{t.facts.venues}</small><span>{t.facts.venuesText}</span></li>
+      <li><b>{VENUE_COUNT}</b><small>{t.facts.venues}</small><span>{t.facts.venuesText}</span></li>
       <li><b className="is-word">{t.facts.days}</b><span>{t.facts.daysText}</span></li>
       {rating && (
         <li>
           <b className="is-rating">{rating.score.toLocaleString(lang === 'es' ? 'es-ES' : 'fr-FR')}<StarIcon size={22} /></b>
-          <small>{t.facts.rating}</small>
+          <small>{rating.count ? t.facts.ratingCount(rating.count) : t.facts.rating}</small>
           <span>{t.facts.ratingText}</span>
         </li>
       )}
@@ -198,7 +216,7 @@ function SectionHead({ eyebrow, title, text, id, light = false }: { eyebrow: str
   )
 }
 
-/** La nota de Google como chip: estrella, nota y número de reseñas. */
+/** La nota de Google como chip, todo junto: «★ 4,4 · 622 avis Google». */
 export function RatingChip({ venue, light = false }: { venue: Venue; light?: boolean }) {
   const { t, lang } = useSite()
   if (!venue.rating) return null
@@ -218,7 +236,7 @@ function VenueCard({ venue }: { venue: Venue }) {
       <a className="venue-card-photo" {...linkTo(page)} tabIndex={-1} aria-hidden="true">
         {venue.photo
           ? <Photo src={venue.photo} alt="" sizes="(max-width: 760px) 100vw, 380px" />
-          : <PhotoSoon name={venue.name} label={t.venue.photoSoon} />}
+          : <PhotoSoon name={venue.name} />}
         {venue.hint && <span className="venue-card-hint">{say(venue.hint, lang)}</span>}
       </a>
       <div className="venue-card-body">
@@ -243,7 +261,7 @@ function Venues() {
       <SectionHead eyebrow={t.venues.eyebrow} title={t.venues.title} text={t.venues.text} id="venues-title" />
       <div className="venues-grid">
         {VENUES.map((venue) => <VenueCard key={venue.id} venue={venue} />)}
-        <Le1492Card />{/* LE-1492 */}
+        {SHOW_LE_1492 && <Le1492Card />}{/* LE-1492 */}
       </div>
     </section>
   )
@@ -282,7 +300,8 @@ function Events() {
     <section className="events" id="evenements" aria-labelledby="events-title">
       <PapelPicado />
       <div className="events-photo">
-        <Photo src="/img/grupo/sol-interieur-deco.webp" alt="" sizes="(max-width: 900px) 100vw, 50vw" />
+        {/* El lustre de botellas: el techo de las ollas ya abre la portada y no se repite. */}
+        <Photo src="/img/grupo/sol-interieur-lustre.webp" alt="" sizes="(max-width: 900px) 100vw, 50vw" />
       </div>
       <div className="events-body">
         <SectionHead eyebrow={t.events.eyebrow} title={t.events.title} text={t.events.text} id="events-title" light />

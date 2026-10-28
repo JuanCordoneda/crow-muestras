@@ -9,10 +9,15 @@
 /* Degradado arriba para que se lea la cabecera y abajo para el texto; en medio, la tábua limpia. */
 .hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(38,22,20,.6) 0%,rgba(38,22,20,0) 22%,rgba(38,22,20,.08) 34%,rgba(38,22,20,.8) 56%,rgba(30,16,16,.96) 100%)}
 .hero-content{position:relative;width:100%;padding:0 18px 40px;display:flex;flex-direction:column;align-items:flex-start}
-.hero-byline{display:inline-flex;align-items:center;gap:7px;min-height:46px;padding:4px 12px 4px 4px;cursor:pointer;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.26);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:13.5px;font-weight:700;text-decoration:none}
+.hero-byline{display:inline-flex;align-items:center;gap:11px;min-height:46px;padding:5px 16px 5px 5px;cursor:pointer;border-radius:999px;text-align:left;background:rgba(38,22,20,.5);border:1px solid rgba(255,255,255,.26);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;font-size:13.5px;font-weight:700;text-decoration:none}
 .hero-byline .story-ring img{border-color:var(--wine-ink)}
-.hero-byline small{font-size:12.5px;font-weight:600;opacity:.8}
-.hero-byline small::before{content:'· '}
+.hero-byline .story-ring{width:56px;height:56px;padding:2.5px}
+.hero-byline .story-ring img{border-width:2px}
+/* Los seguidores en grande, en manteca; el aval de Janaína debajo, más pequeño. */
+.hero-byline-text{display:grid;gap:3px;min-width:0}
+.hero-followers{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 7px;font-size:13px;font-weight:700;line-height:1.1;color:rgba(255,255,255,.88)}
+.hero-followers b{font-family:var(--font-display);font-size:30px;font-weight:600;letter-spacing:-.5px;line-height:1;color:var(--butter)}
+.hero-byline-name{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;line-height:1.3}
 .verified{flex:none;display:inline-block;vertical-align:-2px}
 .hero h1{font-family:var(--font-display);font-weight:600;font-size:clamp(36px,11vw,86px);line-height:.98;letter-spacing:-1.6px;margin-top:16px;text-wrap:balance}
 .hero h1 em{display:block;font-style:italic;font-weight:500;color:var(--butter)}
@@ -25,10 +30,22 @@
 .hero-next svg{color:var(--butter)}
 .hero-next b{color:#fff}
 .hero-next em{font-style:normal;font-weight:800;color:var(--butter);text-decoration:underline;text-underline-offset:3px}
+/* Barra de plazas de la próxima sesión: lo reservado en manteca sobre lo libre, y «5/8» al lado. */
+.hero-seats{display:inline-flex;align-items:center;gap:7px}
+.hero-seats-bar{position:relative;display:block;width:96px;height:7px;border-radius:999px;background:rgba(255,255,255,.22);overflow:hidden}
+.hero-seats-bar i{position:absolute;inset:0 auto 0 0;border-radius:inherit;background:linear-gradient(90deg,var(--butter),#e08a4f)}
+.hero-seats small{font-size:12.5px;font-weight:800;color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
 /* El titular entra por partes al abrir la web. */
 .hero-byline,.hero h1,.hero-text,.hero-chips,.hero-actions,.hero-next{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
 .hero h1{animation-delay:.1s}.hero-text{animation-delay:.18s}.hero-chips{animation-delay:.24s}.hero-actions{animation-delay:.3s}.hero-next{animation-delay:.36s}
 @keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+
+/* ---------- franja de Natal (lleva al vale-presente) ---------- */
+.xmas-strip{display:flex;align-items:center;gap:10px;min-height:56px;padding:12px 18px;background:var(--butter);color:var(--wine-ink);font-size:15px;font-weight:700;line-height:1.35;text-decoration:none}
+.xmas-strip svg{flex:none;color:var(--wine)}
+.xmas-strip span{flex:1;min-width:0}
+.xmas-strip b{flex:none;display:inline-flex;align-items:center;gap:5px;color:var(--wine);text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.xmas-strip:hover b{color:var(--wine-deep)}
 
 /* ---------- encabezado de sección ---------- */
 .section-head{padding:0 18px;max-width:660px}
@@ -149,16 +166,13 @@
 .groups-list li{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center;padding:14px 16px;border-radius:20px;background:var(--sand)}
 .groups-list .live-icon{background:#fff}
 
-/* ---------- outras experiências ---------- */
-.more{padding:60px 0 10px}
-.more-list{list-style:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 14px;margin:0;padding:22px 14px 8px;scrollbar-width:none;overscroll-behavior-x:contain}
-.more-list::-webkit-scrollbar{display:none}
-.more-card{position:relative;flex:none;display:flex;flex-direction:column;gap:8px;width:min(78vw,300px);padding:20px 18px 12px;border-radius:22px;background:#fff;border:1px dashed var(--line-strong);scroll-snap-align:start}
-.more-card h3{margin-top:6px;font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ink)}
-.more-card p{font-size:15px;line-height:1.55;color:var(--muted)}
-.more-card .text-link{margin-top:auto;color:var(--wine);font-size:15px}
-.more-soon{position:absolute;top:16px;right:16px;padding:3px 10px;border-radius:999px;background:var(--olive);color:#fff;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
-.more-card .live-icon{background:var(--olive-soft);border-color:transparent;color:var(--olive-deep)}
+/* ---------- outras experiências: una sola línea ---------- */
+.more{padding:36px 14px 0}
+.more-line{display:flex;flex-wrap:wrap;align-items:center;gap:2px 10px;margin:0;padding:10px 16px;border-radius:18px;background:var(--olive-soft);font-size:15px;line-height:1.45;color:var(--ink)}
+.more-line>svg{flex:none;color:var(--olive-deep)}
+.more-line>span{flex:1 1 200px;min-width:0}
+.more-line b{font-weight:800;color:var(--olive-deep)}
+.more-line .text-link{color:var(--wine);font-size:15px;text-decoration:underline;text-underline-offset:3px}
 
 /* ---------- depoimentos ---------- */
 .reviews{padding:60px 0 10px}
@@ -274,9 +288,9 @@
   .groups{padding-top:84px}
   .groups-list{grid-template-columns:repeat(3,1fr);gap:14px;padding:28px 32px 0}
   .groups-list li{grid-template-columns:1fr;align-items:start;padding:20px}
-  .more{padding-top:84px}
-  .more-list{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;gap:14px;padding:28px 32px 0}
-  .more-card{width:auto}
+  .more{padding:48px 32px 0}
+  .xmas-strip{justify-content:center;padding:12px 32px}
+  .xmas-strip span{flex:none}
   .reviews{padding-top:84px}
   .reviews-list{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;gap:14px;padding:28px 32px 0}
   .reviews-list .review{width:auto}

@@ -55,8 +55,6 @@
 .treatment-meta dt{font-size:10.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--faint)}
 .treatment-meta dd{display:flex;align-items:center;gap:5px;margin:0;font-size:15px;font-weight:700;color:var(--ink);white-space:nowrap}
 .treatment-meta dd svg{color:var(--sage)}
-/* Mientras no haya precio ni duración, el dato pendiente se marca en terracota y punteado. */
-.treatment-meta dd[data-todo]{color:var(--terracotta-deep);text-decoration:underline dotted;text-underline-offset:4px}
 .treatment .btn-sm{flex:none}
 .tiers{list-style:none;margin:16px 0 0;padding:0;display:grid;border-top:1px solid var(--line)}
 .tiers li{padding:14px 0 6px;border-bottom:1px solid var(--line)}
@@ -109,7 +107,6 @@
 .training ul{list-style:none;margin:8px 0 0;padding:0}
 .training li{padding:10px 0;border-bottom:1px solid var(--line);font-size:15px}
 .training li:last-child{border-bottom:0}
-.training li[data-todo]{color:var(--terracotta-deep);font-style:italic}
 
 /* ---------- opiniones ---------- */
 .reviews{padding:76px 0 64px;background:var(--sand)}
@@ -447,4 +444,56 @@
   .finder-goals{flex-wrap:nowrap;overflow-x:auto;margin:18px -18px 0;padding:2px 18px 6px;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
   .finder-goals::-webkit-scrollbar{display:none}
   .finder-goal{flex:none;scroll-snap-align:start}
+}
+
+/* =====================================================================
+   El otro idioma, a la vista: una píldora maciza con su bandera. En el
+   móvil va sobre el pie de la foto de Michele, a la izquierda del sello,
+   para no empujar el titular hacia abajo.
+   ===================================================================== */
+.hero-lang{display:inline-flex;align-items:center;gap:8px;min-height:42px;margin-bottom:14px;padding:0 14px 0 12px;border-radius:999px;background:var(--cream);border:1px solid var(--line);box-shadow:0 6px 18px rgba(43,43,43,.16);font-size:14px;font-weight:700;color:var(--ink);text-decoration:none;animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hero-lang .flag{width:22px;height:15px}
+.hero-lang svg:last-child{color:var(--terracotta-deep)}
+.hero-lang:hover{border-color:var(--sage-deep)}
+
+/* =====================================================================
+   Héroe del móvil: foto más baja (sigue siendo Michele, de cara) para que
+   «Tu cuerpo, remodelado sin cirugía» y el botón de WhatsApp entren en la
+   primera pantalla de un móvil de 390 px.
+   ===================================================================== */
+@media(max-width:1023px){
+  .hero-media{aspect-ratio:6/5;max-height:50svh}
+  .hero-media .hero-shot{object-position:50% 14%}
+  /* Un velo arriba para la cabecera en blanco y otro abajo para que la píldora del idioma se lea sobre el uniforme. */
+  .hero-media::after{background:linear-gradient(180deg,rgba(43,43,43,.48) 0%,rgba(43,43,43,0) 26%,rgba(43,43,43,0) 62%,rgba(33,38,31,.38) 100%)}
+  .hero-lang{position:absolute;left:20px;top:-70px;z-index:3;margin:0;order:0;color:var(--ink)}
+  .hero-badge{width:96px;height:96px;bottom:-30px}
+  .hero-badge img{width:30px}
+  .hero-eyebrow{margin-top:16px;letter-spacing:1.8px}
+  .hero h1{font-size:clamp(42px,11.2vw,68px)}
+}
+
+/* ---------- la píldora del idioma en la cabecera del móvil ---------- */
+/* Maciza y con sombra: se ve igual sobre la foto del héroe que sobre la cabecera clara. */
+@media(max-width:1023px){
+  .site-header .lang-current,.site-header .lang-current.is-light{background:var(--cream);border-color:var(--cream);color:var(--ink);box-shadow:0 4px 14px rgba(43,43,43,.18);backdrop-filter:none;-webkit-backdrop-filter:none}
+}
+
+/* ---------- opiniones: la reseña destacada ---------- */
+.pull-quote{margin:30px 16px 0;padding:30px 24px 26px;border-radius:var(--radius-lg);background:var(--sage-ink) var(--grain);color:#fff;text-align:center;box-shadow:var(--shadow)}
+.pull-quote-mark{display:block;height:38px;font-family:var(--font-display);font-size:96px;line-height:.82;color:var(--gold)}
+.pull-quote blockquote{margin:0}
+.pull-quote blockquote p{font-family:var(--font-display);font-size:clamp(30px,8.2vw,50px);font-style:italic;font-weight:500;line-height:1.16;text-wrap:balance}
+.pull-quote .review-original{margin-top:14px;color:#d6ddd0}
+.pull-quote figcaption{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 10px;margin-top:20px;font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#dfe6d8}
+.pull-quote .stars{color:var(--gold)}
+@media(min-width:761px){
+  .pull-quote{margin:36px 40px 0;padding:44px 56px 36px}
+}
+@media(min-width:1024px){
+  .pull-quote{max-width:980px;margin:40px auto 0}
+  /* Con la destacada arriba quedan tres tarjetas: tres columnas. */
+  .review-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  /* «Cómo funciona» va sin foto (la que había era de IA): una sola columna centrada. */
+  .steps{grid-template-columns:minmax(0,760px);justify-content:center}
 }

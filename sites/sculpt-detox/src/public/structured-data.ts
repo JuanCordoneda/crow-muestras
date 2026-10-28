@@ -20,7 +20,7 @@ export function businessJsonLd(lang: SiteLang) {
     (treatment.tiers ?? [treatment]).map((item) => ({
       '@type': 'Offer',
       itemOffered: { '@type': 'Service', name: item.name[lang], description: item.text[lang] },
-      // Sin precio todavía: Google no admite un «desde XX». Se declara en cuanto esté en treatments.ts.
+      // Sin precio todavía: no se declara ninguno. Sale solo en cuanto esté en treatments.ts.
       ...(item.price !== null ? { priceSpecification: { '@type': 'PriceSpecification', minPrice: item.price, priceCurrency: 'EUR' } } : {}),
     })),
   )

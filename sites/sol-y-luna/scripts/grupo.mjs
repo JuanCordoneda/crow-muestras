@@ -12,7 +12,7 @@
  * Es idempotente: `node scripts/grupo.mjs && npm run images`.
  */
 import sharp from 'sharp'
-import { mkdir, stat, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -31,6 +31,12 @@ const NOCHE = '#1f2a44'
 const CREMA = '#fbf3e4'
 
 const exists = (file) => stat(file).then(() => true, () => false)
+
+/**
+ * LE-1492: la imagen para compartir cuenta las direcciones como la web, así que sigue el interruptor
+ * `SHOW_LE_1492` de `src/public/venues.ts` (leído del fuente: aquí no se compila TypeScript).
+ */
+const SHOW_LE_1492 = /export const SHOW_LE_1492 = true\b/.test(await readFile(join(ROOT, 'src', 'public', 'venues.ts'), 'utf8'))
 
 /** El sol del emblema: doce rayos alternos alrededor de un disco, en un lienzo de 64 × 64. */
 const sunSvg = (rays = SOL_AMARILLO, disc = SOL_AMARILLO, ring = NOCHE) => {
@@ -88,10 +94,10 @@ async function og() {
   const marca = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${ANCHO}" height="${ALTO}">
     <g transform="translate(${x} 118) scale(1.5)">${sunSvg()}</g>
     <text x="${x}" y="276" fill="${SOL_AMARILLO}" font-family="${SANS}" font-size="22" font-weight="700" letter-spacing="5">QUARTIER LATIN · PARIS 5e</text>
-    <text x="${x - 2}" y="350" fill="#fff" font-family="${FUENTE}" font-size="62">3 adresses latines</text>
+    <text x="${x - 2}" y="350" fill="#fff" font-family="${FUENTE}" font-size="62">${SHOW_LE_1492 ? 3 : 2} adresses latines</text>
     <text x="${x - 2}" y="420" fill="#fff" font-family="${FUENTE}" font-size="62" font-style="italic">au cœur du Quartier Latin</text>
     <rect x="${x}" y="456" width="64" height="4" fill="${TERRACOTA}"/>
-    <text x="${x}" y="508" fill="${CREMA}" font-family="${SANS}" font-size="26" font-weight="600">El Sol &amp; La Luna · Mexi &amp; Co · Le 1492</text>
+    <text x="${x}" y="508" fill="${CREMA}" font-family="${SANS}" font-size="26" font-weight="600">El Sol &amp; La Luna · Mexi &amp; Co${SHOW_LE_1492 ? ' · Le 1492' : ''}</text>
   </svg>`)
   await sharp(foto)
     .composite([{ input: velo }, { input: marca }])

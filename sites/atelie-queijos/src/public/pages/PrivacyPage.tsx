@@ -1,3 +1,4 @@
+import { SHOW_TEXT_TODO } from '../business'
 import { useSite } from '../site'
 
 export function PrivacyPage() {
@@ -12,7 +13,8 @@ export function PrivacyPage() {
         {t.privacy.sections.map((section) => (
           <section key={section.title}>
             <h2>{section.title}</h2>
-            <p>{section.text}</p>
+            {/* Lo pendiente (el SIRET) solo sale mientras las etiquetas «a completar» estén encendidas. */}
+            <p>{section.text}{SHOW_TEXT_TODO && section.todo && ` ${section.todo}`}</p>
           </section>
         ))}
       </div>

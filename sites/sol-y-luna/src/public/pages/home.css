@@ -9,7 +9,7 @@
 /* Degradado arriba para que se lea la cabecera y abajo para el texto; en medio, la foto limpia. */
 /* La franja del texto va más cerrada de lo que pide el ojo: con la foto más clara, el chip de
    «Abierto ahora» y el antetítulo se quedaban justo por debajo del contraste mínimo. */
-.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,26,46,.62) 0%,rgba(18,26,46,0) 24%,rgba(18,26,46,.06) 36%,rgba(18,26,46,.78) 58%,rgba(14,20,36,.95) 100%)}
+.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,26,46,.52) 0%,rgba(18,26,46,0) 24%,rgba(18,26,46,.06) 36%,rgba(18,26,46,.78) 58%,rgba(14,20,36,.95) 100%)}
 .hero-content{position:relative;width:100%;padding:0 18px 62px;display:flex;flex-direction:column;align-items:flex-start}
 .hero .open-status.hero-status{background:rgba(14,20,36,.42);color:#fff;border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .hero .hero-status.is-open i{color:#6ee29b;background:#6ee29b}

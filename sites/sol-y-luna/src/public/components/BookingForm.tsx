@@ -3,7 +3,7 @@ import { CalendarDays, CalendarPlus, Check, MessageCircle, PartyPopper, Send, Us
 import type { DayHours } from '../../shared/types'
 import { addDays, dayNumber, dayRanges, hoursOn, longDate, shortMonth, shortWeekday, toMinutes } from '../../shared/hours'
 import { cx, whatsappLink } from '../../shared/utils'
-import { BOOKING_WHATSAPP, EL_SOL, MEXI, SITE_URL, fullAddress, say, scheduleOf, type FrEs } from '../venues'
+import { BOOKING_WHATSAPP, EL_SOL, MEXI, SHOW_LE_1492, SITE_URL, fullAddress, say, scheduleOf, type FrEs } from '../venues'
 import { LE_1492 } from './Le1492' // LE-1492
 import { useSite } from '../site'
 import { WhatsAppIcon } from './Brand'
@@ -12,7 +12,7 @@ import { WhatsAppIcon } from './Brand'
 const CHOICES: { id: string; name: string; cuisine: FrEs; hours: DayHours[]; where: string }[] = [
   { ...EL_SOL, where: fullAddress(EL_SOL) },
   { ...MEXI, where: fullAddress(MEXI) },
-  { ...LE_1492, hours: [], where: `${LE_1492.address}, ${LE_1492.postcode} ${LE_1492.town}` }, // LE-1492
+  ...(SHOW_LE_1492 ? [{ ...LE_1492, hours: [], where: `${LE_1492.address}, ${LE_1492.postcode} ${LE_1492.town}` }] : []), // LE-1492
 ]
 
 /** Una cita de calendario (.ics) para la reserva: dos horas, en hora de París, con la dirección. */

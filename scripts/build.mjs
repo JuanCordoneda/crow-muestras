@@ -33,7 +33,7 @@ export const SITES = [
   },
   {
     name: 'sol-y-luna', kind: 'vite',
-    title: 'El Sol & La Luna · Mexi & Co · Le 1492', what: 'Grupo de restaurantes · París 5e', origin: 'https://www.mexiandco.fr',
+    title: 'El Sol & La Luna · Mexi & Co', what: 'Grupo de restaurantes · París 5e', origin: 'https://www.mexiandco.fr',
     drop: ['admin', 'admin.webmanifest'], // el panel de la plantilla necesita el servidor
   },
   {

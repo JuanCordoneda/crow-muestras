@@ -58,7 +58,7 @@ export const whatsappUrl = (message = '') =>
  * pendiente · cabina»). Con `false` el hueco se queda pero sin el letrero, por si hay que
  * publicar antes de tener las fotos de Michele.
  */
-export const SHOW_PHOTO_TODO = true
+export const SHOW_PHOTO_TODO = false
 
 /**
  * Avisa a la analítica (Google Analytics / Google Ads / Meta) de un clic de reserva, si alguna

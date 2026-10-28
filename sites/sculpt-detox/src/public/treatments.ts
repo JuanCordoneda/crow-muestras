@@ -3,8 +3,8 @@
  * desplegable de la reserva y en la ficha para Google.
  *
  * Precio y duración se rellenan aquí:
- * - `price`: el «desde», en euros (`45`). Mientras sea `null`, la web enseña «Desde XX €».
- * - `minutes`: la duración de la sesión (`60`). Mientras sea `null`, la web enseña «XX min».
+ * - `price`: el «desde», en euros (`45`). Mientras sea `null`, la web enseña «Consultar precio».
+ * - `minutes`: la duración de la sesión (`60`). Mientras sea `null`, la duración no sale.
  * - `photo`: opcional (`/img/sculptdetox/maderoterapia.webp`). Sin foto, la tarjeta va solo con texto.
  *
  * El `id` no se cambia: es el que lleva el enlace «Reservar» de cada tarjeta.

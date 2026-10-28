@@ -1,10 +1,10 @@
 import './home.css'
 import { useState, type ReactNode } from 'react'
-import { ArrowUpRight, BookOpen, Briefcase, CalendarDays, Check, ChevronDown, Clock, Croissant, Euro, Expand, Globe, Instagram, Footprints, Gift, Grape, Layers, Minus, PartyPopper, Plus, Quote, Slice, Sparkles, Users, UtensilsCrossed, Wine } from 'lucide-react'
+import { ArrowRight, ArrowUpRight, Briefcase, CalendarDays, Check, ChevronDown, Clock, Euro, Expand, Globe, Instagram, Gift, Grape, Layers, Minus, PartyPopper, Plus, Quote, Slice, Sparkles, Users, UtensilsCrossed, Wine } from 'lucide-react'
 import { Photo, avifSetFor, srcSetFor } from '../../shared/components/Photo'
 import { cx } from '../../shared/utils'
 import { ATELIE, nextOpenSession, sessionId, upcomingSessions } from '../agenda'
-import { BUSINESS, SHOW_TEXT_TODO, whatsappUrl } from '../business'
+import { BUSINESS, SHOW_TEXT_TODO, christmasBannerOn, whatsappUrl } from '../business'
 import { compactCount, euros, sessionLabel, sessionParts, sessionShort } from '../format'
 import { useSite } from '../site'
 import { BookingForm } from '../components/BookingForm'
@@ -25,7 +25,6 @@ const HERO_MOBILE = '(max-width: 899px)'
 
 const LIVE_ICONS = [Layers, Slice, Grape, UtensilsCrossed]
 const GROUP_ICONS = [Briefcase, PartyPopper, Wine]
-const MORE_ICONS = [Croissant, BookOpen, Footprints]
 
 /** Un enlace de WhatsApp con su mensaje y su aviso a la analítica. */
 function WaLink({ message, source, className, children }: { message: string; source: string; className?: string; children: ReactNode }) {
@@ -46,6 +45,9 @@ export function HomePage() {
   const [story, setStory] = useState(-1)
   const stories = atelierStories(t)
   const followers = compactCount(BUSINESS.followers, lang)
+  const christmas = christmasBannerOn()
+  /** Plazas ya reservadas de la próxima sesión, para la barra del héroe (sale de `agenda.ts`). */
+  const nextTaken = next ? Math.min(ATELIE.maxPeople, Math.max(0, ATELIE.maxPeople - next.left)) : 0
 
   return (
     <>
@@ -70,12 +72,16 @@ export function HomePage() {
           </picture>
         </div>
         <div className="hero-content">
-          {/* Como en Instagram: el avatar con anillo abre las stories del ateliê. */}
-          <button type="button" className="hero-byline" onClick={() => setStory(0)} aria-label={`${t.stories.label} · ${t.hero.byline}`}>
-            <span className="story-ring is-small"><Photo src={PHOTOS.avatar} alt="" sizes="34px" priority /></span>
-            <span>{t.hero.byline}</span>
-            <VerifiedBadge size={15} label={t.host.verified} />
-            <small>{followers}</small>
+          {/*
+            Como en Instagram: el avatar con anillo abre las stories del ateliê. Los seguidores van
+            en grande (es la prueba social que trae el perfil) con el aval de Janaína debajo.
+          */}
+          <button type="button" className="hero-byline" onClick={() => setStory(0)} aria-label={`${t.stories.label} · ${t.hero.byline} · ${followers} ${t.host.followers}`}>
+            <span className="story-ring"><Photo src={PHOTOS.avatar} alt="" sizes="52px" priority /></span>
+            <span className="hero-byline-text">
+              <span className="hero-followers"><b>{followers}</b> {t.host.followers}</span>
+              <span className="hero-byline-name">{t.hero.byline} <VerifiedBadge size={15} label={t.host.verified} /></span>
+            </span>
           </button>
           <h1 id="hero-title">{t.hero.titleA} <em>{t.hero.titleB}</em></h1>
           <p className="hero-text">{t.hero.text}</p>
@@ -93,10 +99,23 @@ export function HomePage() {
               <CalendarDays size={16} />
               <span>{t.hero.next} <b>{sessionShort(next, lang)}</b></span>
               <em>{t.dates.left(next.left, ATELIE.maxPeople)}</em>
+              <span className="hero-seats" role="img" aria-label={t.dates.taken(nextTaken, ATELIE.maxPeople)}>
+                <span className="hero-seats-bar"><i style={{ width: `${(nextTaken / ATELIE.maxPeople) * 100}%` }} /></span>
+                <small aria-hidden="true">{nextTaken}/{ATELIE.maxPeople}</small>
+              </span>
             </button>
           )}
         </div>
       </section>
+
+      {/* ---------- franja de Natal: lleva al vale-presente (interruptor en `business.ts`) ---------- */}
+      {christmas && (
+        <a className="xmas-strip" href="#presente">
+          <Gift size={20} />
+          <span>{t.christmas.text}</span>
+          <b>{t.christmas.cta} <ArrowRight size={16} /></b>
+        </a>
+      )}
 
       {/* ---------- o que você vai viver ---------- */}
       <section className="live" id="atelie" aria-labelledby="live-title">
@@ -273,7 +292,8 @@ export function HomePage() {
             <p>{t.gift.text}</p>
           </div>
           <ul className="gift-points">
-            {t.gift.points.map((point, index) => (
+            {/* Lo marcado en `pointsTodo` es una promesa sin confirmar: sin etiqueta a la vista, no sale. */}
+            {t.gift.points.map((point, index) => (SHOW_TEXT_TODO || !t.gift.pointsTodo[index]) && (
               <li key={point}><VineLeaf size={18} /> <span>{point}{SHOW_TEXT_TODO && t.gift.pointsTodo[index] && <> <TodoTag /></>}</span></li>
             ))}
           </ul>
@@ -313,48 +333,34 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ---------- outras experiências ---------- */}
-      <section className="more" id="experiencias" aria-labelledby="more-title">
-        <div className="section-head">
-          <span className="eyebrow">{t.more.eyebrow}</span>
-          <h2 id="more-title">{t.more.title}</h2>
-          <p>{t.more.lead}</p>
-        </div>
-        <ul className="more-list">
-          {t.more.items.map((item, index) => {
-            const Icon = MORE_ICONS[index] ?? Sparkles
-            return (
-              <li key={item.title} className="more-card">
-                <span className="more-soon">{t.more.soon}</span>
-                <span className="live-icon"><Icon size={22} strokeWidth={1.6} /></span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-                <WaLink className="text-link" message={t.wa.notify(item.title)} source={`em-breve-${index + 1}`}>{t.more.notify}</WaLink>
-              </li>
-            )
-          })}
-        </ul>
-      </section>
+      {/* ---------- outras experiências: una línea con «avise-me» (el mismo WhatsApp de antes) ---------- */}
+      <aside className="more" id="experiencias" aria-label={`${t.more.soon} ${t.more.line}`}>
+        <p className="more-line">
+          <Sparkles size={17} />
+          <span><b>{t.more.soon}</b> {t.more.line}</span>
+          <WaLink className="text-link" message={t.wa.notify(t.more.items.map((item) => item.title).join(', '))} source="em-breve">{t.more.notify}</WaLink>
+        </p>
+      </aside>
 
-      {/* ---------- depoimentos ---------- */}
-      <section className="reviews" id="depoimentos" aria-labelledby="reviews-title">
-        <div className="section-head">
-          <span className="eyebrow">{t.reviews.eyebrow}</span>
-          <h2 id="reviews-title">{t.reviews.title}</h2>
-          <p>{t.reviews.lead}</p>
-        </div>
-        {/* PENDIENTE: depoimentos reales (con permiso) en `reviews.items` de los tres idiomas. */}
-        <ul className="reviews-list">
-          {t.reviews.items.map((review, index) => (
-            <li key={index} className="review is-todo" data-todo="depoimento">
-              <Quote size={22} className="review-mark" />
-              <blockquote>{review.quote}</blockquote>
-              <footer><b>{review.name}</b><small>{review.place}</small></footer>
-              {SHOW_TEXT_TODO && <span className="todo-tag">{t.reviews.todo}</span>}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* ---------- depoimentos: solo si hay alguno real en `reviews.items` ---------- */}
+      {t.reviews.items.length > 0 && (
+        <section className="reviews" id="depoimentos" aria-labelledby="reviews-title">
+          <div className="section-head">
+            <span className="eyebrow">{t.reviews.eyebrow}</span>
+            <h2 id="reviews-title">{t.reviews.title}</h2>
+            <p>{t.reviews.lead}</p>
+          </div>
+          <ul className="reviews-list">
+            {t.reviews.items.map((review, index) => (
+              <li key={index} className="review">
+                <Quote size={22} className="review-mark" />
+                <blockquote>{review.quote}</blockquote>
+                <footer><b>{review.name}</b><small>{review.place}</small></footer>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {/* ---------- perguntas frequentes ---------- */}
       <section className="faq" id="duvidas" aria-labelledby="faq-title">

@@ -69,7 +69,7 @@ function VenueHero({ venue, eyebrow }: { venue: Venue; eyebrow: string }) {
           </picture>
         ) : venue.photo
           ? <Photo src={venue.photo} alt="" className="hero-shot is-on" sizes="100vw" priority />
-          : <PhotoSoon name={venue.name} label={t.venue.photoSoon} className="hero-soon" />}
+          : <PhotoSoon name={venue.name} className="hero-soon" />}
       </div>
       <div className="hero-content">
         <a className="hero-back" {...linkTo(publicRoute({ view: 'inicio', section: 'adresses' }))}><ArrowLeft size={15} /> {t.venue.back}</a>

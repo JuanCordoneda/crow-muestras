@@ -57,6 +57,10 @@ export const fr: Texts = {
     photoAlt: 'Plateau de fromages français avec pains, raisins, noix et abricots, composé à l’atelier',
     byline: 'Avec Janaína, de @parisabor',
   },
+  christmas: {
+    text: 'Un cadeau de Noël pour qui aime Paris',
+    cta: 'Bon cadeau',
+  },
   stories: {
     label: 'Voir l’atelier en stories',
     title: 'Atelier',
@@ -133,6 +137,7 @@ export const fr: Texts = {
     title: 'Prochaines dates',
     lead: '8 personnes maximum par séance. Choisissez votre date et réservez votre place.',
     left: (left: number, max: number) => (left >= max ? `${left} places disponibles` : left === 1 ? 'plus qu’1 place' : `plus que ${left} places`),
+    taken: (taken: number, max: number) => `${taken} places sur ${max} déjà réservées`,
     full: 'Complet',
     waitlist: 'Liste d’attente',
     book: 'Réserver',
@@ -219,10 +224,8 @@ export const fr: Texts = {
     cta: 'Demander un devis',
   },
   more: {
-    eyebrow: 'Autres expériences',
-    title: 'Bientôt avec Janaína',
-    lead: 'L’atelier fromages est la première d’une série d’expériences gastronomiques à Paris.',
-    soon: 'Bientôt',
+    soon: 'Bientôt\u00a0:',
+    line: 'dîners, savoir-vivre à table et balades gourmandes',
     notify: 'Me prévenir',
     items: [
       { title: 'Dîners guidés', text: 'Une soirée dans un restaurant parisien choisi avec soin, avec Janaína à table.' },
@@ -234,12 +237,7 @@ export const fr: Texts = {
     eyebrow: 'Témoignages',
     title: 'Ils ont vécu l’atelier',
     lead: 'Les mots de celles et ceux qui ont composé leur plateau avec Janaína.',
-    todo: 'Témoignage à compléter',
-    items: [
-      { quote: 'Emplacement pour le vrai témoignage d’un participant de l’atelier, avec ses propres mots.', name: 'Nom du participant', place: 'Ville · date de l’atelier' },
-      { quote: 'Emplacement pour le vrai témoignage d’un participant de l’atelier, avec ses propres mots.', name: 'Nom du participant', place: 'Ville · date de l’atelier' },
-      { quote: 'Emplacement pour le vrai témoignage d’un participant de l’atelier, avec ses propres mots.', name: 'Nom du participant', place: 'Ville · date de l’atelier' },
-    ],
+    items: [],
   },
   faq: {
     eyebrow: 'Questions',
@@ -283,7 +281,7 @@ export const fr: Texts = {
     title: 'Confidentialité',
     updated: 'Mis à jour en octobre 2026.',
     sections: [
-      { title: 'Qui sommes-nous', text: 'PariSabor est la marque de Janaína Pedroza de Macedo, à Paris. Contact : contato@parisabor.com. Informations légales (SIRET) : à compléter.' },
+      { title: 'Qui sommes-nous', text: 'PariSabor est la marque de Janaína Pedroza de Macedo, à Paris. Contact : contato@parisabor.com.', todo: 'Informations légales (SIRET) : à compléter.' },
       { title: 'Ce que deviennent vos données', text: 'Le formulaire de réservation n’envoie rien à aucun serveur : il ouvre simplement WhatsApp avec le message prêt. Les données que vous nous y envoyez (nom, téléphone, date) servent uniquement à organiser votre réservation et ne sont partagées avec personne.' },
       { title: 'Paiement en ligne', text: 'Si vous payez en ligne, le paiement se fait directement sur la plateforme de paiement (Stripe). Nous ne voyons ni ne conservons les données de votre carte.' },
       { title: 'Vos droits', text: 'Vous pouvez demander à consulter, corriger ou effacer vos données en écrivant à contato@parisabor.com, et introduire une réclamation auprès de la CNIL (cnil.fr).' },

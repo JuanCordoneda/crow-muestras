@@ -1,6 +1,8 @@
 /* LTB Concept · todo lo editable del sitio, en un solo lugar.
    - Nombre / bajada: cambiar `name` y `tagline` (y luego `node scripts/sync-head.mjs` para el <head>: título, SEO, schema).
-   - Precios y duraciones: `price` (número, en €) y `min` (minutos). Mientras estén en null se ve «à partir de XX €» / «XX min».
+   - Precios y duraciones: `price` (número, en €) y `min` (minutos). Con precio se ve «à partir de N €» y con minutos «N min»;
+     mientras estén en null se ve «Sur devis» / «Sob consulta» y la duración no aparece (nunca «XX»).
+   - Tarjetas grandes de «Nos prestations»: `featured` (ids de `services`). El resto sale solo en la carta de tarifas.
    - Fotos: dejar el original en fotos/ y correr `npm run fotos` (genera 4 tamaños nítidos en img/). En avant/après e Instagram
      se pone el nombre sin extensión (p. ej. "aa-lissage-1-avant") en lugar de null. */
 window.LTB = {
@@ -39,6 +41,9 @@ window.LTB = {
     { id: "cheveux", fr: "Cheveux", pt: "Cabelo" },
     { id: "esthetique", fr: "Esthétique", pt: "Estética" },
   ],
+
+  // Servicios con tarjeta grande (en este orden); los demás se ven solo en la carta de tarifas
+  featured: ["lissage", "meches", "epilation"],
 
   services: [
     { id: "lissage", cat: "cheveux", img: "lissage", star: true, price: null, min: null,
@@ -82,7 +87,8 @@ window.LTB = {
       desc: { fr: "Un hâle doré et naturel, sans soleil.", pt: "Um bronzeado dourado e natural, sem sol." } },
   ],
 
-  // Avant / Après: `before` y `after` = nombre de la foto procesada (null = recuadro «photo à remplacer»)
+  // Avant / Après: `before` y `after` = nombre de la foto procesada. Solo se muestran los pares con las dos fotos;
+  // mientras no haya ninguno, el bloque Avant / Après (y su enlace del menú) no aparece
   beforeAfter: [
     { cat: "lissage", service: "lissage", before: null, after: null },
     { cat: "blonds", service: "meches", before: null, after: null },

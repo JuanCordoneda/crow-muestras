@@ -37,18 +37,33 @@
     <meta property="og:title" content="Restaurants latinos Quartier Latin Paris 5e | El Sol &amp; La Luna · Mexi &amp; Co" />
     <meta property="og:description" content="Cuisine colombienne et mexicaine au cœur du Quartier Latin : bandeja paisa, empanadas, burritos et margaritas. Réservez en ligne, sans commission." />
     <meta id="og-url" property="og:url" content="https://www.mexiandco.fr/" />
-    <meta property="og:image" content="https://www.mexiandco.fr/og.jpg?v=1" />
+    <meta property="og:image" content="https://www.mexiandco.fr/og.jpg?v=2" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <!--
+      Los textos que cuentan las direcciones van en dos versiones entre marcas: con el tercer local
+      y sin él. `scripts/pages.mjs` deja la que toca según el interruptor de `venues.ts` y quita las
+      marcas. og.jpg lleva el mismo texto: se rehace con `node scripts/grupo.mjs`.
+    -->
+    <!-- LE-1492 -->
     <meta property="og:image:alt" content="3 adresses latines au cœur du Quartier Latin : El Sol &amp; La Luna, Mexi &amp; Co et Le 1492" />
+    <!-- /LE-1492 -->
+    <!-- SIN-LE-1492 -->
+    <meta property="og:image:alt" content="2 adresses latines au cœur du Quartier Latin : El Sol &amp; La Luna et Mexi &amp; Co" />
+    <!-- /SIN-LE-1492 -->
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:locale:alternate" content="es_ES" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Restaurants latinos Quartier Latin Paris 5e | El Sol &amp; La Luna · Mexi &amp; Co" />
     <meta name="twitter:description" content="Cuisine colombienne et mexicaine au cœur du Quartier Latin : bandeja paisa, empanadas, burritos et margaritas. Réservez en ligne, sans commission." />
-    <meta name="twitter:image" content="https://www.mexiandco.fr/og.jpg?v=1" />
+    <meta name="twitter:image" content="https://www.mexiandco.fr/og.jpg?v=2" />
+    <!-- LE-1492 -->
     <meta name="twitter:image:alt" content="3 adresses latines au cœur du Quartier Latin : El Sol &amp; La Luna, Mexi &amp; Co et Le 1492" />
+    <!-- /LE-1492 -->
+    <!-- SIN-LE-1492 -->
+    <meta name="twitter:image:alt" content="2 adresses latines au cœur du Quartier Latin : El Sol &amp; La Luna et Mexi &amp; Co" />
+    <!-- /SIN-LE-1492 -->
 
     <!--
       Solo se precarga lo que pinta el primer pantallazo: el cuerpo de texto y los titulares.
@@ -68,8 +83,8 @@
     <link
       rel="preload"
       as="image"
-      href="/img/grupo/sol-interieur-lustre.webp"
-      imagesrcset="/img/grupo/sol-interieur-lustre-480.webp 480w, /img/grupo/sol-interieur-lustre-900.webp 900w, /img/grupo/sol-interieur-lustre-1200.webp 1200w"
+      href="/img/grupo/sol-interieur-deco.webp"
+      imagesrcset="/img/grupo/sol-interieur-deco-480.webp 480w, /img/grupo/sol-interieur-deco-900.webp 900w, /img/grupo/sol-interieur-deco-1200.webp 1200w"
       imagesizes="100vw"
       fetchpriority="high"
     />
@@ -155,7 +170,8 @@
     <!--
       Las fichas de los restaurantes para Google: una por local, con dirección, teléfono, horario y
       cocina. La app las rehace al arrancar desde `src/public/venues.ts` (structured-data.ts); esta
-      copia es la que lee quien no ejecuta JavaScript. Le 1492 va solo con lo que se sabe.
+      copia es la que lee quien no ejecuta JavaScript. El tercer local va solo con lo que se sabe, y
+      `scripts/pages.mjs` lo quita del build mientras su interruptor esté apagado (venues.ts).
     -->
     <script type="application/ld+json">
       {
@@ -236,9 +252,6 @@
             "name": "Mexi & Co",
             "description": "Le Mexique en version restaurant et épicerie : burritos, tacos, options végétariennes pour chaque plat, et tous les produits pour cuisiner mexicain chez vous.",
             "url": "https://www.mexiandco.fr/mexi-and-co",
-            "image": [
-              "https://www.mexiandco.fr/og.jpg"
-            ],
             "telephone": "+33146341412",
             "priceRange": "€€",
             "servesCuisine": [
@@ -314,7 +327,12 @@
     </div>
     <noscript>
       <main class="nojs">
+        <!-- LE-1492 -->
         <h1>3 adresses latines au cœur du Quartier Latin</h1>
+        <!-- /LE-1492 -->
+        <!-- SIN-LE-1492 -->
+        <h1>2 adresses latines au cœur du Quartier Latin</h1>
+        <!-- /SIN-LE-1492 -->
         <p>Cuisine colombienne et mexicaine à Paris 5e : bandeja paisa, empanadas, burritos et margaritas.</p>
         <p class="nojs-note">Activez JavaScript pour voir la carte et réserver en ligne. Vous pouvez aussi réserver directement sur WhatsApp.</p>
         <a class="nojs-btn" href="https://wa.me/33624438023">Réserver sur WhatsApp</a>
@@ -327,8 +345,10 @@
         <address>10 rue Dante, 75005 Paris</address>
         <p><a href="tel:+33146341412">01 46 34 14 12</a> · Ouvert 7j/7, 11h30–23h30</p>
 
+        <!-- LE-1492 -->
         <h2>Le 1492</h2>
         <address>Marché Saint-Germain, rue Clément, 75006 Paris</address>
+        <!-- /LE-1492 -->
       </main>
     </noscript>
     <script>

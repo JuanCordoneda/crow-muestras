@@ -62,7 +62,8 @@ export function LipedemaPage({ onWhatsApp }: { onWhatsApp: (source: string) => (
         </div>
 
         <aside className="article-aside">
-          <Figure src="/img/sculptdetox/ia-michele-drenaje-piernas.webp" alt={t.specialty.photoAlt} note={t.specialty.photoNote} sizes="(min-width: 900px) 34vw, 100vw" width={1103} height={1200} />
+          {/* Quién te va a atender, junto al botón: Michele en su cabina (foto real del centro). */}
+          <Figure src="/img/sculptdetox/michele-costa-retrato.webp" alt={t.about.photoAlt} sizes="(min-width: 900px) 34vw, 100vw" width={1200} height={1324} />
           <div className="aside-card">
             <h2>{copy.ctaTitle}</h2>
             <p>{copy.ctaText}</p>

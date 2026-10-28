@@ -1,7 +1,7 @@
 // El armazón va antes que las páginas: sus estilos se apoyan en él y a veces lo afinan.
 import './public.css'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { CalendarDays, ChevronRight, Clock, MapPin, Menu as MenuIcon, Phone, X } from 'lucide-react'
+import { CalendarDays, ChevronRight, MapPin, Menu as MenuIcon, Phone, X } from 'lucide-react'
 import type { Lang, Menu } from '../shared/types'
 import { fetchMenu, primedMenu } from '../shared/api'
 import { loadMenu, saveMenu } from '../shared/store'
@@ -12,7 +12,7 @@ import { cx, directionsLink, telLink, whatsappLink } from '../shared/utils'
 import { textsFor } from './content'
 import { updateStructuredData } from './structured-data'
 import { SiteContext, useMadridNow, useScrolledPast, type Site } from './site'
-import { BOOKING_WHATSAPP, EL_SOL, MEXI, SITE_URL, VENUES, fullAddress, say } from './venues'
+import { BOOKING_WHATSAPP, EL_SOL, MEXI, SHOW_LE_1492, SITE_URL, VENUES, fullAddress, say } from './venues'
 import { LE_1492 } from './components/Le1492' // LE-1492
 import { Logo, PapelPicado, WhatsAppIcon } from './components/Brand'
 import { LangGrid, LangPicker } from './components/LangPicker'
@@ -191,7 +191,7 @@ export function PublicApp({ route }: Props) {
   /** La navegación del grupo: un enlace por local y «Réserver» destacado. */
   const nav = [
     ...VENUES.map((venue) => ({ key: venue.id, label: venue.name, link: linkTo(publicRoute({ view: venue.id as 'el-sol-la-luna' | 'mexi-and-co' })) })),
-    { key: 'le-1492', label: LE_1492.name, link: linkTo(publicRoute({ view: 'inicio', section: 'le-1492' })) }, // LE-1492
+    ...(SHOW_LE_1492 ? [{ key: 'le-1492', label: LE_1492.name, link: linkTo(publicRoute({ view: 'inicio', section: 'le-1492' })) }] : []), // LE-1492
     { key: 'reserver', label: t.nav.book, link: linkTo(publicRoute({ view: 'reserver' })) },
   ]
 
@@ -306,12 +306,13 @@ export function PublicApp({ route }: Props) {
                 <li><span>{t.footer.every}</span><span>11:30 – 23:30</span></li>
               </ul>
             </section>
-            {/* LE-1492 */}
-            <section>
-              <h2>{LE_1492.name}</h2>
-              <a href={directionsLink(`${LE_1492.address}, ${LE_1492.postcode} ${LE_1492.town}`)} target="_blank" rel="noopener noreferrer"><MapPin size={16} /> {LE_1492.address}, {LE_1492.postcode} {LE_1492.town}</a>
-              <p className="footer-muted"><Clock size={16} /> {lang === 'es' ? 'Horario por confirmar' : 'Horaires à confirmer'}</p>
-            </section>
+            {/* LE-1492: sin horario, solo la dirección. */}
+            {SHOW_LE_1492 && (
+              <section>
+                <h2>{LE_1492.name}</h2>
+                <a href={directionsLink(`${LE_1492.address}, ${LE_1492.postcode} ${LE_1492.town}`)} target="_blank" rel="noopener noreferrer"><MapPin size={16} /> {LE_1492.address}, {LE_1492.postcode} {LE_1492.town}</a>
+              </section>
+            )}
             <section>
               <h2>{t.footer.events}</h2>
               <a href={whatsappLink(BOOKING_WHATSAPP, t.events.message)} target="_blank" rel="noopener noreferrer"><WhatsAppIcon size={16} /> {t.events.cta}</a>

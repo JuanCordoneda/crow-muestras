@@ -102,8 +102,7 @@ export const en: Texts = {
     disclaimer: DISCLAIMER,
     more: 'Read more about lipedema',
     book: 'Book an assessment',
-    photoAlt: 'Manual lymphatic drainage session on the legs, on a treatment couch',
-    photoNote: 'Illustrative image',
+    photoAlt: 'Legs of a client with lipedema before and after her lymphatic drainage plan at Sculpt Detox',
   },
   treatments: {
     eyebrow: 'Body treatments',
@@ -113,9 +112,8 @@ export const en: Texts = {
     facialTitle: 'A rested, glowing, defined face',
     facialText: 'From a decongesting Gua Sha to a complete Hydrafacial, for every skin type.',
     from: (amount: string) => `From ${amount}`,
-    priceTodo: 'From €XX',
+    priceOnRequest: 'Price on request',
     minutes: (value: number) => `${value} min`,
-    minutesTodo: 'XX min',
     priceLabel: 'Price',
     durationLabel: 'Duration',
     book: 'Book',
@@ -139,8 +137,6 @@ export const en: Texts = {
       { title: 'Personalised assessment', text: 'At your first visit we look at your body, your habits and your goals — and, if you’ve had surgery, your doctor’s instructions.' },
       { title: 'Session plan and follow-up', text: 'We suggest the right frequency and track your progress to fine-tune every session to your results.' },
     ],
-    photoAlt: 'Michele measuring a client’s waist during the assessment',
-    photoNote: 'Illustrative image',
     cta: 'Start on WhatsApp',
   },
   about: {
@@ -171,6 +167,7 @@ export const en: Texts = {
     original: '',
     stars: 'Five out of five stars',
     leave: 'Leave your review on Google',
+    featured: 2,
     items: [
       { quote: 'Best therapist in Ibiza, I highly recommend.', original: '' },
       { quote: 'Her natural products and treatments are amazing! She’s very professional and her hands are magic!', original: '' },
@@ -358,8 +355,6 @@ export const en: Texts = {
       ],
       testimonial: 2,
       disclaimer: DISCLAIMER,
-      photoAlt: 'Manual lymphatic drainage session on the legs',
-      photoNote: 'Illustrative image',
       resultsAlt: 'Legs of a client with lipedema before and after her lymphatic drainage plan',
     },
     madero: {
@@ -386,7 +381,7 @@ export const en: Texts = {
     sections: [
       {
         title: 'Who runs this website',
-        text: 'Sculpt Detox is Michele Costa’s centre (tax ID: to be added), at Carrer de l’Historiador Josep Clapés, 13, 07800 Eivissa (Balearic Islands, Spain). You can write to contact@sculptdetox.com or call +34 631 21 32 14.',
+        text: 'Sculpt Detox is Michele Costa’s centre, at Carrer de l’Historiador Josep Clapés, 13, 07800 Eivissa (Balearic Islands, Spain). You can write to contact@sculptdetox.com or call +34 631 21 32 14.',
       },
       {
         title: 'What data we process',

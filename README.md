@@ -8,7 +8,7 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | --- | --- | --- |
 | `/` | Índice con las cinco muestras (uso interno) | `scripts/index-page.mjs` |
 | `/comptoir/` | Le Comptoir du Pérou | HTML estático (`sites/comptoir/public`) |
-| `/sol-y-luna/` | El Sol & La Luna · Mexi & Co · Le 1492 | Vite + Preact |
+| `/sol-y-luna/` | El Sol & La Luna · Mexi & Co (Le 1492 oculto, ver su README) | Vite + Preact |
 | `/sculpt-detox/` | Sculpt Detox (Ibiza) | Vite + Preact, HTML prerenderizado |
 | `/ltb-concept/` | LTB Concept | HTML estático + `config.js` |
 | `/atelie-queijos/` | Ateliê de queijos · PariSabor | Vite + Preact, HTML prerenderizado |

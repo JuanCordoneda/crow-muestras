@@ -57,6 +57,10 @@ export const en: Texts = {
     photoAlt: 'A board of French cheeses with bread, grapes, walnuts and apricots, put together at the workshop',
     byline: 'With Janaína, from @parisabor',
   },
+  christmas: {
+    text: 'A Christmas gift for anyone who loves Paris',
+    cta: 'Gift voucher',
+  },
   stories: {
     label: 'See the workshop in stories',
     title: 'Workshop',
@@ -133,6 +137,7 @@ export const en: Texts = {
     title: 'Upcoming dates',
     lead: 'No more than 8 people per session. Pick your date and secure your spot.',
     left: (left: number, max: number) => (left >= max ? `${left} spots available` : left === 1 ? 'only 1 spot left' : `only ${left} spots left`),
+    taken: (taken: number, max: number) => `${taken} of ${max} spots already booked`,
     full: 'Sold out',
     waitlist: 'Waiting list',
     book: 'Book',
@@ -219,10 +224,8 @@ export const en: Texts = {
     cta: 'Ask for a quote',
   },
   more: {
-    eyebrow: 'More experiences',
-    title: 'Coming soon with Janaína',
-    lead: 'The cheese workshop is the first in a series of food experiences in Paris.',
-    soon: 'Coming soon',
+    soon: 'Coming soon:',
+    line: 'dinners, table etiquette and food walks',
     notify: 'Let me know',
     items: [
       { title: 'Guided dinners', text: 'An evening at a hand-picked Paris restaurant, with Janaína at the table.' },
@@ -234,12 +237,7 @@ export const en: Texts = {
     eyebrow: 'Reviews',
     title: 'From those who’ve been',
     lead: 'In the words of people who built their board with Janaína.',
-    todo: 'Review to be added',
-    items: [
-      { quote: 'Space for a real review from a workshop participant, in their own words.', name: 'Participant’s name', place: 'City · workshop date' },
-      { quote: 'Space for a real review from a workshop participant, in their own words.', name: 'Participant’s name', place: 'City · workshop date' },
-      { quote: 'Space for a real review from a workshop participant, in their own words.', name: 'Participant’s name', place: 'City · workshop date' },
-    ],
+    items: [],
   },
   faq: {
     eyebrow: 'FAQ',
@@ -283,7 +281,7 @@ export const en: Texts = {
     title: 'Privacy',
     updated: 'Updated October 2026.',
     sections: [
-      { title: 'Who we are', text: 'PariSabor is the brand of Janaína Pedroza de Macedo, in Paris. Contact: contato@parisabor.com. Company details (SIRET): to be added.' },
+      { title: 'Who we are', text: 'PariSabor is the brand of Janaína Pedroza de Macedo, in Paris. Contact: contato@parisabor.com.', todo: 'Company details (SIRET): to be added.' },
       { title: 'What happens to your data', text: 'The booking form doesn’t send anything to any server: it simply opens WhatsApp with the message ready. The details you send us there (name, phone, date) are used only to organise your booking and are never shared.' },
       { title: 'Online payment', text: 'If you pay online, payment happens directly on the payment platform (Stripe). We never see or store your card details.' },
       { title: 'Your rights', text: 'You can ask to see, correct or delete your data by writing to contato@parisabor.com, and lodge a complaint with the CNIL (cnil.fr).' },

@@ -115,8 +115,7 @@ const es = {
     disclaimer: DISCLAIMER,
     more: 'Leer más sobre lipedema',
     book: 'Pedir valoración',
-    photoAlt: 'Sesión de drenaje linfático manual en las piernas, en una camilla',
-    photoNote: 'Imagen ilustrativa',
+    photoAlt: 'Piernas de una clienta con lipedema antes y después de su plan de drenaje linfático en Sculpt Detox',
   },
   treatments: {
     eyebrow: 'Tratamientos corporales',
@@ -126,9 +125,9 @@ const es = {
     facialTitle: 'Rostro descansado, luminoso y definido',
     facialText: 'Desde un Gua Sha que descongestiona hasta un Hydrafacial completo, para cada tipo de piel.',
     from: (amount: string) => `Desde ${amount}`,
-    priceTodo: 'Desde XX €',
+    /** Mientras el tratamiento no tenga precio en `treatments.ts`. Sin duración, la duración no sale. */
+    priceOnRequest: 'Consultar precio',
     minutes: (value: number) => `${value} min`,
-    minutesTodo: 'XX min',
     priceLabel: 'Precio',
     durationLabel: 'Duración',
     book: 'Reservar',
@@ -152,8 +151,6 @@ const es = {
       { title: 'Evaluación personalizada', text: 'En la primera visita valoramos tu cuerpo, tus hábitos y tus objetivos; si vienes de una cirugía, también las indicaciones de tu médico.' },
       { title: 'Plan de sesiones y seguimiento', text: 'Te proponemos la frecuencia adecuada y medimos tu evolución para ajustar cada sesión a tus resultados.' },
     ],
-    photoAlt: 'Michele mide el contorno de cintura de una clienta durante la evaluación',
-    photoNote: 'Imagen ilustrativa',
     cta: 'Empezar por WhatsApp',
   },
   about: {
@@ -185,6 +182,8 @@ const es = {
     original: 'Original en inglés:',
     stars: 'Cinco estrellas de cinco',
     leave: 'Deja tu reseña en Google',
+    /** La que va en grande, como cita destacada, encima de las demás (índice en `items`). */
+    featured: 2,
     items: [
       { quote: 'La mejor terapeuta de Ibiza, la recomiendo muchísimo.', original: 'Best therapist in Ibiza, I highly recommend.' },
       { quote: '¡Sus productos naturales y sus tratamientos son increíbles! Es muy profesional y tiene unas manos mágicas.', original: 'Her natural products and treatments are amazing! She’s very professional and her hands are magic!' },
@@ -372,8 +371,6 @@ const es = {
       ],
       testimonial: 2,
       disclaimer: DISCLAIMER,
-      photoAlt: 'Sesión de drenaje linfático manual en las piernas',
-      photoNote: 'Imagen ilustrativa',
       resultsAlt: 'Piernas de una clienta con lipedema antes y después de su plan de drenaje linfático',
     },
     madero: {
@@ -400,7 +397,7 @@ const es = {
     sections: [
       {
         title: 'Quién está detrás de esta web',
-        text: 'Sculpt Detox es el centro de Michele Costa (NIF: pendiente), en el Carrer de l’Historiador Josep Clapés, 13, 07800 Eivissa (Illes Balears). Puedes escribirnos a contact@sculptdetox.com o al +34 631 21 32 14.',
+        text: 'Sculpt Detox es el centro de Michele Costa, en el Carrer de l’Historiador Josep Clapés, 13, 07800 Eivissa (Illes Balears). Puedes escribirnos a contact@sculptdetox.com o al +34 631 21 32 14.',
       },
       {
         title: 'Qué datos tratamos',

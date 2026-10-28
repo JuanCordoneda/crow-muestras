@@ -6,14 +6,20 @@ mismo armazón y mismas piezas; cambian contenidos, colores, tipografía de tít
 - **Datos de cada local** (dirección, teléfono, horario, carta sin precios): `src/public/venues.ts`.
   Para poner precios, rellenar `price` en cada plato: la web deja de decir «Prix sur place».
 - **Textos**: francés de referencia en `src/public/content.ts`, castellano en `src/public/texts/es.ts`.
-- **Le 1492** vive entero en `src/public/components/Le1492.tsx`. Si el local cerró: borrar ese fichero
-  y las líneas marcadas `LE-1492` (HomePage, BookingForm, PublicApp, structured-data e `index.html`).
+- **Le 1492** vive entero en `src/public/components/Le1492.tsx` y hoy está **escondido**: sin fotos,
+  carta ni horario. Se enciende con `SHOW_LE_1492 = true` en `src/public/venues.ts` (portada, menú,
+  pie, reservas, ficha de Google y los textos de «2/3 adresses» y «5e / 5e et 6e»; `index.html` y
+  `llms.txt` los ajusta `scripts/pages.mjs` en el build) y `node scripts/grupo.mjs` para la imagen
+  de compartir. Si el local cerró: borrar ese fichero y las líneas marcadas `LE-1492` (venues,
+  HomePage, BookingForm, PublicApp, structured-data, `index.html`, `llms.txt`, pages y grupo).
 - **Reservas**: `/reserver` (o `?local=el-sol-la-luna|mexi-and-co|le-1492`) arma el mensaje y abre
   WhatsApp al 06 24 43 80 23. No guarda nada en el servidor.
 - **Fotos**: originales a resolución completa en `recursos/grupo-originales/` (fuera de git).
   `node scripts/fotos-grupo.mjs` saca las maestras (2400 px) y sus variantes (240–1600) con enfoque
   suave; `npm run images` escribe el manifiesto con el difuminado de carga de cada foto. Mapa,
-  iconos y og.jpg: `node scripts/grupo.mjs`.
+  iconos y og.jpg: `node scripts/grupo.mjs`. Las cuatro fotos de platos de la portada llevan un
+  retoque (recorte más cerrado, más color y calidez): `node scripts/retoque-platos.mjs` después de
+  `fotos-grupo.mjs`; la copia sin retocar queda en `recursos/originales-platos/`.
 - **Panel** (`/admin`): sigue siendo el de la plantilla y no está conectado a esta muestra; la web
   pública no enlaza a él.
 - **«Ce soir, on va où ?»** (`components/MoodFinder.tsx`): una gana → local, platos, si está abierto

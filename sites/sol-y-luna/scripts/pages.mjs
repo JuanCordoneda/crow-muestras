@@ -15,6 +15,10 @@
  * De paso, la precarga de la foto del héroe se queda solo en la portada, que es la única que la
  * enseña: en `/carta` eran 100 kB de foto que nadie llegaba a ver.
  *
+ * Y Le 1492: con `SHOW_LE_1492` apagado (venues.ts), se quitan del HTML y de `llms.txt` los trozos
+ * entre `<!-- LE-1492 -->` y `<!-- /LE-1492 -->`, y su ficha del JSON-LD; encendido, los de
+ * `<!-- SIN-LE-1492 -->`. Las marcas no llegan nunca a lo publicado.
+ *
  * Corre sola después de `npm run build` (`postbuild`).
  */
 import { build } from 'esbuild'
@@ -49,7 +53,24 @@ try {
 if (!fr?.meta?.title) throw new Error('content.ts no ha dado los textos en francés')
 
 const MARCA = 'Quartier Latin · Paris 5e'
-const { EL_SOL, MEXI } = venues
+const { EL_SOL, MEXI, SHOW_LE_1492 } = venues
+if (typeof SHOW_LE_1492 !== 'boolean') throw new Error('venues.ts no ha dado SHOW_LE_1492')
+
+/** LE-1492: deja la versión que toca de cada trozo marcado y quita las marcas. */
+const bloque = (marca) => new RegExp(`[ \\t]*<!-- ${marca} -->[\\s\\S]*?<!-- /${marca} -->[ \\t]*\\n?`, 'g')
+const conLe1492 = (text) => text
+  .replace(bloque(SHOW_LE_1492 ? 'SIN-LE-1492' : 'LE-1492'), '')
+  .replace(/[ \t]*<!-- \/?(?:SIN-)?LE-1492 -->[ \t]*\n?/g, '')
+
+/** LE-1492: la ficha de Le 1492 fuera del JSON-LD escrito a mano (la app hace lo mismo al arrancar). */
+const sinFicha = (html) => {
+  if (SHOW_LE_1492) return html
+  return html.replace(/(<script type="application\/ld\+json">)([\s\S]*?)(<\/script>)/, (_, open, json, close) => {
+    const data = JSON.parse(json)
+    data['@graph'] = data['@graph'].filter((node) => !String(node['@id']).endsWith('#le-1492'))
+    return `${open}\n${JSON.stringify(data, null, 2).replace(/^/gm, '      ')}\n    ${close}`
+  })
+}
 
 /** Cada página con lo que la distingue. La portada se queda donde está, en la raíz. */
 const PAGES = [
@@ -78,7 +99,8 @@ const setMeta = (html, match, value) => {
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
-const source = await readFile(join(dist, 'index.html'), 'utf8')
+const source = sinFicha(conLe1492(await readFile(join(dist, 'index.html'), 'utf8')))
+await writeFile(join(dist, 'llms.txt'), conLe1492(await readFile(join(dist, 'llms.txt'), 'utf8')))
 const hecho = []
 
 for (const page of PAGES) {

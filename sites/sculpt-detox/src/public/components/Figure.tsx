@@ -9,7 +9,7 @@ type Props = {
   alt: string
   /** Qué foto va aquí («cabina», «manos trabajando»…). Sale en el letrero del hueco. */
   todo?: string
-  /** Pie bajo la foto: «Imagen ilustrativa». */
+  /** Pie corto sobre la foto (una nota de una o dos palabras). */
   note?: string
   sizes?: string
   priority?: boolean

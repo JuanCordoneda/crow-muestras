@@ -28,8 +28,9 @@ npm run dev       # desarrollo con recarga en caliente (Vite, puerto 5173)
 
 ## Dónde se cambia cada cosa
 
-- **Precios, duraciones y fotos de los tratamientos:** `src/public/treatments.ts`. Mientras `price` o
-  `minutes` sean `null`, la web enseña «Desde XX €» y «XX min» (marcados en terracota).
+- **Precios, duraciones y fotos de los tratamientos:** `src/public/treatments.ts`. Mientras `price`
+  sea `null`, la web enseña «Consultar precio» («Price on request»); mientras `minutes` sea `null`, la
+  duración no sale. Al rellenarlos vuelve solo «Desde 45 € · 60 min».
 - **Datos del negocio** (teléfono, correo, dirección, horario, Instagram, reseñas de Google):
   `src/public/business.ts`.
 - **Textos:** `src/public/content.ts` (castellano) y `src/public/texts/en.ts` (inglés). El
@@ -44,8 +45,9 @@ Los originales están en `recursos/sculptdetox/` (descargados de `/wp-content/up
 anterior). `npm run recursos` convierte a webp las que usa la web (lista `FOTOS` en
 `scripts/recursos.mjs`), recorta el emblema del logo, hace los iconos, la imagen para compartir
 (`public/og.jpg`) y el mapa; `npm run images` saca las variantes por tamaño. Las fotos de banco de
-imágenes de la web anterior no se publican. Las dos generadas con IA que ya usaba (drenaje en
-piernas y medición de cintura) van marcadas como «Imagen ilustrativa» hasta tener fotos reales.
+imágenes de la web anterior no se publican, y tampoco las generadas con IA (drenaje en piernas y
+medición de cintura): en la especialidad de la portada va el antes y después de lipedema, en
+`/lipedema` el retrato de Michele y «Cómo funciona» queda sin foto hasta tener una real.
 
 ## Buscadores y publicidad
 

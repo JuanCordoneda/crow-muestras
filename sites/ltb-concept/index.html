@@ -634,6 +634,7 @@ select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
   .treat-grid{gap:26px}
   .hair-types button{padding:14px 12px;font-size:14px}
   .recommend{padding:22px}
+  .recommend h3{display:none} /* en móvil repite el botón elegido justo encima */
   .about{gap:34px}
   .values{grid-template-columns:1fr}
   .values div{padding:14px}
@@ -791,12 +792,10 @@ select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
     <div class="container">
       <div class="head">
         <div><span class="eyebrow rv" data-pt="Nossos serviços">Nos prestations</span><h2 class="title serif rv" data-pt="Cabelo <em>&amp; estética.</em>">Cheveux <em>&amp; esthétique.</em></h2></div>
-        <p class="lead rv" style="max-width:440px" data-pt="Preços «a partir de»: o valor final depende do comprimento e do volume do cabelo, e é confirmado antes do serviço.">Tarifs « à partir de » : le prix final dépend de la longueur et de l'épaisseur de vos cheveux, et vous est confirmé avant la prestation.</p>
+        <p class="lead rv" style="max-width:440px" id="tarifs-note" data-pt="Preços «a partir de»: o valor final depende do comprimento e do volume do cabelo, e é confirmado antes do serviço.">Tarifs « à partir de » : le prix final dépend de la longueur et de l'épaisseur de vos cheveux, et vous est confirmé avant la prestation.</p>
       </div>
-      <h3 class="cat-h serif rv" id="cat-cheveux"></h3>
-      <div class="services rail" id="svc-cheveux"></div>
-      <h3 class="cat-h serif rv" id="cat-esthetique"></h3>
-      <div class="services rail" id="svc-esthetique"></div>
+      <div class="services rail" id="svc-featured"></div>
+      <h3 class="cat-h serif rv" id="tarifs-h"></h3>
       <div class="tarifs rv" id="tarifs"></div>
       <p class="brands-note rv"><span data-pt="Trabalhamos com">Nous travaillons avec</span> <b>L'Oréal Professionnel</b> <span aria-hidden="true">·</span> <b>Schwarzkopf Professional</b></p>
     </div>
@@ -1141,7 +1140,7 @@ select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.
       <a class="qb-tile" href="#reservation" data-p="meches"><img src="img/blonds-1024.webp" srcset="img/blonds-640.webp 640w, img/blonds-1024.webp 1024w, img/blonds-1600.webp 1600w, img/blonds-2400.webp 2400w, img/blonds-3200.webp 3200w" sizes="(max-width:560px) 46vw, 260px" alt="" loading="lazy"><span class="pill" data-pt="Loiros">Blonds</span><div><b data-svc-name="meches">Mèches &amp; balayage</b><small data-pt="Especialista em loiros">Spécialiste des blonds</small></div></a>
       <a class="qb-tile" href="#reservation" data-p="coupe"><img src="img/brushing-1024.webp" srcset="img/brushing-640.webp 640w, img/brushing-1024.webp 1024w, img/brushing-1600.webp 1600w, img/brushing-2400.webp 2400w, img/brushing-3200.webp 3200w" sizes="(max-width:560px) 46vw, 260px" alt="" loading="lazy"><div><b data-svc-name="coupe">Coupe &amp; brushing</b><small data-pt="Cabelo">Cheveux</small></div></a>
       <a class="qb-tile" href="#reservation" data-p="soins"><img src="img/soin-1024.webp" srcset="img/soin-640.webp 640w, img/soin-1024.webp 1024w, img/soin-1600.webp 1600w, img/soin-2400.webp 2400w, img/soin-3200.webp 3200w" sizes="(max-width:560px) 46vw, 260px" alt="" loading="lazy"><div><b data-svc-name="soins">Soins capillaires</b><small data-pt="Hidratação, nutrição">Hydratation, nutrition</small></div></a>
-      <a class="qb-tile" href="#reservation" data-p="bbglow"><img src="img/bbglow-1024.webp" srcset="img/bbglow-640.webp 640w, img/bbglow-1024.webp 1024w, img/bbglow-1600.webp 1600w, img/bbglow-2400.webp 2400w, img/bbglow-3200.webp 3200w" sizes="(max-width:560px) 46vw, 260px" alt="" loading="lazy"><div><b data-pt="Estética">Esthétique</b><small data-pt="Depilação, unhas, BB Glow…">Épilation, ongles, BB Glow…</small></div></a>
+      <a class="qb-tile" href="#reservation" data-p="epilation"><img src="img/epilation-1024.webp" srcset="img/epilation-640.webp 640w, img/epilation-1024.webp 1024w, img/epilation-1600.webp 1600w, img/epilation-2400.webp 2400w, img/epilation-3200.webp 3200w" sizes="(max-width:560px) 46vw, 260px" alt="" loading="lazy"><div><b data-pt="Estética">Esthétique</b><small data-pt="Depilação, unhas, BB Glow…">Épilation, ongles, BB Glow…</small></div></a>
       <a class="qb-tile plain" href="#reservation" data-p=""><div><b data-pt="Todos os serviços →">Toutes les prestations →</b><small data-pt="Escolha no formulário">À choisir dans le formulaire</small></div></a>
     </div>
     <div class="qb-row" id="qb-row"></div>
@@ -1171,6 +1170,16 @@ function fillBrand(root=document){
   root.querySelectorAll("[data-reviews]").forEach(a => a.href = C.reviewsUrl);
 }
 fillBrand();
+
+/* Avant / Après: solo los pares con las dos fotos reales (config.js). Sin ninguno se oculta el bloque, se quita su enlace
+   del menú y la pestaña del dock lleva a los avis (antes de guardar los textos de idioma, para que el cambio FR/PT la incluya) */
+const BA_ITEMS = C.beforeAfter.filter(x=>x.before && x.after);
+if(!BA_ITEMS.length){
+  $("#avant-apres").hidden = true;
+  $$('#nav a[href="#avant-apres"]').forEach(a=>a.remove());
+  const tab = $('.dock a[data-sec="avant-apres"]');
+  if(tab){ tab.href = "#avis"; tab.innerHTML = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg><span data-pt="Avaliações">Avis</span>`; }
+}
 
 /* Textos estáticos: se guarda el francés antes de tocar nada (el párrafo que se enciende palabra a palabra se parte después) */
 $$("[data-pt]").forEach(el => el.dataset.fr = el.innerHTML);
@@ -1203,8 +1212,9 @@ function status(s){
 const wa = (s, text) => `https://wa.me/${s.wa}` + (text ? "?text="+encodeURIComponent(text) : "");
 const mapsQ = s => encodeURIComponent(`${s.street}, ${s.zip} ${s.city}`);
 const SVC = Object.fromEntries(C.services.map(s=>[s.id,s]));
-const price = s => T("à partir de ","a partir de ") + (s.price==null ? `<span class="ph">XX</span>` : s.price.toLocaleString(LANG==="pt"?"pt-BR":"fr-FR")) + "&nbsp;€";
-const dur = s => s.min==null ? `<span class="ph">XX</span>&nbsp;min` : (s.min<60 ? s.min+"&nbsp;min" : Math.floor(s.min/60)+"&nbsp;h"+(s.min%60 ? (LANG==="pt"?"":"&nbsp;")+String(s.min%60).padStart(2,"0") : ""));
+/* Precio y duración: con null en config.js no se inventa nada → «Sur devis» y la duración no se muestra */
+const price = s => s.price==null ? T("Sur devis","Sob consulta") : T("à partir de ","a partir de ") + s.price.toLocaleString(LANG==="pt"?"pt-BR":"fr-FR") + "&nbsp;€";
+const dur = s => s.min==null ? "" : (s.min<60 ? s.min+"&nbsp;min" : Math.floor(s.min/60)+"&nbsp;h"+(s.min%60 ? (LANG==="pt"?"":"&nbsp;")+String(s.min%60).padStart(2,"0") : ""));
 /* Fotos en 4 tamaños (npm run fotos): el navegador baja la justa para la pantalla, también en retina */
 const WIDTHS = [640,1024,1600,2400,3200];
 const srcsetOf = n => WIDTHS.map(w=>`img/${n}-${w}.webp ${w}w`).join(", ");
@@ -1323,20 +1333,20 @@ function renderMarquee(){
 
 /* ---------- Prestations: tarjetas y carta de tarifas ---------- */
 function renderServices(){
-  for(const cat of C.categories){
-    const list = C.services.filter(s=>s.cat===cat.id), hair = cat.id==="cheveux";
-    $(`#cat-${cat.id}`).innerHTML = `${esc(L(cat))} <small>${list.length} ${T("prestations","serviços")}</small>`;
-    $(`#svc-${cat.id}`).innerHTML = list.map((s,i) => {
-      const cls = hair ? (i===0 ? "card wide" : i===1 ? "card" : "card") : "card sm";
-      const tags = s.tags ? `<div class="more"><div><ul>${L(s.tags).map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div></div>` : "";
-      return `<a class="${cls} rv${i%3?" d"+(i%3):""}" href="#reservation" data-p="${s.id}">
-        <img ${imgSet(s.img)} sizes="(max-width:760px) 86vw, ${hair&&i===0?"820px":"420px"}" alt="" loading="lazy">
-        ${s.badge ? `<span class="bdg${s.star?" star":""}">${s.star?"★ ":""}${esc(L(s.badge))}</span>` : ""}<span class="arrow" aria-hidden="true">→</span>
-        <div class="card-body"><small>${esc(L(cat))}</small><h3 class="serif">${esc(L(s))}</h3><p>${esc(L(s.desc))}</p>
-          <div class="meta"><span class="pr">${price(s)}</span><span>⏱ ${dur(s)}</span></div>${tags}</div></a>`;
-    }).join("");
-    observeRv($(`#svc-${cat.id}`));
-  }
+  /* Tarjetas grandes solo para los destacados (`featured` en config.js); todos los servicios están en la carta de tarifas */
+  const feat = (C.featured||[]).map(id=>SVC[id]).filter(Boolean);
+  $("#svc-featured").innerHTML = feat.map((s,i) => {
+    const cat = C.categories.find(c=>c.id===s.cat);
+    const tags = s.tags ? `<div class="more"><div><ul>${L(s.tags).map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div></div>` : "";
+    return `<a class="card rv${i%3?" d"+(i%3):""}" href="#reservation" data-p="${s.id}">
+      <img ${imgSet(s.img)} sizes="(max-width:760px) 86vw, 420px" alt="" loading="lazy">
+      ${s.badge ? `<span class="bdg${s.star?" star":""}">${s.star?"★ ":""}${esc(L(s.badge))}</span>` : ""}<span class="arrow" aria-hidden="true">→</span>
+      <div class="card-body"><small>${esc(L(cat))}</small><h3 class="serif">${esc(L(s))}</h3><p>${esc(L(s.desc))}</p>
+        <div class="meta"><span class="pr">${price(s)}</span>${dur(s)?`<span>⏱ ${dur(s)}</span>`:""}</div>${tags}</div></a>`;
+  }).join("");
+  observeRv($("#svc-featured"));
+  $("#tarifs-h").textContent = T("Toutes nos prestations","Todos os nossos serviços");
+  $("#tarifs-note").hidden = !C.services.some(s=>s.price!=null); /* la nota «à partir de» solo cuando hay precios cargados */
   $("#tarifs").innerHTML = C.categories.map(cat => `<div class="t-box"><h3 class="serif">${esc(L(cat))}</h3>${C.services.filter(s=>s.cat===cat.id).map(s=>`<div class="t-row"><b>${esc(L(s))}${s.badge?`<em>${esc(L(s.badge))}</em>`:""}</b><span class="d">${dur(s)}</span><span class="p">${price(s)}</span></div>`).join("")}</div>`).join("");
   rails();
 }
@@ -1345,15 +1355,14 @@ document.addEventListener("click", e => { const a=e.target.closest("[data-p]"); 
 
 /* ---------- Avant / Après ---------- */
 let baCat = "all";
-const BA_CATS = () => [["all",T("Tout","Tudo")],["lissage",T("Lissage","Progressiva")],["blonds",T("Blonds","Loiros")],["esthetique",T("Esthétique","Estética")]];
-const CAM = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>`;
+const BA_CATS = () => [["all",T("Tout","Tudo")],["lissage",T("Lissage","Progressiva")],["blonds",T("Blonds","Loiros")],["esthetique",T("Esthétique","Estética")]].filter(([k])=>k==="all"||BA_ITEMS.some(x=>x.cat===k));
 function renderBA(){
+  if(!BA_ITEMS.length) return;
   $("#ba-filters").innerHTML = BA_CATS().map(([k,l])=>`<button type="button" aria-pressed="${k===baCat}" data-k="${k}">${l}</button>`).join("") + `<span class="ba-hint" aria-hidden="true">⟷ ${T("Faites glisser pour comparer","Arraste para comparar")}</span>`;
-  $("#ba-grid").innerHTML = C.beforeAfter.map((x,i)=>{
+  $("#ba-grid").innerHTML = BA_ITEMS.map((x,i)=>{
     const s=SVC[x.service], half=(src,lbl,cls)=>`<div class="ba-half ${cls}">${src?`<img ${photo(src,"(max-width:900px) 48vw, 300px")} alt="${esc(lbl)} – ${esc(L(s))}" loading="lazy">`:""}<span>${lbl}</span></div>`;
-    const ph = !x.before || !x.after;
     /* «Après» debajo y «Avant» encima, recortado hasta la línea: se arrastra para comparar */
-    return `<figure class="ba" data-cat="${x.cat}" ${baCat!=="all"&&x.cat!==baCat?"hidden":""}><div class="ba-img">${half(x.after,T("Après","Depois"),"ap")}${half(x.before,T("Avant","Antes"),"av")}${ph?`<div class="ba-ph">${CAM}<span>${T("photo à remplacer","foto a substituir")}</span></div>`:""}<span class="ba-line" aria-hidden="true"><i>⟷</i></span><input type="range" min="0" max="100" value="50" aria-label="${T("Comparer avant et après","Comparar antes e depois")} – ${esc(L(s))}"></div><figcaption><b>${esc(L(s))}</b><small>${esc(L(C.categories.find(c=>c.id===s.cat)))}</small></figcaption></figure>`;
+    return `<figure class="ba" data-cat="${x.cat}" ${baCat!=="all"&&x.cat!==baCat?"hidden":""}><div class="ba-img">${half(x.after,T("Après","Depois"),"ap")}${half(x.before,T("Avant","Antes"),"av")}<span class="ba-line" aria-hidden="true"><i>⟷</i></span><input type="range" min="0" max="100" value="50" aria-label="${T("Comparer avant et après","Comparar antes e depois")} – ${esc(L(s))}"></div><figcaption><b>${esc(L(s))}</b><small>${esc(L(C.categories.find(c=>c.id===s.cat)))}</small></figcaption></figure>`;
   }).join("");
 }
 $("#ba-filters").addEventListener("click", e => { const b=e.target.closest("button"); if(b){ baCat=b.dataset.k; renderBA(); } });
@@ -1371,7 +1380,7 @@ function renderTypes(){
   const x=TYPES[sel], t=x[LANG];
   $("#types").innerHTML = TYPES.map((y,i)=>`<button type="button" aria-pressed="${i===sel}" data-i="${i}"><span aria-hidden="true">${y.i}</span>${y[LANG][0]}</button>`).join("");
   $("#rec").innerHTML = `<h3 class="serif">${t[1]}</h3><p>${t[2]}</p>
-    <div class="rec-list">${x.r.map(id=>{ const s=SVC[id]; return `<div class="rec"><i aria-hidden="true">✦</i><div><b>${esc(L(s))}</b><span>${price(s)} · ${dur(s)}</span></div></div>`; }).join("")}</div>
+    <div class="rec-list">${x.r.map(id=>{ const s=SVC[id]; return `<div class="rec"><i aria-hidden="true">✦</i><div><b>${esc(L(s))}</b>${s.price!=null||s.min!=null ? `<span>${[price(s),dur(s)].filter(Boolean).join(" · ")}</span>` : ""}</div></div>`; }).join("")}</div>
     <a class="btn btn-gold" href="#reservation" data-p="${x.r[0]}">${T("Réserver cette prestation","Reservar este serviço")} <span class="ar">→</span></a>`;
 }
 $("#types").addEventListener("click", e => { const b=e.target.closest("button"); if(b){ sel=+b.dataset.i; renderTypes(); } });

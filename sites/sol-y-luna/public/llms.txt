@@ -1,6 +1,11 @@
 # Mexi-and-Co — restaurants latinos du Quartier Latin (Paris)
 
+<!-- LE-1492 -->
 > Trois adresses latines au cœur du Quartier Latin : El Sol & La Luna (cuisine colombienne et mexicaine), Mexi & Co (restaurant et épicerie mexicaine) et Le 1492 (Marché Saint-Germain). Réservation directe, sans commission, sur le site ou sur WhatsApp (+33 6 24 43 80 23).
+<!-- /LE-1492 -->
+<!-- SIN-LE-1492 -->
+> Deux adresses latines au cœur du Quartier Latin, à Paris 5e : El Sol & La Luna (cuisine colombienne et mexicaine) et Mexi & Co (restaurant et épicerie mexicaine), l'une en face de l'autre. Réservation directe, sans commission, sur le site ou sur WhatsApp (+33 6 24 43 80 23).
+<!-- /SIN-LE-1492 -->
 
 Le site est en français et en espagnol (`?lang=fr|es`). Les horaires et la carte de chaque adresse sont sur sa page.
 
@@ -19,10 +24,12 @@ Le site est en français et en espagnol (`?lang=fr|es`). Les horaires et la cart
 - Burritos, tacos, quesadillas, fajitas, chili con carne, options végétariennes ; épicerie mexicaine
 - Page : https://www.mexiandco.fr/mexi-and-co
 
+<!-- LE-1492 -->
 ## Le 1492
 
 - Marché Saint-Germain, rue Clément, 75006 Paris · depuis 2005
 
+<!-- /LE-1492 -->
 ## Réserver
 
 - https://www.mexiandco.fr/reserver

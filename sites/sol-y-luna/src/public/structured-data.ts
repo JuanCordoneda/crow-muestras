@@ -9,7 +9,7 @@
 import type { DayHours } from '../shared/types'
 import { WEEK_ORDER, dayRanges } from '../shared/hours'
 import { telLink } from '../shared/utils'
-import { EL_SOL, MEXI, SITE_URL, type Venue } from './venues'
+import { EL_SOL, MEXI, SHOW_LE_1492, SITE_URL, type Venue } from './venues'
 import { LE_1492 } from './components/Le1492' // LE-1492
 
 /** Los días de la semana como los nombra schema.org, por índice de `Date.getDay()`. */
@@ -42,7 +42,8 @@ function restaurant(venue: Venue) {
     name: venue.name,
     description: venue.intro.fr,
     url: page,
-    image: venue.photo ? [`${SITE_URL}${venue.photo}`] : [`${SITE_URL}/og.jpg`],
+    // Sin foto propia, sin imagen: og.jpg es una sala de El Sol y Google la daría como de este local.
+    image: venue.photo ? [`${SITE_URL}${venue.photo}`] : undefined,
     telephone: international(venue.phone),
     priceRange: '€€',
     servesCuisine: venue.cuisines,
@@ -77,8 +78,8 @@ export function buildStructuredData() {
       },
       restaurant(EL_SOL),
       restaurant(MEXI),
-      // LE-1492: sin teléfono ni horario confirmados, solo lo que se sabe.
-      {
+      // LE-1492: sin teléfono ni horario confirmados, solo lo que se sabe (y solo si está encendido).
+      ...(SHOW_LE_1492 ? [{
         '@type': 'Restaurant',
         '@id': `${SITE_URL}/#le-1492`,
         name: LE_1492.name,
@@ -86,7 +87,7 @@ export function buildStructuredData() {
         foundingDate: LE_1492.since,
         address: { '@type': 'PostalAddress', streetAddress: LE_1492.address, postalCode: LE_1492.postcode, addressLocality: LE_1492.town, addressCountry: 'FR' },
         parentOrganization: { '@id': `${SITE_URL}/#groupe` },
-      },
+      }] : []),
     ],
   }
 }
