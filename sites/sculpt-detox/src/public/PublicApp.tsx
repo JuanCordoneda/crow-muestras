@@ -3,7 +3,6 @@ import './public.css'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronRight, Clock, Instagram, Mail, MapPin, Menu as MenuIcon, Phone, X } from 'lucide-react'
 import { PAGE_PATHS, linkTo, navigate, publicRoute, type PublicRoute, type SiteLang } from '../shared/routing'
-import { withBase } from '../shared/base'
 import { useScrollLock } from '../shared/useMedia'
 import { cx } from '../shared/utils'
 import { textsFor, type Texts } from './content'
@@ -15,6 +14,7 @@ import { HomePage } from './pages/HomePage'
 import { LipedemaPage } from './pages/LipedemaPage'
 import { LandingPage } from './pages/LandingPage'
 import { PrivacyPage } from './pages/PrivacyPage'
+import { withBase } from '../shared/base'
 
 type Props = { route: PublicRoute }
 

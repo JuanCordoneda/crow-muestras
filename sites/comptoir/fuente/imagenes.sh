@@ -1,18 +1,21 @@
 #!/bin/sh
-# Descarga las fotos del Comptoir (Google Maps y Zenchef) y las deja en ../public/img/comptoir
-# como webp de 1600 px de ancho como mucho. Cada foto lleva el nombre de lo que enseña.
+# Fotos del Comptoir, de punta a punta:
+#   1. descarga los originales (Google Maps y Zenchef) en fuente/originales/
+#   2. amplía con Real-ESRGAN las que usa la web (mejorar_fotos.py → fuente/maestras/, PNG sin pérdida)
+#   3. saca las webp de 800, 1400 y 2000 px en ../public/img/comptoir (variantes.sh)
+# Necesita los modelos de Real-ESRGAN en $MODELOS (ver mejorar_fotos.py). Sin ellos, salta el paso 2
+# y las variantes salen de los originales.
 set -e
 cd "$(dirname "$0")"
-out=../public/img/comptoir
-tmp=$(mktemp -d)
-mkdir -p "$out"
+orig=originales
+mkdir -p "$orig"
 
 G=https://lh3.googleusercontent.com/p
 Z=https://ugc.zenchef.com/3/4/9/5/6/6/1/5/0/3
 while read -r name url; do
   [ -z "$name" ] && continue
-  curl -sfL --max-time 60 -o "$tmp/$name" "$url"
-  magick "$tmp/$name" -auto-orient -strip -resize '1600x>' -quality 80 -define webp:method=6 "$out/$name.webp"
+  ext=${url##*.}; case "$ext" in png|jpg) ;; *) ext=jpg ;; esac
+  [ -f "$orig/$name.$ext" ] || curl -sfL --max-time 60 -o "$orig/$name.$ext" "$url"
 done <<EOF
 salle-bar $G/AF1QipOGaKjgDJWZ5RnFuD7BjqgtucSnr4UVfpWkY9ek=s1600-w1600
 ceviche-salade $G/AF1QipPD5RK7vr_EjGqq0L_KcnJTLylTxZGZqPspGZAO=s1600-w1600
@@ -40,11 +43,8 @@ facade-terrasse $Z/9/7/8/1644418868_131/7797549008f10bb76dc675ff973e5b9a.png
 pisco-sour $Z/9/7/8/1644419309_414/2b47d40c97cc782e0cc7ef9f7a11fa0a.png
 EOF
 
-rm -rf "$tmp"
-
-# Variante de 800 px para el móvil y las miniaturas (srcset); la grande queda para pantallas anchas y el visor.
-for f in "$out"/*.webp; do
-  case "$f" in *-800.webp) continue ;; esac
-  magick "$f" -resize '800x>' -quality 78 -define webp:method=6 "${f%.webp}-800.webp"
-done
-ls -l "$out" | awk 'NR>1{printf "%-28s %4d KB\n", $9, $5/1024}'
+# las que salen en la web
+USADAS="ceviche-charbon ceviche-crevettes chefs terrasse-soir ceviche-classique causa-thon tacos-thon pisco-sour poke-bowl
+  facade-terrasse dressage-causa salle-tableaux salle-soir vins-primeurs salle-claire ceviche-salade"
+if [ -n "$MODELOS" ]; then python3 -I mejorar_fotos.py "$orig" maestras "$MODELOS" $USADAS; fi
+./variantes.sh maestras "$orig" $USADAS ceviche-agrumes salle-bar

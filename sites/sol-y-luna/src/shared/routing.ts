@@ -100,7 +100,22 @@ export function navigate(route: Route, options: { replace?: boolean } = {}) {
     if (options.replace) window.history.replaceState(null, '', target)
     else window.history.pushState(null, '', target)
   }
-  window.dispatchEvent(new Event(CHANGE))
+  /**
+   * Entre páginas, un fundido corto como el de una app (View Transitions, Chrome y Safari 18). El
+   * navegador fotografía la página de antes, se pinta la nueva y funde una sobre otra. Sin soporte,
+   * o si el teléfono pide menos movimiento, se cambia de golpe como siempre.
+   */
+  const transition = (document as Document & { startViewTransition?: (update: () => Promise<void>) => unknown }).startViewTransition
+  const calm = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  if (!transition || calm || path === current) {
+    window.dispatchEvent(new Event(CHANGE))
+    return
+  }
+  transition.call(document, () => new Promise<void>((resolve) => {
+    window.dispatchEvent(new Event(CHANGE))
+    // Dos fotogramas: el primero pinta la página nueva, el segundo ya la tiene en pantalla.
+    requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+  }))
 }
 
 /** La ruta actual, al día con los botones de atrás y adelante del navegador. */

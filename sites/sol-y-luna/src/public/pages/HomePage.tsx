@@ -9,6 +9,7 @@ import { PapelPicado, StarIcon, WhatsAppIcon } from '../components/Brand'
 import { PhotoSoon } from '../components/PhotoSoon'
 import { BookingSection } from '../components/BookingForm'
 import { Le1492Card } from '../components/Le1492' // LE-1492
+import { MoodFinder } from '../components/MoodFinder'
 import { BOOKING_WHATSAPP, EL_SOL, MEXI, VENUES, fullAddress, say, scheduleOf, type Venue } from '../venues'
 import { useSite } from '../site'
 import './home.css'
@@ -44,6 +45,7 @@ export function HomePage({ section }: { section?: string }) {
       <QuickInfo />
       <Facts />
       <Venues />
+      <MoodFinder />
       <Dishes />
       <Events />
       <BookingSection eyebrow={t.booking.eyebrow} title={t.booking.title} text={t.booking.text} />

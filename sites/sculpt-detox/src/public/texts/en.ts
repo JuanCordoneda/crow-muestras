@@ -59,6 +59,26 @@ export const en: Texts = {
     photoAlt: 'Michele Costa, massage therapist at Sculpt Detox, in her treatment room in Ibiza',
     langHint: 'Ver en español',
   },
+  badge: 'Non-surgical · Body sculpting · Ibiza · ',
+  marquee: 'Sculpt Detox treatments',
+  finder: {
+    eyebrow: 'Find your treatment',
+    title: 'What would you like to achieve?',
+    text: 'Pick a goal and we’ll tell you where to start. At your first visit we tailor it to you.',
+    label: 'Your goal',
+    result: 'We recommend starting with',
+    lipedema: 'Read more about lipedema',
+    goals: [
+      { id: 'moldear', label: 'Contour my silhouette', text: 'Define waist, legs and buttocks without going under the knife.', ids: ['maderoterapia', 'drenaje-brasileno', 'reafirmante'] },
+      { id: 'deshinchar', label: 'De-puff my body', text: 'If you notice fluid retention, bloating or a heavy feeling.', ids: ['drenaje-brasileno', 'detox-corporal', 'infrarrojo'] },
+      { id: 'celulitis', label: 'Improve cellulite', text: 'Smoother, more even skin on legs, buttocks and abdomen.', ids: ['anticelulitis', 'maderoterapia', 'infrarrojo'] },
+      { id: 'lipedema', label: 'Ease lipedema', text: 'Heaviness, tenderness and tired legs. Complementary to your medical follow-up.', ids: ['drenaje-brasileno', 'drenaje-postquirurgico'] },
+      { id: 'postop', label: 'Recover from surgery', text: 'Liposuction, tummy tuck or liposculpture, always with your surgeon’s approval.', ids: ['drenaje-postquirurgico', 'drenaje-brasileno'] },
+      { id: 'relax', label: 'Release tension', text: 'Muscle knots, built-up stress or simply switching off.', ids: ['descontracturante', 'relajante', 'masaje-facial'] },
+      { id: 'rostro', label: 'Care for my face', text: 'Dull skin, a puffy face or a less defined jawline.', ids: ['hydrafacial', 'sculpt-face', 'drenaje-facial'] },
+      { id: 'embarazo', label: 'I’m pregnant', text: 'A massage designed for this stage, with your midwife’s approval.', ids: ['embarazadas'] },
+    ],
+  },
   trust: {
     label: 'Why Sculpt Detox',
     items: [

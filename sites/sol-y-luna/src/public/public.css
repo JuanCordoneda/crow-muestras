@@ -163,6 +163,32 @@
 .site-credit{display:inline-flex;align-items:center;gap:6px;opacity:.85}
 .site-credit img{display:block;height:auto}
 
+/* ---------- transiciones entre páginas ---------- */
+/* La cabecera y el botón flotante se quedan quietos; lo de en medio funde y sube un poco. */
+.site-header{view-transition-name:site-header}
+.wa-fab{view-transition-name:wa-fab}
+::view-transition-old(root){animation:vt-out .18s ease-in both}
+::view-transition-new(root){animation:vt-in .32s cubic-bezier(.2,.7,.2,1) both}
+@keyframes vt-out{to{opacity:0;transform:translateY(-8px)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(14px)}}
+
+/* ---------- movimiento sutil ---------- */
+/* Con `prefers-reduced-motion` nada de esto se mueve (base.css corta todas las animaciones). */
+/* El papel picado se mece como si corriera un poco de aire. */
+.papel-picado{animation:flutter 6s ease-in-out infinite;transform-origin:50% 0}
+@keyframes flutter{0%,100%{transform:skewX(0) translateY(0)}30%{transform:skewX(-1.6deg) translateY(1px)}70%{transform:skewX(1.4deg) translateY(-1px)}}
+/* El sol de los carteles gira muy despacio: se nota que está vivo sin distraer. */
+.photo-soon-sun{animation:sun-turn 60s linear infinite}
+@keyframes sun-turn{to{transform:rotate(360deg)}}
+/* Parallax del héroe con el scroll, sin JavaScript: la foto baja más despacio que la página y el
+   texto se desvanece al irse. Solo donde el navegador sabe atar una animación al scroll. */
+@media (prefers-reduced-motion:no-preference){@supports (animation-timeline: scroll()){
+  .hero-media{animation:hero-drift linear both;animation-timeline:scroll(root);animation-range:0 100vh}
+  .hero-content{animation:hero-fade linear both;animation-timeline:scroll(root);animation-range:0 70vh}
+  @keyframes hero-drift{to{transform:translateY(22vh) scale(1.05)}}
+  @keyframes hero-fade{to{opacity:0;transform:translateY(-6vh)}}
+}}
+
 /* ---------- interruptor de idioma (FR | ES) ---------- */
 .lang-switch{display:inline-flex;align-items:center;padding:3px;border-radius:999px;border:1px solid var(--line);background:#fff}
 .lang-switch button{min-width:38px;min-height:34px;padding:0 9px;border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.6px;color:var(--muted)}

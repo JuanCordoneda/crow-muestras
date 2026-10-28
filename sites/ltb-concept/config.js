@@ -1,7 +1,8 @@
 /* LTB Concept · todo lo editable del sitio, en un solo lugar.
    - Nombre / bajada: cambiar `name` y `tagline` (y luego `node scripts/sync-head.mjs` para el <head>: título, SEO, schema).
    - Precios y duraciones: `price` (número, en €) y `min` (minutos). Mientras estén en null se ve «à partir de XX €» / «XX min».
-   - Fotos avant/après e Instagram: poner la ruta de la foto (p. ej. "img/aa-lissage-1-avant.webp") en lugar de null. */
+   - Fotos: dejar el original en fotos/ y correr `npm run fotos` (genera 4 tamaños nítidos en img/). En avant/après e Instagram
+     se pone el nombre sin extensión (p. ej. "aa-lissage-1-avant") en lugar de null. */
 window.LTB = {
   name: "LTB Concept",
   tagline: "by La Touche Brésilienne",
@@ -81,7 +82,7 @@ window.LTB = {
       desc: { fr: "Un hâle doré et naturel, sans soleil.", pt: "Um bronzeado dourado e natural, sem sol." } },
   ],
 
-  // Avant / Après: `before` y `after` = ruta de cada foto (null = recuadro «photo à remplacer»)
+  // Avant / Après: `before` y `after` = nombre de la foto procesada (null = recuadro «photo à remplacer»)
   beforeAfter: [
     { cat: "lissage", service: "lissage", before: null, after: null },
     { cat: "blonds", service: "meches", before: null, after: null },
@@ -93,7 +94,7 @@ window.LTB = {
     { cat: "esthetique", service: "microneedling", before: null, after: null },
   ],
 
-  // Últimas publicaciones de Instagram (null = recuadro «photo à remplacer»)
+  // Últimas publicaciones de Instagram: nombre de la foto procesada (null = recuadro «photo à remplacer»)
   instagramPosts: [null, null, null, null, null, null],
 
   reviews: [

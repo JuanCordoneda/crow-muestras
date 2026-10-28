@@ -1,11 +1,15 @@
 import './links.css'
+import { useState } from 'react'
 import { BookOpen, CalendarDays, ChevronRight, Gift, Utensils } from 'lucide-react'
+import { Photo } from '../../shared/components/Photo'
 import { linkTo, publicRoute } from '../../shared/routing'
 import { ATELIE, nextOpenSession, sessionId } from '../agenda'
 import { BUSINESS, whatsappUrl } from '../business'
 import { compactCount, sessionShort } from '../format'
 import { useSite } from '../site'
 import { CheeseBoard, VerifiedBadge, WhatsAppIcon } from '../components/Brand'
+import { Stories } from '../components/Stories'
+import { PHOTOS, atelierStories } from '../photos'
 
 /**
  * La página de la bio de Instagram (`/links`). Quien llega aquí viene del perfil de Janaína con el
@@ -16,11 +20,16 @@ export function LinksPage() {
   const { t, lang, onWhatsApp, book } = useSite()
   const next = nextOpenSession()
   const home = (section?: string) => linkTo(publicRoute({ view: 'inicio', lang, section }))
+  const [story, setStory] = useState(-1)
 
   return (
     <div className="links">
       <header className="links-head">
-        <img className="links-avatar" src="/img/atelie/janaina-avatar.webp" alt={t.host.photoAlt} width={112} height={112} decoding="async" {...{ fetchpriority: 'high' }} />
+        {/* El avatar con anillo, como en el perfil de Instagram: abre las stories del ateliê. */}
+        <button type="button" className="story-ring is-large" onClick={() => setStory(0)} aria-label={t.stories.label}>
+          <Photo className="links-avatar" src={PHOTOS.avatar} alt={t.host.photoAlt} sizes="112px" priority width={112} height={112} />
+        </button>
+        <span className="links-tap">{t.stories.label}</span>
         <h1>{t.links.name}</h1>
         <p className="links-handle">
           <a href={BUSINESS.instagram} target="_blank" rel="noopener noreferrer">{BUSINESS.instagramHandle}</a>
@@ -71,7 +80,8 @@ export function LinksPage() {
       </nav>
 
       <a className="links-site" {...home()}>{t.links.site}</a>
-      <CheeseBoard className="links-art" size={150} />
+      <CheeseBoard className="links-art board-draw" size={150} />
+      {story >= 0 && <Stories stories={atelierStories(t)} start={story} onClose={() => setStory(-1)} onBook={() => { setStory(-1); next ? book(sessionId(next)) : book() }} />}
     </div>
   )
 }

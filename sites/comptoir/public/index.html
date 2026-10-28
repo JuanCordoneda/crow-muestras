@@ -21,8 +21,8 @@
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="__ORIGIN__/og.jpg?v=1">
-<link rel="preload" as="image" href="img/comptoir/ceviche-charbon.webp" media="(max-width:699px)" fetchpriority="high">
-<link rel="preload" as="image" href="img/comptoir/ceviche-crevettes.webp" media="(min-width:700px)" fetchpriority="high">
+<link rel="preload" as="image" imagesrcset="img/comptoir/ceviche-charbon-800.webp 800w, img/comptoir/ceviche-charbon-1400.webp 1400w, img/comptoir/ceviche-charbon.webp 2000w" imagesizes="175vw" media="(max-width:699px)" fetchpriority="high">
+<link rel="preload" as="image" imagesrcset="img/comptoir/ceviche-crevettes-800.webp 800w, img/comptoir/ceviche-crevettes-1400.webp 1400w, img/comptoir/ceviche-crevettes.webp 2000w, img/comptoir/ceviche-crevettes-xl.webp 2560w" imagesizes="100vw" media="(min-width:700px)" fetchpriority="high">
 <link rel="preload" as="font" type="font/woff2" href="fonts/dm-sans-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/cormorant-garamond-latin.woff2" crossorigin>
 <script type="application/ld+json">
@@ -282,11 +282,61 @@ section{scroll-margin-top:var(--head)}
 .grid-g .wide{grid-column:span 2}
 .btn-ig{background:linear-gradient(45deg,#f3a530,#e2457f 55%,#8b3fd1);color:#fff}
 @media (min-width:768px){.grid-g{grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;gap:12px}}
-dialog.lb{border:0;padding:0;background:transparent;max-width:min(94vw,1100px);max-height:90vh}
-dialog.lb::backdrop{background:rgba(10,9,8,.92)}
-dialog.lb img{max-height:86vh;width:auto;border-radius:12px;margin:auto}
-dialog.lb button{position:fixed;top:14px;right:14px;width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.15);color:#fff;cursor:pointer;display:grid;place-items:center}
-dialog.lb button svg{width:24px;height:24px}
+/* visionneuse façon stories */
+dialog.st{border:0;padding:0;margin:0;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;background:#000;color:#fff;overflow:hidden;overscroll-behavior:contain}
+dialog.st::backdrop{background:rgba(8,7,6,.94);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+@media (min-width:700px){dialog.st{width:min(470px,92vw);height:min(840px,92vh);margin:auto;border-radius:22px;box-shadow:0 40px 120px rgba(0,0,0,.6)}}
+.st-stage{position:absolute;inset:0;overflow:hidden;outline:0}
+.st-blur{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:blur(30px) saturate(1.2) brightness(.5)}
+.st-img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;animation:stzoom 6s ease-out both}
+@keyframes stzoom{from{transform:scale(1.06)}to{transform:scale(1)}}
+.st-bars{position:absolute;z-index:3;top:calc(10px + env(safe-area-inset-top));left:12px;right:12px;display:flex;gap:4px}
+.st-bars i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.3);overflow:hidden}
+.st-bars i b{display:block;height:100%;width:0;background:#fff}
+.st-bars i.done b{width:100%}
+.st-bars i.now b{animation:stbar 5s linear forwards}
+dialog.st.paused .st-bars i.now b,dialog.st.paused .st-img{animation-play-state:paused}
+@keyframes stbar{to{width:100%}}
+.st-top{position:absolute;z-index:3;top:calc(20px + env(safe-area-inset-top));left:14px;right:6px;display:flex;align-items:center;justify-content:space-between}
+.st-brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.88rem;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.st-brand svg{width:30px;height:30px;color:var(--gold)}
+.st-x{width:46px;height:46px;border:0;background:none;color:#fff;display:grid;place-items:center;cursor:pointer}
+.st-x svg{width:26px;height:26px}
+.st-nav{position:absolute;z-index:2;top:70px;bottom:150px;border:0;background:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.st-prev{left:0;width:34%}.st-next{right:0;width:66%}
+.st-foot{position:absolute;z-index:3;left:0;right:0;bottom:0;padding:70px 16px calc(18px + env(safe-area-inset-bottom));background:linear-gradient(transparent,rgba(0,0,0,.78));display:grid;gap:14px}
+.st-cap{margin:0;font-family:var(--f-display);font-style:italic;font-weight:500;font-size:1.55rem;line-height:1.15;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.st-foot .btn{width:100%}
+/* aperçu de plat au survol (ordinateur) */
+.peek{position:fixed;z-index:45;left:0;top:0;width:210px;aspect-ratio:4/5;border-radius:16px;overflow:hidden;pointer-events:none;opacity:0;transform:scale(.9) rotate(-4deg);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1);box-shadow:0 30px 60px -20px rgba(20,18,16,.55);border:5px solid var(--white);background:var(--cream-2)}
+.peek.on{opacity:1;transform:scale(1) rotate(-2deg)}
+.peek img{width:100%;height:100%;object-fit:cover}
+.dish-pic{border:0;padding:0;cursor:pointer;display:inline-grid;place-items:center;width:30px;height:30px;margin:-4px 0;border-radius:50%;background:var(--cream-2);color:var(--gold-d);flex:none}
+.dish-pic svg{width:15px;height:15px}
+.dish-pic:hover{background:var(--gold);color:var(--ink)}
+.dish.has-pic h4{cursor:default}
+/* Lima → Paris */
+.route{margin:24px 0 6px;padding:16px 16px 14px;border-radius:18px;background:var(--ink);color:var(--white);max-width:30rem;box-shadow:0 30px 60px -36px rgba(20,18,16,.7)}
+.route svg{display:block;width:100%;height:auto;overflow:visible}
+.route .arc-bg{fill:none;stroke:rgba(201,162,74,.35);stroke-width:1.5;stroke-dasharray:2 5;stroke-linecap:round}
+.route .arc{fill:none;stroke:var(--gold);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:var(--len,400);stroke-dashoffset:var(--len,400)}
+.route.go .arc{transition:stroke-dashoffset 2.4s cubic-bezier(.45,0,.25,1);stroke-dashoffset:0}
+.route .pt{fill:var(--gold)}
+.route .ring{fill:none;stroke:var(--gold);stroke-width:1;opacity:.45}
+.route.go .ring-paris{animation:ringpulse 1.6s ease-out 2.3s 2}
+@keyframes ringpulse{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.2)}}
+.route .ring-paris{transform-box:fill-box;transform-origin:center}
+.route .lbl{font:700 9.5px/1 "DM Sans",sans-serif;letter-spacing:.14em;fill:rgba(255,251,244,.75)}
+.route .plane{fill:var(--white);opacity:0;transition:opacity .2s}
+.route.go .plane{opacity:1}
+.route-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;padding-top:12px;border-top:1px solid rgba(201,162,74,.22)}
+.route-stats b{display:block;font-family:var(--f-display);font-weight:600;font-size:1.75rem;line-height:1;color:var(--gold);font-variant-numeric:lining-nums tabular-nums}
+.route-stats span{font-size:.78rem;color:rgba(255,251,244,.72)}
+/* créneau suggéré par le bouton du hero */
+.slot-group.hint small{color:var(--red);font-weight:700}
+.slot-group.hint .slot-list span{animation:hint 1.1s ease 2}
+@keyframes hint{50%{box-shadow:inset 0 0 0 2px var(--gold);background:rgba(201,162,74,.2)}}
+.must-list button.pic{display:block;width:100%;border:0;padding:0;cursor:zoom-in}
 
 /* ---------- reviews ---------- */
 .reviews{padding:84px 0;background:var(--cream-2)}
@@ -443,6 +493,7 @@ dialog.lb button svg{width:24px;height:24px}
   <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></g></symbol>
   <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></g></symbol>
+  <symbol id="i-cam" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3.5"/></g></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></g></symbol>
 </svg>
 
@@ -485,15 +536,15 @@ dialog.lb button svg{width:24px;height:24px}
 <!-- ============ HERO ============ -->
 <section class="hero" aria-label="Le Comptoir du Pérou">
   <picture class="bg">
-    <source media="(max-width:699px)" srcset="img/comptoir/ceviche-charbon.webp">
-    <img src="img/comptoir/ceviche-crevettes.webp" alt="Ceviche du Comptoir du Pérou : poisson mariné, maïs, patate douce et leche de tigre" data-i18n-alt="hero.alt" fetchpriority="high">
+    <source media="(max-width:699px)" srcset="img/comptoir/ceviche-charbon-800.webp 800w, img/comptoir/ceviche-charbon-1400.webp 1400w, img/comptoir/ceviche-charbon.webp 2000w" sizes="175vw">
+    <img src="img/comptoir/ceviche-crevettes.webp" srcset="img/comptoir/ceviche-crevettes-800.webp 800w, img/comptoir/ceviche-crevettes-1400.webp 1400w, img/comptoir/ceviche-crevettes.webp 2000w, img/comptoir/ceviche-crevettes-xl.webp 2560w" sizes="100vw" alt="Ceviche du Comptoir du Pérou : poisson mariné, maïs, patate douce et leche de tigre" data-i18n-alt="hero.alt" fetchpriority="high">
   </picture>
   <div class="wrap">
     <div class="eyebrow"><svg width="14" height="14"><use href="#inti"/></svg><span data-i18n="hero.eyebrow">Cuisine péruvienne · Paris 15e · depuis 2019</span></div>
     <h1 data-i18n-html="hero.title">Le Pérou, <em>sans prendre l'avion.</em></h1>
     <p class="sub" data-i18n="hero.sub">Ceviches, causas et poulpe au charbon préparés par des chefs péruviens, rue de la Croix-Nivert. Réservez votre table en 30 secondes, directement chez nous.</p>
     <div class="ctas">
-      <a class="btn btn-gold" href="#reserver"><svg><use href="#i-cal"/></svg><span data-i18n="cta.bookTable">Réserver une table</span></a>
+      <a class="btn btn-gold" href="#reserver" id="heroCta"><svg><use href="#i-cal"/></svg><span>Réserver une table</span></a>
       <a class="btn btn-ghost" href="#carte" data-i18n="cta.menu">Voir la carte</a>
     </div>
     <div class="chips">
@@ -522,14 +573,29 @@ dialog.lb button svg{width:24px;height:24px}
         <h2 class="h2" data-i18n-html="concept.title">Un comptoir <em>liménien</em> à Paris</h2>
         <p class="lead" data-i18n="concept.p1">Depuis 2019, Le Comptoir du Pérou fait voyager le 15e. En cuisine, des chefs péruviens préparent les grands classiques de Lima : ceviches marinés à la minute, causas, poulpe au charbon.</p>
         <p class="lead" data-i18n="concept.p2">Une salle chaleureuse, une petite terrasse aux beaux jours et un pisco sour au comptoir. Il ne manque que l'avion, et c'est très bien comme ça.</p>
+        <div class="route" id="route" role="img" data-i18n-aria="route.aria" aria-label="De Lima à Paris 15e : 10 254 km, zéro avion">
+          <svg viewBox="0 0 320 112" aria-hidden="true">
+            <path class="arc-bg" d="M24 86 Q150 -26 296 46"/>
+            <path class="arc" id="routeArc" d="M24 86 Q150 -26 296 46"/>
+            <circle class="ring" cx="24" cy="86" r="9"/><circle class="pt" cx="24" cy="86" r="4.5"/>
+            <circle class="ring ring-paris" cx="296" cy="46" r="9"/><circle class="pt" cx="296" cy="46" r="4.5"/>
+            <text class="lbl" x="12" y="108">LIMA</text><text class="lbl" x="308" y="72" text-anchor="end">PARIS 15E</text>
+            <g class="plane"><path d="M9 0 4.5-1.3-1-1.4-6-7.5H-8.6L-4.6-1.5-9-1.6-11.2-4.4H-12.8L-11.4 0-12.8 4.4H-11.2L-9 1.6-4.6 1.5-8.6 7.5H-6L-1 1.4 4.5 1.3Z"/><animateMotion id="routeFly" dur="2.4s" begin="indefinite" fill="freeze" rotate="auto" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines=".45 0 .25 1"><mpath href="#routeArc"/></animateMotion></g>
+          </svg>
+          <div class="route-stats">
+            <div><b id="routeKm">10 254</b><span>km</span></div>
+            <div><b>0</b><span data-i18n="route.plane">avion</span></div>
+            <div><b>30 s</b><span data-i18n="route.book">pour réserver</span></div>
+          </div>
+        </div>
         <div class="badges-line">
           <span class="pill"><svg><use href="#i-leaf"/></svg><span data-i18n="concept.veg">Option végétarienne</span></span>
           <span class="pill"><svg><use href="#i-users"/></svg><span data-i18n="concept.groups">Groupes bienvenus</span></span>
         </div>
       </div>
       <div class="collage rv">
-        <img class="big" src="img/comptoir/chefs.webp" alt="Les chefs du Comptoir du Pérou derrière le comptoir" data-i18n-alt="concept.altChefs" loading="lazy">
-        <img class="small" src="img/comptoir/ceviche-classique.webp" srcset="img/comptoir/ceviche-classique-800.webp 800w, img/comptoir/ceviche-classique.webp 1400w" sizes="(min-width:900px) 270px, 45vw" alt="" loading="lazy">
+        <img class="big" src="img/comptoir/chefs.webp" srcset="img/comptoir/chefs-800.webp 800w, img/comptoir/chefs-1400.webp 1400w, img/comptoir/chefs.webp 2000w" sizes="(min-width:900px) 560px, 92vw" alt="Les chefs du Comptoir du Pérou derrière le comptoir" data-i18n-alt="concept.altChefs" loading="lazy">
+        <img class="small" src="img/comptoir/ceviche-classique.webp" srcset="img/comptoir/ceviche-classique-800.webp 800w, img/comptoir/ceviche-classique-1400.webp 1400w, img/comptoir/ceviche-classique.webp 2000w" sizes="(min-width:900px) 270px, 45vw" alt="" loading="lazy">
         <div class="sticker"><div><span data-i18n="concept.since">Depuis</span><b>2019</b><small>con cariño</small></div></div>
       </div>
     </div>
@@ -618,18 +684,18 @@ dialog.lb button svg{width:24px;height:24px}
       <a class="btn btn-ig" href="https://www.instagram.com/lecomptoirduperou/" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg>@lecomptoirduperou</a>
     </div>
     <div class="grid-g rv" id="grid">
-      <button class="tall"><img src="img/comptoir/ceviche-charbon.webp" srcset="img/comptoir/ceviche-charbon-800.webp 800w, img/comptoir/ceviche-charbon.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Ceviche au charbon, maïs grillé et crème d'ají" loading="lazy"></button>
-      <button><img src="img/comptoir/salle-tableaux.webp" srcset="img/comptoir/salle-tableaux-800.webp 800w, img/comptoir/salle-tableaux.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="La salle et ses portraits péruviens" loading="lazy"></button>
-      <button><img src="img/comptoir/pisco-sour.webp" srcset="img/comptoir/pisco-sour-800.webp 800w, img/comptoir/pisco-sour.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Deux pisco sours au comptoir" loading="lazy"></button>
-      <button class="wide"><img src="img/comptoir/facade-terrasse.webp" srcset="img/comptoir/facade-terrasse-800.webp 800w, img/comptoir/facade-terrasse.webp 1400w" sizes="(min-width:768px) 50vw, 100vw" alt="La façade verte et la terrasse, rue de la Croix-Nivert" loading="lazy"></button>
-      <button><img src="img/comptoir/dressage-causa.webp" srcset="img/comptoir/dressage-causa-800.webp 800w, img/comptoir/dressage-causa.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Dressage d'une causa en cuisine" loading="lazy"></button>
-      <button class="tall"><img src="img/comptoir/ceviche-salade.webp" srcset="img/comptoir/ceviche-salade-800.webp 800w, img/comptoir/ceviche-salade.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Ceviche aux agrumes et jeunes pousses" loading="lazy"></button>
-      <button><img src="img/comptoir/tacos-thon.webp" srcset="img/comptoir/tacos-thon-800.webp 800w, img/comptoir/tacos-thon.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Tacos de thon" loading="lazy"></button>
-      <button><img src="img/comptoir/salle-comptoir.webp" srcset="img/comptoir/salle-comptoir-800.webp 800w, img/comptoir/salle-comptoir.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Le comptoir et la salle" loading="lazy"></button>
-      <button class="wide"><img src="img/comptoir/ceviche-agrumes.webp" srcset="img/comptoir/ceviche-agrumes-800.webp 800w, img/comptoir/ceviche-agrumes.webp 1400w" sizes="(min-width:768px) 50vw, 100vw" alt="Ceviche aux agrumes, kiwi et maïs grillé" loading="lazy"></button>
-      <button><img src="img/comptoir/vins-primeurs.webp" srcset="img/comptoir/vins-primeurs-800.webp 800w, img/comptoir/vins-primeurs.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Vins et produits frais" loading="lazy"></button>
-      <button><img src="img/comptoir/salle-soir.webp" srcset="img/comptoir/salle-soir-800.webp 800w, img/comptoir/salle-soir.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="La salle un soir de service" loading="lazy"></button>
-      <button><img src="img/comptoir/salle-bar.webp" srcset="img/comptoir/salle-bar-800.webp 800w, img/comptoir/salle-bar.webp 1400w" sizes="(min-width:768px) 25vw, 50vw" alt="Tables dressées près du bar" loading="lazy"></button>
+      <button class="tall"><img src="img/comptoir/ceviche-charbon.webp" srcset="img/comptoir/ceviche-charbon-800.webp 800w, img/comptoir/ceviche-charbon-1400.webp 1400w, img/comptoir/ceviche-charbon.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="Ceviche au charbon, maïs grillé et crème d'ají" loading="lazy"></button>
+      <button><img src="img/comptoir/salle-tableaux.webp" srcset="img/comptoir/salle-tableaux-800.webp 800w, img/comptoir/salle-tableaux-1400.webp 1400w, img/comptoir/salle-tableaux.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="La salle et ses portraits péruviens" loading="lazy"></button>
+      <button><img src="img/comptoir/pisco-sour.webp" srcset="img/comptoir/pisco-sour-800.webp 800w, img/comptoir/pisco-sour-1400.webp 1400w, img/comptoir/pisco-sour.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="Deux pisco sours au comptoir" loading="lazy"></button>
+      <button class="wide"><img src="img/comptoir/facade-terrasse.webp" srcset="img/comptoir/facade-terrasse-800.webp 800w, img/comptoir/facade-terrasse-1400.webp 1400w, img/comptoir/facade-terrasse.webp 2000w" sizes="(min-width:768px) 50vw, 100vw" alt="La façade verte et la terrasse, rue de la Croix-Nivert" loading="lazy"></button>
+      <button><img src="img/comptoir/dressage-causa.webp" srcset="img/comptoir/dressage-causa-800.webp 800w, img/comptoir/dressage-causa-1400.webp 1400w, img/comptoir/dressage-causa.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="Dressage d'une causa en cuisine" loading="lazy"></button>
+      <button class="tall"><img src="img/comptoir/ceviche-salade.webp" srcset="img/comptoir/ceviche-salade-800.webp 800w, img/comptoir/ceviche-salade-1400.webp 1400w, img/comptoir/ceviche-salade.webp 1920w" sizes="(min-width:768px) 25vw, 50vw" alt="Ceviche aux agrumes et jeunes pousses" loading="lazy"></button>
+      <button><img src="img/comptoir/tacos-thon.webp" srcset="img/comptoir/tacos-thon-800.webp 800w, img/comptoir/tacos-thon-1400.webp 1400w, img/comptoir/tacos-thon.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="Tacos de thon" loading="lazy"></button>
+      <button><img src="img/comptoir/salle-claire.webp" srcset="img/comptoir/salle-claire-800.webp 800w, img/comptoir/salle-claire-1400.webp 1400w, img/comptoir/salle-claire.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="La salle, côté comptoir" loading="lazy"></button>
+      <button class="wide"><img src="img/comptoir/ceviche-agrumes.webp" srcset="img/comptoir/ceviche-agrumes-800.webp 800w, img/comptoir/ceviche-agrumes-1400.webp 1400w, img/comptoir/ceviche-agrumes.webp 1600w" sizes="(min-width:768px) 50vw, 100vw" alt="Ceviche aux agrumes, kiwi et maïs grillé" loading="lazy"></button>
+      <button><img src="img/comptoir/vins-primeurs.webp" srcset="img/comptoir/vins-primeurs-800.webp 800w, img/comptoir/vins-primeurs-1400.webp 1400w, img/comptoir/vins-primeurs.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="Vins et produits frais" loading="lazy"></button>
+      <button><img src="img/comptoir/salle-soir.webp" srcset="img/comptoir/salle-soir-800.webp 800w, img/comptoir/salle-soir-1400.webp 1400w, img/comptoir/salle-soir.webp 2000w" sizes="(min-width:768px) 25vw, 50vw" alt="La salle un soir de service" loading="lazy"></button>
+      <button><img src="img/comptoir/salle-bar.webp" srcset="img/comptoir/salle-bar-800.webp 800w, img/comptoir/salle-bar-1400.webp 1400w, img/comptoir/salle-bar.webp 1600w" sizes="(min-width:768px) 25vw, 50vw" alt="Tables dressées près du bar" loading="lazy"></button>
     </div>
   </div>
 </section>
@@ -703,7 +769,7 @@ dialog.lb button svg{width:24px;height:24px}
         <div class="item"><span class="ic"><svg><use href="#i-ig"/></svg></span><div><small>Instagram</small><a href="https://www.instagram.com/lecomptoirduperou/" target="_blank" rel="noopener">@lecomptoirduperou</a></div></div>
       </div>
       <div class="terr rv">
-        <img src="img/comptoir/terrasse-soir.webp" alt="La petite terrasse du Comptoir du Pérou un soir d'été" data-i18n-alt="i.terrAlt" loading="lazy">
+        <img src="img/comptoir/terrasse-soir.webp" srcset="img/comptoir/terrasse-soir-800.webp 800w, img/comptoir/terrasse-soir-1400.webp 1400w, img/comptoir/terrasse-soir.webp 2000w" sizes="(min-width:900px) 360px, 92vw" alt="La petite terrasse du Comptoir du Pérou un soir d'été" data-i18n-alt="i.terrAlt" loading="lazy">
         <h3 data-i18n="i.terr">La petite terrasse</h3>
         <p data-i18n="i.terrD">Quelques tables dehors aux beaux jours, pour un ceviche au soleil ou un pisco en fin de journée.</p>
         <a class="btn btn-ink" href="#reserver" style="margin-top:18px"><svg><use href="#i-cal"/></svg><span data-i18n="cta.bookTable">Réserver une table</span></a>
@@ -711,7 +777,7 @@ dialog.lb button svg{width:24px;height:24px}
     </div>
   </div>
   <div class="map" id="map">
-    <img class="bg" src="img/comptoir/facade-terrasse-800.webp" srcset="img/comptoir/facade-terrasse-800.webp 800w, img/comptoir/facade-terrasse.webp 1032w" sizes="100vw" alt="" loading="lazy">
+    <img class="bg" src="img/comptoir/facade-terrasse-1400.webp" srcset="img/comptoir/facade-terrasse-800.webp 800w, img/comptoir/facade-terrasse-1400.webp 1400w, img/comptoir/facade-terrasse.webp 2000w" sizes="100vw" alt="" loading="lazy">
     <div class="map-ui">
       <p style="margin:0"><b>41 rue de la Croix-Nivert</b><span>75015 Paris · Cambronne (6) · La Motte-Picquet – Grenelle (6, 8, 10)</span></p>
       <div class="btns">
@@ -748,7 +814,15 @@ dialog.lb button svg{width:24px;height:24px}
 <a class="wa" href="#" data-wa target="_blank" rel="noopener" data-i18n-aria="wa.aria" aria-label="Réserver sur WhatsApp"><svg><use href="#i-wa"/></svg><span data-i18n="cta.book">Réserver</span></a>
 <div class="demo"><i></i><span data-i18n="demo">Proposition · Crow Agency</span></div>
 
-<dialog class="lb" id="lb"><button type="button" id="lbClose" data-i18n-aria="nav.close"><svg><use href="#i-x"/></svg></button><img alt=""></dialog>
+<dialog class="st" id="st" aria-label="Le Comptoir du Pérou">
+  <div class="st-stage" tabindex="-1" autofocus><img class="st-blur" alt="" aria-hidden="true"><img class="st-img" alt=""></div>
+  <div class="st-bars" id="stBars"></div>
+  <div class="st-top"><span class="st-brand"><svg><use href="#logo"/></svg>Le Comptoir du Pérou</span><button type="button" class="st-x" id="stClose" data-i18n-aria="nav.close"><svg><use href="#i-x"/></svg></button></div>
+  <button class="st-nav st-prev" type="button" data-i18n-aria="st.prev" aria-label="Précédente"></button>
+  <button class="st-nav st-next" type="button" data-i18n-aria="st.next" aria-label="Suivante"></button>
+  <div class="st-foot"><p class="st-cap" id="stCap"></p><a class="btn btn-gold" href="#reserver" id="stBook"><svg><use href="#i-cal"/></svg><span data-i18n="cta.bookTable">Réserver une table</span></a></div>
+</dialog>
+<div class="peek" id="peek" aria-hidden="true"><img alt=""></div>
 
 <script>
 (function(){
@@ -787,7 +861,7 @@ fr:{
  "ok.open":"Ouvrir WhatsApp","ok.again":"Nouvelle réservation",
  "wa.book":"Bonjour ! Je souhaite réserver une table.\nDate : {date}\nHeure : {time}\nPersonnes : {n}\nNom : {name}\nTél : {tel}",
  "wa":"Bonjour ! Je souhaite réserver une table.","wa.aria":"Réserver sur WhatsApp",
- "f.errTel":"Vérifiez le numéro de téléphone.","ok.cal":"Ajouter à mon agenda","ics.title":"Table au Comptoir du Pérou ({n} pers.) · à confirmer","ics.desc":"Demande envoyée par WhatsApp au 07 63 94 83 49. Le restaurant vous confirme la table.","i.showMap":"Afficher la carte","i.mapNote":"La carte Google ne se charge que si vous la demandez.","f.other":"Autre date","f.today":"Auj.","f.tomorrow":"Demain","f.recap":"{date} · {time} · {n} pers.",
+ "cta.lunch":"Réserver pour ce midi","cta.tonight":"Réserver pour ce soir","cta.tomorrow":"Réserver pour demain","cta.day":"Réserver pour {d}","route.aria":"De Lima à Paris 15e : 10 254 km, zéro avion","route.plane":"avion","route.book":"pour réserver","dish.photo":"Voir la photo","st.prev":"Photo précédente","st.next":"Photo suivante","f.errTel":"Vérifiez le numéro de téléphone.","ok.cal":"Ajouter à mon agenda","ics.title":"Table au Comptoir du Pérou ({n} pers.) · à confirmer","ics.desc":"Demande envoyée par WhatsApp au 07 63 94 83 49. Le restaurant vous confirme la table.","i.showMap":"Afficher la carte","i.mapNote":"La carte Google ne se charge que si vous la demandez.","f.other":"Autre date","f.today":"Auj.","f.tomorrow":"Demain","f.recap":"{date} · {time} · {n} pers.",
  "must.title":"Les incontournables","must.hint":"Glissez →","r.all":"Lire les 710 avis sur Google",
  "q.kicker":"Bon à savoir","q.title":"Vos <em>questions</em>",
  "q1.q":"Faut-il réserver ?","q1.a":"C'est plus sûr le soir et le week-end. Réservez en 30 secondes avec le formulaire, ou appelez-nous au 07 63 94 83 49.",
@@ -835,7 +909,7 @@ en:{
  "ok.open":"Open WhatsApp","ok.again":"New booking",
  "wa.book":"Hello! I'd like to book a table.\nDate: {date}\nTime: {time}\nGuests: {n}\nName: {name}\nPhone: {tel}",
  "wa":"Hello! I'd like to book a table.","wa.aria":"Book on WhatsApp",
- "f.errTel":"Please check the phone number.","ok.cal":"Add to my calendar","ics.title":"Table at Le Comptoir du Pérou ({n} guests) · to be confirmed","ics.desc":"Request sent on WhatsApp to +33 7 63 94 83 49. The restaurant will confirm your table.","i.showMap":"Show the map","i.mapNote":"The Google map only loads if you ask for it.","f.other":"Other date","f.today":"Today","f.tomorrow":"Tomorrow","f.recap":"{date} · {time} · {n} guests",
+ "cta.lunch":"Book for lunch today","cta.tonight":"Book for tonight","cta.tomorrow":"Book for tomorrow","cta.day":"Book for {d}","route.aria":"From Lima to Paris 15th: 10,254 km, zero flights","route.plane":"flights","route.book":"to book","dish.photo":"See the photo","st.prev":"Previous photo","st.next":"Next photo","f.errTel":"Please check the phone number.","ok.cal":"Add to my calendar","ics.title":"Table at Le Comptoir du Pérou ({n} guests) · to be confirmed","ics.desc":"Request sent on WhatsApp to +33 7 63 94 83 49. The restaurant will confirm your table.","i.showMap":"Show the map","i.mapNote":"The Google map only loads if you ask for it.","f.other":"Other date","f.today":"Today","f.tomorrow":"Tomorrow","f.recap":"{date} · {time} · {n} guests",
  "must.title":"Must-tries","must.hint":"Swipe →","r.all":"Read all 710 reviews on Google",
  "q.kicker":"Good to know","q.title":"Your <em>questions</em>",
  "q1.q":"Do I need to book?","q1.a":"It's safer in the evening and at weekends. Book in 30 seconds with the form, or call us on +33 7 63 94 83 49.",
@@ -883,7 +957,7 @@ es:{
  "ok.open":"Abrir WhatsApp","ok.again":"Nueva reserva",
  "wa.book":"¡Hola! Quisiera reservar una mesa.\nFecha: {date}\nHora: {time}\nPersonas: {n}\nNombre: {name}\nTel: {tel}",
  "wa":"¡Hola! Quisiera reservar una mesa.","wa.aria":"Reservar por WhatsApp",
- "f.errTel":"Revisa el número de teléfono.","ok.cal":"Agregar a mi calendario","ics.title":"Mesa en Le Comptoir du Pérou ({n} pers.) · por confirmar","ics.desc":"Solicitud enviada por WhatsApp al +33 7 63 94 83 49. El restaurante te confirma la mesa.","i.showMap":"Ver el mapa","i.mapNote":"El mapa de Google solo se carga si lo pides.","f.other":"Otra fecha","f.today":"Hoy","f.tomorrow":"Mañana","f.recap":"{date} · {time} · {n} pers.",
+ "cta.lunch":"Reservar para hoy al mediodía","cta.tonight":"Reservar para esta noche","cta.tomorrow":"Reservar para mañana","cta.day":"Reservar para el {d}","route.aria":"De Lima a París 15: 10 254 km, cero aviones","route.plane":"aviones","route.book":"para reservar","dish.photo":"Ver la foto","st.prev":"Foto anterior","st.next":"Foto siguiente","f.errTel":"Revisa el número de teléfono.","ok.cal":"Agregar a mi calendario","ics.title":"Mesa en Le Comptoir du Pérou ({n} pers.) · por confirmar","ics.desc":"Solicitud enviada por WhatsApp al +33 7 63 94 83 49. El restaurante te confirma la mesa.","i.showMap":"Ver el mapa","i.mapNote":"El mapa de Google solo se carga si lo pides.","f.other":"Otra fecha","f.today":"Hoy","f.tomorrow":"Mañana","f.recap":"{date} · {time} · {n} pers.",
  "must.title":"Los imprescindibles","must.hint":"Desliza →","r.all":"Leer las 710 reseñas en Google",
  "q.kicker":"Bueno saberlo","q.title":"Tus <em>preguntas</em>",
  "q1.q":"¿Hay que reservar?","q1.a":"Es lo más seguro por la noche y el fin de semana. Reserva en 30 segundos con el formulario o llámanos al +33 7 63 94 83 49.",
@@ -906,7 +980,10 @@ es:{
 
 /* ---------------- carte ---------------- */
 var IMG = {entrees:"causa-thon", ceviches:"ceviche-classique", plats:"poke-bowl", cocktails:"pisco-sour"};
-function imgAttrs(name,sizes,alt){return {src:"img/comptoir/"+name+".webp",srcset:"img/comptoir/"+name+"-800.webp 800w, img/comptoir/"+name+".webp 1400w",sizes:sizes,alt:alt,loading:"lazy"};}
+// chaque photo existe en 800, 1400 et 2000 px (amplifiées par Real-ESRGAN) : le navigateur prend celle qui suffit
+var FULL={"salle-bar":1600,"ceviche-agrumes":1600,"ceviche-salade":1920};
+function srcsetOf(n){return "img/comptoir/"+n+"-800.webp 800w, img/comptoir/"+n+"-1400.webp 1400w, img/comptoir/"+n+".webp "+(FULL[n]||2000)+"w";}
+function imgAttrs(name,sizes,alt){return {src:"img/comptoir/"+name+".webp",srcset:srcsetOf(name),sizes:sizes,alt:alt,loading:"lazy"};}
 function D(fr,en,es){return {fr:fr,en:en,es:es};}
 var CAUSA = D("Purée de pomme de terre jaune citronnée","Lime-seasoned yellow potato mash","Masa de papa amarilla con limón");
 var MENU = [
@@ -914,12 +991,12 @@ var MENU = [
   {n:"Pulpo al carbón", p:15, d:D("Poulpe grillé au charbon.","Charcoal-grilled octopus.","Pulpo a la brasa.")},
   {n:"Pulpo al olivo", p:13, d:D("Poulpe, crème d'olive noire.","Octopus, black olive cream.","Pulpo en crema de aceituna.")},
   {n:"Causa de palta y camarones", p:12, d:D(CAUSA.fr+", avocat et crevettes.",CAUSA.en+", avocado and prawns.",CAUSA.es+", palta y camarones.")},
-  {n:"Causa de atún", p:11, d:D(CAUSA.fr+" et thon.",CAUSA.en+" with tuna.",CAUSA.es+" y atún.")},
-  {n:"Tacos de atún", p:12},
+  {n:"Causa de atún", p:11, img:"causa-thon", d:D(CAUSA.fr+" et thon.",CAUSA.en+" with tuna.",CAUSA.es+" y atún.")},
+  {n:"Tacos de atún", p:12, img:"tacos-thon"},
   {n:"Velouté Kantuta", p:9}
  ]},
  {id:"ceviches", name:D("Ceviches","Ceviches","Ceviches"), img:"ceviches", intro:D("Poisson cru mariné minute au citron vert : le plat national du Pérou.","Raw fish cured to order in lime juice: Peru's national dish.","Pescado crudo marinado al momento en limón: el plato bandera del Perú."), items:[
-  {n:"Ceviche clásico", p:15},
+  {n:"Ceviche clásico", p:15, img:"ceviche-classique"},
   {n:"Ceviche fresa salvaje", p:16},
   {n:"Ceviche aux 3 piments au charbon", p:17},
   {n:"Ceviche saumon ají amarillo", p:17},
@@ -930,7 +1007,7 @@ var MENU = [
  ]},
  {id:"plats", name:D("Plats","Mains","Platos"), img:"plats", items:[
   {n:"Empanadas de bœuf", p:15},
-  {n:"Poké bowl végétarien avocat", p:15, v:1}
+  {n:"Poké bowl végétarien avocat", p:15, v:1, img:"poke-bowl"}
  ]},
  {id:"desserts", name:D("Desserts","Desserts","Postres"), intro:D("Les douceurs de Lima.","Sweet treats from Lima.","Los dulces de Lima."), items:[
   {n:"Postre del día", p:7, d:D("Le dessert du jour, selon l'humeur du chef.","Dessert of the day, ask us!","Pregunta por el postre del día.")},
@@ -940,7 +1017,7 @@ var MENU = [
   {n:"Marquise au chocolat", p:10}
  ]},
  {id:"cocktails", name:D("Cocktails","Cocktails","Cócteles"), img:"cocktails", intro:D("Le pisco, l'eau-de-vie de raisin du Pérou, dans tous ses états.","Pisco, Peru's grape brandy, every which way.","El pisco, en todas sus formas."), items:[
-  {n:"Pisco sour", p:10, d:D("Pisco, citron vert, blanc d'œuf, angostura.","Pisco, lime, egg white, angostura.","Pisco, limón, clara de huevo, amargo de angostura.")},
+  {n:"Pisco sour", p:10, img:"pisco-sour", d:D("Pisco, citron vert, blanc d'œuf, angostura.","Pisco, lime, egg white, angostura.","Pisco, limón, clara de huevo, amargo de angostura.")},
   {n:"Mojito", p:10},
   {n:"Cuba libre", p:10},
   {n:"Chilcano", p:12, d:D("Pisco, ginger ale, citron vert.","Pisco, ginger ale, lime.","Pisco, ginger ale, limón.")},
@@ -991,10 +1068,12 @@ function renderMenu(){
     if(cat.intro)list.appendChild(el("p",{class:"cat-intro",text:L(cat.intro)}));
     var ul=el("ul",{class:"dishes"});
     cat.items.forEach(function(it){
-      var li=el("li",{class:"dish"});
+      var li=el("li",{class:"dish"+(it.img?" has-pic":"")});
+      if(it.img)li.dataset.img=it.img;
       var top=el("div",{class:"dish-top"});
       var name=el("h4",{text:L(it.n)});
       if(it.tag==="fav")name.appendChild(el("span",{class:"b b-fav",text:t("b.fav")}));
+      if(it.img){var pb=el("button",{type:"button",class:"dish-pic","aria-label":t("dish.photo")+" : "+L(it.n)},[svgUse("i-cam")]);(function(it){pb.addEventListener("click",function(){openStories([{img:it.img,cap:L(it.n)+" · "+euro(it.p)}],0);});})(it);name.appendChild(pb);}
       if(it.v){var vb=el("span",{class:"b b-veg"});vb.appendChild(svgUse("i-leaf"));vb.appendChild(document.createTextNode(t("b.veg")));name.appendChild(vb);}
       top.appendChild(name);top.appendChild(el("span",{class:"lead-dots","aria-hidden":"true"}));top.appendChild(el("span",{class:"price",text:euro(it.p)}));
       li.appendChild(top);
@@ -1010,7 +1089,8 @@ function renderMenu(){
 function renderMust(){
   var ul=document.getElementById("must");ul.innerHTML="";
   MUST.forEach(function(m){
-    var pic=el("div",{class:"pic"},[el("img",imgAttrs(m.img,"(min-width:900px) 270px, 70vw",m.n)),el("span",{class:"price-tag",text:euro(m.p)})]);
+    var pic=el("button",{type:"button",class:"pic","aria-label":t("dish.photo")+" : "+m.n},[el("img",imgAttrs(m.img,"(min-width:900px) 270px, 70vw",m.n)),el("span",{class:"price-tag",text:euro(m.p)})]);
+    pic.addEventListener("click",function(){openStories(MUST.map(function(x){return {img:x.img,cap:x.n+" · "+euro(x.p)};}),MUST.indexOf(m));});
     ul.appendChild(el("li",{},[el("figure",{},[pic,el("figcaption",{},[el("b",{text:m.n}),el("span",{text:L(m.d)})])])]));
   });
 }
@@ -1088,7 +1168,7 @@ function renderSlots(){
   if(!avail.length){box.appendChild(el("p",{class:"notice",text:t("f.full")}));return;}
   [["f.lunch",avail.filter(function(m){return m<960;})],["f.dinner",avail.filter(function(m){return m>=960;})]].forEach(function(g){
     if(!g[1].length)return;
-    var grp=el("div",{class:"slot-group"},[el("small",{text:t(g[0])})]);
+    var grp=el("div",{class:"slot-group","data-group":g[0]==="f.lunch"?"lunch":"dinner"},[el("small",{text:t(g[0])})]);
     var list=el("div",{class:"slot-list"});
     g[1].forEach(function(m){
       var inp=el("input",{type:"radio",name:"slot",value:String(m),"aria-label":slotTime(m)});
@@ -1188,6 +1268,29 @@ function downloadIcs(w){
   setTimeout(function(){URL.revokeObjectURL(url);},4000);
 }
 
+/* ---------------- bouton du hero : ce midi, ce soir ou demain, selon l'heure à Paris ---------------- */
+var heroIntent=null;
+function updateHeroCta(){
+  var n=parisNow(),today=slotsFor(n.iso),label;
+  if(today.some(function(m){return m<960;})){heroIntent={iso:n.iso,group:"lunch"};label=t("cta.lunch");}
+  else if(today.length){heroIntent={iso:n.iso,group:"dinner"};label=t("cta.tonight");}
+  else{
+    var d=n.iso,i=0;while(i<8&&!slotsFor(d=isoAdd(n.iso,++i)).length){}
+    heroIntent={iso:d,group:null};
+    var p=d.split("-").map(Number);
+    label=i===1?t("cta.tomorrow"):fill(t("cta.day"),{d:new Date(p[0],p[1]-1,p[2]).toLocaleDateString(LOC[lang],{weekday:"long"})});
+  }
+  document.querySelector("#heroCta span").textContent=label;
+}
+document.getElementById("heroCta").addEventListener("click",function(){
+  if(!heroIntent)return;
+  bDate.value=heroIntent.iso;onDate();
+  if(heroIntent.group){
+    var g=document.querySelector('.slot-group[data-group="'+heroIntent.group+'"]');
+    if(g){g.classList.remove("hint");void g.offsetWidth;setTimeout(function(){g.classList.add("hint");},500);}
+  }
+});
+
 /* ---------------- whatsapp ---------------- */
 function updateWa(){
   var url=waUrl(t("wa"));
@@ -1202,7 +1305,7 @@ function applyLang(l){
   document.querySelectorAll("[data-i18n-aria]").forEach(function(e){e.setAttribute("aria-label",t(e.dataset.i18nAria));});
   document.querySelectorAll("[data-i18n-alt]").forEach(function(e){e.alt=t(e.dataset.i18nAlt);});
   document.querySelectorAll("[data-lang]").forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.lang===l));});
-  renderMust();renderMenu();renderHours();updateStatus();renderQuick();renderSlots();updateRecap();updateWa();
+  renderMust();renderMenu();renderHours();updateStatus();renderQuick();renderSlots();updateRecap();updateWa();updateHeroCta();
   try{localStorage.setItem("comptoir-lang",l);}catch(_){}
 }
 document.querySelectorAll("[data-lang]").forEach(function(b){b.addEventListener("click",function(){applyLang(b.dataset.lang);});});
@@ -1225,11 +1328,83 @@ document.getElementById("mapLoad").addEventListener("click",function(){
   m.classList.add("on");
 });
 
-/* ---------------- lightbox ---------------- */
-var lb=document.getElementById("lb");
-document.querySelectorAll("#grid button").forEach(function(b){b.addEventListener("click",function(){var i=b.querySelector("img");var big=lb.querySelector("img");big.src=i.src;big.alt=i.alt;if(lb.showModal)lb.showModal();});});
-document.getElementById("lbClose").addEventListener("click",function(){lb.close();});
-lb.addEventListener("click",function(e){if(e.target===lb)lb.close();});
+/* ---------------- visionneuse « stories » ---------------- */
+// 5 s par photo, tap à droite / à gauche, glisser, maintenir pour mettre en pause, glisser vers le bas pour fermer
+var st=document.getElementById("st"),stItems=[],stI=0,stHeld=false,stDown=0;
+var stImg=st.querySelector(".st-img"),stBlur=st.querySelector(".st-blur"),stBars=document.getElementById("stBars");
+function openStories(items,i){
+  stItems=items;stBars.innerHTML="";
+  items.forEach(function(){stBars.appendChild(el("i",{},[el("b")]));});
+  stBars.hidden=items.length<2;
+  if(st.showModal)st.showModal();else st.setAttribute("open","");
+  document.body.style.overflow="hidden";
+  stShow(i||0);
+}
+function stShow(i){
+  if(i<0)i=0;
+  if(i>=stItems.length){st.close();return;}
+  stI=i;var it=stItems[i];
+  stImg.style.animation="none";void stImg.offsetWidth;stImg.style.animation="";
+  stImg.srcset=srcsetOf(it.img);stImg.sizes="(min-width:700px) 470px, 100vw";stImg.src="img/comptoir/"+it.img+".webp";stImg.alt=it.cap;
+  stBlur.src="img/comptoir/"+it.img+"-800.webp";
+  document.getElementById("stCap").textContent=it.cap;
+  [].forEach.call(stBars.children,function(bar,k){
+    bar.className=k<i?"done":"";
+    var b=bar.firstChild,nb=el("b");bar.replaceChild(nb,b);
+    if(k===i&&stItems.length>1){bar.className="now";nb.addEventListener("animationend",function(){if(st.open)stShow(stI+1);});}
+  });
+  if(stItems[i+1]){var pre=new Image();pre.srcset=srcsetOf(stItems[i+1].img);pre.sizes=stImg.sizes;}
+}
+st.querySelector(".st-prev").addEventListener("click",function(){if(!stHeld)stShow(stI-1);});
+st.querySelector(".st-next").addEventListener("click",function(){if(!stHeld)stShow(stI+1);});
+document.getElementById("stClose").addEventListener("click",function(){st.close();});
+document.getElementById("stBook").addEventListener("click",function(){st.close();});
+st.addEventListener("close",function(){document.body.style.overflow="";st.classList.remove("paused");});
+st.addEventListener("keydown",function(e){if(e.key==="ArrowRight")stShow(stI+1);if(e.key==="ArrowLeft")stShow(stI-1);});
+st.addEventListener("pointerdown",function(e){if(e.target.closest(".st-foot,.st-top"))return;stDown=Date.now();stHeld=false;st.classList.add("paused");});
+st.addEventListener("pointerup",function(){if(stDown&&Date.now()-stDown>260)stHeld=true;stDown=0;st.classList.remove("paused");setTimeout(function(){stHeld=false;},0);});
+var stTouch=null;
+st.addEventListener("touchstart",function(e){var t0=e.touches[0];stTouch={x:t0.clientX,y:t0.clientY};},{passive:true});
+st.addEventListener("touchend",function(e){
+  if(!stTouch)return;var t1=e.changedTouches[0],dx=t1.clientX-stTouch.x,dy=t1.clientY-stTouch.y;stTouch=null;
+  if(dy>90&&Math.abs(dx)<60){st.close();return;}
+  if(Math.abs(dx)>50&&Math.abs(dy)<60){stHeld=true;stShow(stI+(dx<0?1:-1));setTimeout(function(){stHeld=false;},0);}
+});
+var galleryItems=[].map.call(document.querySelectorAll("#grid img"),function(i){return {img:i.getAttribute("src").replace(/^img\/comptoir\/|\.webp$/g,""),cap:i.alt};});
+document.querySelectorAll("#grid button").forEach(function(b,k){b.addEventListener("click",function(){openStories(galleryItems,k);});});
+
+/* ---------------- aperçu des plats au survol (souris uniquement) ---------------- */
+var peek=document.getElementById("peek"),canHover=window.matchMedia&&matchMedia("(hover:hover) and (pointer:fine)").matches;
+document.getElementById("menuBody").addEventListener("mouseover",function(e){
+  if(!canHover)return;var li=e.target.closest(".dish.has-pic");if(!li)return;
+  var n=li.dataset.img,img=peek.firstChild;
+  if(img.dataset.n!==n){img.dataset.n=n;img.srcset=srcsetOf(n);img.sizes="210px";img.src="img/comptoir/"+n+"-800.webp";}
+  peek.classList.add("on");
+});
+document.getElementById("menuBody").addEventListener("mouseout",function(e){var li=e.target.closest(".dish.has-pic");if(li&&!li.contains(e.relatedTarget))peek.classList.remove("on");});
+document.getElementById("menuBody").addEventListener("mousemove",function(e){
+  if(!peek.classList.contains("on"))return;
+  var li=e.target.closest(".dish"),left=li?li.getBoundingClientRect().left:e.clientX;
+  var x=left>260?left-232:Math.min(e.clientX+28,innerWidth-230),y=Math.max(12,Math.min(e.clientY-150,innerHeight-280));
+  peek.style.left=x+"px";peek.style.top=y+"px";
+});
+
+/* ---------------- Lima → Paris : l'avion part quand la carte est à l'écran ---------------- */
+(function(){
+  var r=document.getElementById("route"),arc=document.getElementById("routeArc"),km=document.getElementById("routeKm");
+  var len=Math.ceil(arc.getTotalLength());r.style.setProperty("--len",len);
+  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
+  function fly(){
+    r.classList.add("go");
+    var fl=document.getElementById("routeFly");if(reduce)fl.setAttribute("dur","0.01s");if(fl.beginElement)fl.beginElement();
+    if(reduce)return;
+    var t0=performance.now();
+    (function tick(now){var k=Math.min(1,(now-t0)/2400),e=1-Math.pow(1-k,3);km.textContent=Math.round(10254*e).toLocaleString(LOC[lang]);if(k<1)requestAnimationFrame(tick);})(t0);
+  }
+  if(!("IntersectionObserver" in window)){fly();return;}
+  var io=new IntersectionObserver(function(es){if(es[0].isIntersecting){io.disconnect();setTimeout(fly,250);}},{threshold:.6});
+  io.observe(r);
+})();
 
 /* le bouton flottant s'efface quand le formulaire est à l'écran */
 var waFloat=document.querySelector(".wa");
@@ -1245,7 +1420,7 @@ if("IntersectionObserver" in window){
 initDates();setPeople(2);
 var saved=null;try{saved=localStorage.getItem("comptoir-lang");}catch(_){}
 applyLang(saved||"fr");
-setInterval(updateStatus,60000);
+setInterval(function(){updateStatus();updateHeroCta();},60000);
 })();
 </script>
 </body>

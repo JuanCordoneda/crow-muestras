@@ -63,6 +63,8 @@
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip;scroll-behavior:smooth}
 body{margin:0;min-width:320px;background:var(--paper);overflow-x:clip;line-height:1.5}
 img{max-width:100%}
+/* Las fotos con AVIF van en un <picture>: que no rompa ningún `.algo > img` ni ningún `object-fit`. */
+picture{display:contents}
 h1,h2,h3,h4{margin:0;line-height:1.15}
 p{margin:0}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}

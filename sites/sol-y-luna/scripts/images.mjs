@@ -9,16 +9,19 @@ import { execFile } from 'node:child_process'
 import { join, extname, basename, dirname, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { promisify } from 'node:util'
+import sharp from 'sharp'
 
 const run = promisify(execFile)
 const root = fileURLToPath(new URL('../public', import.meta.url))
 /**
  * Anchuras que de verdad se piden en la web: 240 para las miniaturas de la carta, 480 para el
  * móvil normal, 720 para las tarjetas de especialidades en pantallas densas, 900 para los bloques
- * a media pantalla y 1200 para la foto ancha en un móvil de tres puntos por píxel.
+ * a media pantalla, 1200 para la foto ancha en un móvil de tres puntos por píxel y 1600 para una
+ * tablet o media pantalla de un portátil retina. Por debajo de esa calidad, las fotos se veían
+ * empastadas en los móviles buenos.
  */
-const WIDTHS = [240, 480, 720, 900, 1200]
-const QUALITY = { 240: 62, 480: 68, 720: 72, 900: 74, 1200: 74 }
+const WIDTHS = [240, 480, 720, 900, 1200, 1600]
+const QUALITY = { 240: 70, 480: 74, 720: 76, 900: 78, 1200: 78, 1600: 80 }
 
 const walk = async (dir) => {
   const out = []
@@ -42,6 +45,19 @@ const isSource = (file) => {
 const pixelWidth = async (file) => {
   const { stdout } = await run('sips', ['-g', 'pixelWidth', file]).catch(() => ({ stdout: '' }))
   return Number(stdout.match(/pixelWidth:\s*(\d+)/)?.[1]) || 0
+}
+
+/**
+ * Difuminado de carga: la foto a 24 px, desenfocada en un SVG. Va dentro del manifiesto (unos
+ * 600 bytes por foto) y se pinta de fondo mientras llega la buena: nunca se ve un hueco gris ni una
+ * foto que aparece a trozos. Solo para las fotos del grupo, que son las que se ven grandes.
+ */
+const blur = async (file) => {
+  const { data, info } = await sharp(file).resize(24).webp({ quality: 50 }).toBuffer({ resolveWithObject: true })
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 ${info.width} ${info.height}' preserveAspectRatio='none'>` +
+    `<filter id='b' color-interpolation-filters='sRGB'><feGaussianBlur stdDeviation='1.2'/><feComponentTransfer><feFuncA type='discrete' tableValues='1 1'/></feComponentTransfer></filter>` +
+    `<image width='100%' height='100%' preserveAspectRatio='none' filter='url(#b)' href='data:image/webp;base64,${data.toString('base64')}'/></svg>`
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
 }
 
 async function main() {
@@ -68,14 +84,14 @@ async function main() {
       await mkdir(dirname(out), { recursive: true })
       // `-resize W 0` mantiene la proporción; nunca amplía porque se filtra por ancho abajo.
       if (!existing || existing.mtimeMs < source.mtimeMs) {
-        await run('cwebp', ['-quiet', '-q', String(QUALITY[target]), '-resize', String(target), '0', '-m', '6', file, '-o', out])
+        await run('cwebp', ['-quiet', '-q', String(QUALITY[target]), '-sharp_yuv', '-resize', String(target), '0', '-m', '6', file, '-o', out])
         made++
       }
       variants.push(target)
     }
     if (variants.length) {
       const url = '/' + file.slice(root.length + 1).split(sep).join('/')
-      manifest[url] = { w: original, sizes: variants }
+      manifest[url] = { w: original, sizes: variants, ...(url.startsWith('/img/grupo/') ? { blur: await blur(file) } : {}) }
     }
   }
 
@@ -83,8 +99,8 @@ async function main() {
   await writeFile(
     fileURLToPath(new URL('../src/shared/photo-variants.ts', import.meta.url)),
     '/** Generado por `npm run images`. No editar a mano. */\n' +
-      'export const PHOTO_VARIANTS: Record<string, { w: number; sizes: number[] }> = {\n' +
-      entries.map(([url, info]) => `  '${url}': { w: ${info.w}, sizes: [${info.sizes.join(', ')}] },`).join('\n') +
+      'export const PHOTO_VARIANTS: Record<string, { w: number; sizes: number[]; blur?: string }> = {\n' +
+      entries.map(([url, info]) => `  '${url}': { w: ${info.w}, sizes: [${info.sizes.join(', ')}]${info.blur ? `, blur: ${JSON.stringify(info.blur)}` : ''} },`).join('\n') +
       '\n}\n',
   )
   console.log(`[images] ${made} variantes generadas, ${skipped} omitidas, ${entries.length} fotos en el manifiesto.`)

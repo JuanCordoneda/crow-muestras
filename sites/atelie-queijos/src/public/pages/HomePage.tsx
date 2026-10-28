@@ -1,8 +1,7 @@
 import './home.css'
 import { useState, type ReactNode } from 'react'
 import { ArrowUpRight, BookOpen, Briefcase, CalendarDays, Check, ChevronDown, Clock, Croissant, Euro, Expand, Globe, Instagram, Footprints, Gift, Grape, Layers, Minus, PartyPopper, Plus, Quote, Slice, Sparkles, Users, UtensilsCrossed, Wine } from 'lucide-react'
-import { Photo } from '../../shared/components/Photo'
-import { Lightbox, type GalleryPhoto } from '../../shared/components/Lightbox'
+import { Photo, avifSetFor, srcSetFor } from '../../shared/components/Photo'
 import { cx } from '../../shared/utils'
 import { ATELIE, nextOpenSession, sessionId, upcomingSessions } from '../agenda'
 import { BUSINESS, SHOW_TEXT_TODO, whatsappUrl } from '../business'
@@ -11,14 +10,18 @@ import { useSite } from '../site'
 import { BookingForm } from '../components/BookingForm'
 import { CheeseBoard, VerifiedBadge, VineLeaf, WhatsAppIcon } from '../components/Brand'
 import { Figure, TodoTag } from '../components/Figure'
+import { Stories } from '../components/Stories'
+import { CheeseQuiz } from '../components/CheeseQuiz'
+import { PHOTOS, atelierStories } from '../photos'
 
-/** Las fotos del ateliê, sacadas del artículo de parisabor.com (enero de 2025). */
-const PHOTOS = {
-  hero: '/img/atelie/tabua-queijos.webp',
-  table: '/img/atelie/mesa-atelie.webp',
-  board: '/img/atelie/tabua-paes-queijos.webp',
-  janaina: '/img/atelie/janaina-pedroza.webp',
-}
+/**
+ * El héroe con dos encuadres. En el móvil, el 1:2 cubre una pantalla alta: en un teléfono de 19,5:9
+ * se ve a media altura de pantalla de ancho (55vh), no a 100vw, y eso es lo que se le dice al
+ * navegador para que baje una versión lo bastante grande. En escritorio la foto ocupa media pantalla.
+ */
+const HERO_SIZES_MOBILE = '(max-aspect-ratio: 1/2) 55vh, 100vw'
+const HERO_SIZES_DESKTOP = '52vw'
+const HERO_MOBILE = '(max-width: 899px)'
 
 const LIVE_ICONS = [Layers, Slice, Grape, UtensilsCrossed]
 const GROUP_ICONS = [Briefcase, PartyPopper, Wine]
@@ -39,13 +42,9 @@ export function HomePage() {
   const sessions = upcomingSessions()
   const next = nextOpenSession()
   const [giftPeople, setGiftPeople] = useState(2)
-  /** La foto abierta a pantalla completa (-1: ninguna). */
-  const [photo, setPhoto] = useState(-1)
-  const gallery: GalleryPhoto[] = [
-    { id: 'tabua', src: PHOTOS.hero, caption: t.hero.photoAlt },
-    { id: 'mesa', src: PHOTOS.table, caption: t.live.photoAlt },
-    { id: 'paes', src: PHOTOS.board, caption: t.live.photoAlt2 },
-  ]
+  /** La story abierta (-1: ninguna). */
+  const [story, setStory] = useState(-1)
+  const stories = atelierStories(t)
   const followers = compactCount(BUSINESS.followers, lang)
 
   return (
@@ -53,15 +52,31 @@ export function HomePage() {
       {/* ---------- héroe ---------- */}
       <section className="hero" aria-labelledby="hero-title">
         <div className="hero-media">
-          <Photo className="hero-shot is-on" src={PHOTOS.hero} alt={t.hero.photoAlt} sizes="100vw" priority />
+          <picture>
+            <source media={HERO_MOBILE} type="image/avif" srcSet={avifSetFor(PHOTOS.heroMobile)} sizes={HERO_SIZES_MOBILE} />
+            <source media={HERO_MOBILE} type="image/webp" srcSet={srcSetFor(PHOTOS.heroMobile)} sizes={HERO_SIZES_MOBILE} />
+            <source type="image/avif" srcSet={avifSetFor(PHOTOS.hero)} sizes={HERO_SIZES_DESKTOP} />
+            <img
+              className="hero-shot is-on"
+              src={PHOTOS.hero}
+              srcSet={srcSetFor(PHOTOS.hero)}
+              sizes={HERO_SIZES_DESKTOP}
+              alt={t.hero.photoAlt}
+              width={1440}
+              height={1920}
+              decoding="async"
+              {...{ fetchpriority: 'high' }}
+            />
+          </picture>
         </div>
         <div className="hero-content">
-          <a className="hero-byline" href={BUSINESS.instagram} target="_blank" rel="noopener noreferrer">
-            <img src="/img/atelie/janaina-avatar-240.webp" alt="" width={34} height={34} decoding="async" />
+          {/* Como en Instagram: el avatar con anillo abre las stories del ateliê. */}
+          <button type="button" className="hero-byline" onClick={() => setStory(0)} aria-label={`${t.stories.label} · ${t.hero.byline}`}>
+            <span className="story-ring is-small"><Photo src={PHOTOS.avatar} alt="" sizes="34px" priority /></span>
             <span>{t.hero.byline}</span>
             <VerifiedBadge size={15} label={t.host.verified} />
             <small>{followers}</small>
-          </a>
+          </button>
           <h1 id="hero-title">{t.hero.titleA} <em>{t.hero.titleB}</em></h1>
           <p className="hero-text">{t.hero.text}</p>
           <ul className="hero-chips">
@@ -90,6 +105,16 @@ export function HomePage() {
           <h2 id="live-title">{t.live.title}</h2>
           <p>{t.live.lead}</p>
         </div>
+        <ul className="highlights" aria-label={t.stories.label}>
+          {stories.map((entry, position) => (
+            <li key={entry.src}>
+              <button type="button" onClick={() => setStory(position)}>
+                <span className="story-ring"><Photo src={position === 3 ? PHOTOS.avatar : entry.src} alt="" sizes="72px" /></span>
+                <small>{entry.kicker}</small>
+              </button>
+            </li>
+          ))}
+        </ul>
         <ol className="live-list">
           {t.live.items.map((item, index) => {
             const Icon = LIVE_ICONS[index] ?? Sparkles
@@ -105,15 +130,25 @@ export function HomePage() {
           })}
         </ol>
         <div className="live-photos">
-          <button type="button" className="live-photo is-a" onClick={() => setPhoto(1)} aria-label={`${t.live.gallery}: ${t.live.photoAlt}`}>
+          <button type="button" className="live-photo is-a" onClick={() => setStory(0)} aria-label={`${t.stories.label}: ${t.live.photoAlt}`}>
             <Figure src={PHOTOS.table} alt={t.live.photoAlt} sizes="(min-width: 761px) 30vw, 60vw" />
           </button>
-          <button type="button" className="live-photo is-b" onClick={() => setPhoto(2)} aria-label={`${t.live.gallery}: ${t.live.photoAlt2}`}>
+          <button type="button" className="live-photo is-b" onClick={() => setStory(1)} aria-label={`${t.stories.label}: ${t.live.photoAlt2}`}>
             <Figure src={PHOTOS.board} alt={t.live.photoAlt2} sizes="(min-width: 761px) 24vw, 45vw" />
           </button>
-          <button type="button" className="live-gallery" onClick={() => setPhoto(0)}><Expand size={16} /> {t.live.gallery} · {gallery.length}</button>
+          <button type="button" className="live-gallery" onClick={() => setStory(0)}><Expand size={16} /> {t.stories.label}</button>
         </div>
         <p className="partner-line"><VineLeaf size={22} /> {t.host.partner}</p>
+      </section>
+
+      {/* ---------- quiz ---------- */}
+      <section className="quiz" id="quiz" aria-labelledby="quiz-title">
+        <div className="section-head">
+          <span className="eyebrow">{t.quiz.eyebrow}</span>
+          <h2 id="quiz-title">{t.quiz.title}</h2>
+          <p>{t.quiz.lead}</p>
+        </div>
+        <CheeseQuiz />
       </section>
 
       {/* ---------- com quem ---------- */}
@@ -135,7 +170,7 @@ export function HomePage() {
               <small>{BUSINESS.instagramHandle} <VerifiedBadge size={14} label={t.host.verified} /></small>
             </a>
             <a className="host-card is-post" href={BUSINESS.atelierPost} target="_blank" rel="noopener noreferrer">
-              <span className="host-post-thumb"><img src="/img/atelie/mesa-atelie-240.webp" alt="" width={120} height={160} loading="lazy" decoding="async" /><Instagram size={18} /></span>
+              <span className="host-post-thumb"><Photo src={PHOTOS.table} alt="" sizes="46px" /><Instagram size={18} /></span>
               <span>{t.host.post} <ArrowUpRight size={15} /></span>
               <small>{t.host.postNote}</small>
             </a>
@@ -224,14 +259,14 @@ export function HomePage() {
             </ul>
             <p className="booking-price"><b>{euros(ATELIE.price, lang)}</b> <span>{t.hero.perPerson} · {t.hero.duration} · {t.hero.group}</span></p>
           </div>
-          <CheeseBoard className="booking-art" size={170} />
+          <CheeseBoard className="booking-art board-draw" size={170} />
         </div>
       </section>
 
       {/* ---------- vale-presente ---------- */}
       <section className="gift" id="presente" aria-labelledby="gift-title">
         <div className="gift-inner">
-          <CheeseBoard className="gift-art" size={220} />
+          <CheeseBoard className="gift-art board-draw" size={220} />
           <div className="section-head is-light">
             <span className="eyebrow"><Gift size={15} /> {t.gift.eyebrow}</span>
             <h2 id="gift-title">{t.gift.title}</h2>
@@ -341,7 +376,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {photo >= 0 && <Lightbox photos={gallery} index={photo} onIndex={setPhoto} onClose={() => setPhoto(-1)} labels={t.live.lightbox} />}
+      {story >= 0 && <Stories stories={stories} start={story} onClose={() => setStory(-1)} onBook={() => { setStory(-1); book() }} />}
     </>
   )
 }

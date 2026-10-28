@@ -10,10 +10,17 @@ mismo armazón y mismas piezas; cambian contenidos, colores, tipografía de tít
   y las líneas marcadas `LE-1492` (HomePage, BookingForm, PublicApp, structured-data e `index.html`).
 - **Reservas**: `/reserver` (o `?local=el-sol-la-luna|mexi-and-co|le-1492`) arma el mensaje y abre
   WhatsApp al 06 24 43 80 23. No guarda nada en el servidor.
-- **Fotos**: `public/img/grupo/` (webp, máx. 1600 px). Mapa, iconos y og.jpg: `node scripts/grupo.mjs`,
-  y luego `npm run images` para las variantes.
+- **Fotos**: originales a resolución completa en `recursos/grupo-originales/` (fuera de git).
+  `node scripts/fotos-grupo.mjs` saca las maestras (2400 px) y sus variantes (240–1600) con enfoque
+  suave; `npm run images` escribe el manifiesto con el difuminado de carga de cada foto. Mapa,
+  iconos y og.jpg: `node scripts/grupo.mjs`.
 - **Panel** (`/admin`): sigue siendo el de la plantilla y no está conectado a esta muestra; la web
   pública no enlaza a él.
+- **«Ce soir, on va où ?»** (`components/MoodFinder.tsx`): una gana → local, platos, si está abierto
+  y el botón que toca. Todo sale de la carta.
+- **Tras reservar**: resumen, `.ics` para el calendario y mensaje para avisar a los invitados.
+- **Movimiento**: transiciones entre páginas (View Transitions), parallax del héroe atado al scroll,
+  papel picado que se mece. Nada se mueve si el teléfono pide menos movimiento.
 - **Capturas**: `capturas/`.
 
 Lo que sigue es el README de la plantilla.

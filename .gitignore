@@ -3,3 +3,8 @@ dist/
 .DS_Store
 *.tsbuildinfo
 .env
+
+# Material de trabajo (fotos originales, capturas): queda en la Mac, no va al repo ni a Railway
+sites/*/capturas/
+sites/*/recursos/
+sites/ltb-concept/fotos/

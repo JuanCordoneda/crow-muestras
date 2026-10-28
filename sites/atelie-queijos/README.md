@@ -32,6 +32,27 @@ plazas quedan en esa fecha y recuerda nombre y teléfono en el propio teléfono 
 se envían a ningún sitio). Las horas llevan «Horários de Paris» para quien mira desde Brasil. Si se instala Meta Pixel o Google Analytics, cada clic ya llega
 como evento (`track` en `src/public/business.ts`).
 
+## Fotos: siempre nítidas
+
+Los originales van en `recursos/originales/atelie/`, tal como salen del teléfono (cuanto más grandes,
+mejor). `npm run images` (y cada `npm run build`) los convierte con `scripts/fotos.mjs` a AVIF + webp
+en 480–2560 px. El navegador elige según pantalla y densidad, así que un iPhone de 3x recibe una
+foto grande y no una estirada. Nunca se agranda un original: si uno mide menos de 1600 px, el script
+avisa. Las fotos del ateliê son los originales del iPhone (3024×4032) sacados del WordPress; la de
+Janaína es la de 1489 px, la única que hay. El héroe tiene un recorte vertical 1:2 para móviles y
+en escritorio ocupa media pantalla. La primera vez tarda unos minutos; después solo rehace lo que
+cambió. Si se sustituye una foto con el mismo nombre, subir `VERSION` en `public/sw.js`.
+
+## Lo interactivo
+
+- **Stories del ateliê**: el avatar del héroe y de `/links` (con anillo) y los destacados de «O que
+  você vai viver» abren las fotos como stories de Instagram (barras, toque para pasar, mantener para
+  pausar, botón de reservar como sticker de enlace). Textos en `stories` de cada idioma.
+- **Quiz «Qual queijo francês tem a sua cara?»**: 3 preguntas, 5 familias, resultado con quesos y
+  maridaje, botón de reservar y compartir (menú del teléfono → stories / WhatsApp). La puntuación
+  está en `src/public/components/CheeseQuiz.tsx`; los textos, en `quiz`.
+- Las tábuas de línea fina se dibujan solas al entrar en pantalla.
+
 ## Arranque
 
 ```bash

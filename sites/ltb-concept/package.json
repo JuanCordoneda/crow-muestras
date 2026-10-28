@@ -1,0 +1,14 @@
+{
+  "name": "ltb-concept",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "fotos": "node scripts/fotos.mjs",
+    "head": "node scripts/sync-head.mjs",
+    "dev": "python3 -m http.server 4610 --bind 127.0.0.1"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
+}

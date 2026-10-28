@@ -66,6 +66,11 @@ export type Venue = {
   maps: string
   /** Foto principal. Vacía = cartel de «photo à venir» con el nombre del local. */
   photo?: string
+  /**
+   * Foto apaisada para el héroe en pantallas anchas. La principal puede ser vertical (la fachada lo
+   * es) y a pantalla completa en un portátil se estiraría hasta verse blanda.
+   */
+  photoWide?: string
   gallery?: { src: string; caption: FrEs }[]
   menu: MenuSection[]
 }
@@ -105,6 +110,7 @@ export const EL_SOL: Venue = {
   rating: { score: 4.4, count: 622 },
   maps: 'https://www.google.com/maps/search/?api=1&query=El+Sol+y+La+Luna+31+Rue+Saint-Jacques+75005+Paris',
   photo: '/img/grupo/sol-facade.webp',
+  photoWide: '/img/grupo/sol-interieur-deco.webp',
   gallery: [
     { src: '/img/grupo/sol-interieur-lustre.webp', caption: { fr: 'Le lustre de bouteilles, au-dessus de la salle', es: 'La lámpara de botellas, sobre el comedor' } },
     { src: '/img/grupo/sol-empanadas.webp', caption: { fr: 'Empanadas maison, citron vert et guacamole', es: 'Empanadas caseras, lima y guacamole' } },

@@ -8,7 +8,8 @@ URL como `?lang=pt`). Página estática: sin servidor, sin base de datos, la res
 
 ```bash
 cd ltb-concept
-python3 -m http.server 4610      # → http://127.0.0.1:4610
+npm install                      # solo la primera vez (sharp, para las fotos)
+npm run dev                      # → http://127.0.0.1:4610
 ```
 
 No usar el `server.js` de `peluqueria/`: es el de Lucía (hair-vision, recordatorios por WhatsApp a sus clientas).
@@ -34,8 +35,13 @@ que tiene que estar escrito en el HTML porque WhatsApp/Facebook no ejecutan JS a
 
 ## Carpetas
 
-- `img/`: fotos en webp (800 y 1400 px). Son de Unsplash (licencia libre, uso comercial, sin atribución) y
-  solo ilustran: hay que cambiarlas por fotos del salón.
+- `fotos/` → `img/`: **fotos siempre nítidas.** El original va en `fotos/` (no se sube al repo) y
+  `npm run fotos` genera 5 tamaños (640 a 3200 px), recortes verticales del hero para móvil e `img/fotos.js`
+  con la proporción de cada foto. La página mide cada caja (con `object-fit: cover`, zoom y pantalla retina) y
+  pide el tamaño que hace falta. Si una foto es chica (por ejemplo, reenviada por WhatsApp), el script avisa.
+  Las actuales son de Unsplash (licencia libre, uso comercial, sin atribución) y solo ilustran.
+- `img/blonds-mascara.png`: máscara del pelo para «Trouvez votre blond» (`node scripts/mascara-pelo.mjs`).
+  Si se cambia la foto del probador, regenerarla.
 - `instagram/`: 4 posts (HTML + PNG 1080×1350), `logo-ltb-concept` (foto de perfil 1080×1080) y
   `bio-instagram.txt`. Los posts leen el nombre de `config.js`; para reexportar, abrir cada HTML a 1080 px
   de ancho y capturar `.post`.
@@ -44,6 +50,14 @@ que tiene que estar escrito en el HTML porque WhatsApp/Facebook no ejecutan JS a
 
 La tipografía francesa (’, espacios insécables antes de : ; ! ? y dentro de « ») la pone el JS solo:
 los textos se escriben normales.
+
+## Piezas interactivas
+
+- **Le lissage en un geste**: la plancha baja con el scroll y el pelo (SVG) pasa del frizz al liso brillante,
+  con los 4 pasos al costado. Con «reducir movimiento» se ve directo el resultado.
+- **Trouvez votre blond**: 6 nuances sobre una foto real; solo se tiñe el pelo (máscara). Manteniendo
+  apretado se ve el original. «Réserver ce blond» lleva la nuance al formulario y al mensaje de WhatsApp.
+- **Avant / Après**: deslizador para comparar en cada tarjeta.
 
 ## Antes de publicar
 

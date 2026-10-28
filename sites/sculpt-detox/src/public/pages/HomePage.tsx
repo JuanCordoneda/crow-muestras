@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight, Check, Clock, Instagram, Mail, MapPin, Navigation, Phone, ShieldCheck } from 'lucide-react'
 import { linkTo, publicRoute } from '../../shared/routing'
-import { withBase } from '../../shared/base'
 import { Photo } from '../../shared/components/Photo'
 import { cx } from '../../shared/utils'
 import { BUSINESS, directionsUrl, telUrl, whatsappUrl } from '../business'
 import { TREATMENTS, type Treatment, type TreatmentGroup } from '../treatments'
-import { Stars, WhatsAppIcon } from '../components/Brand'
+import { RoundBadge, Stars, WhatsAppIcon } from '../components/Brand'
 import { Figure } from '../components/Figure'
 import { BookingForm } from '../components/BookingForm'
 import { useSite } from '../site'
 import './home.css'
+import { withBase } from '../../shared/base'
 
 type Track = (source: string) => () => void
 
@@ -19,6 +19,7 @@ export function HomePage({ onWhatsApp }: { onWhatsApp: Track }) {
     <>
       <Hero onWhatsApp={onWhatsApp} />
       <TrustStrip />
+      <Marquee />
       <Specialty />
       <Treatments />
       <Steps onWhatsApp={onWhatsApp} />
@@ -72,18 +73,26 @@ function Hero({ onWhatsApp }: { onWhatsApp: Track }) {
           src="/img/sculptdetox/michele-costa-retrato.webp"
           alt={t.hero.photoAlt}
           className="hero-shot"
-          sizes="(min-width: 1024px) 46vw, 100vw"
+          sizes="(min-width: 1024px) 600px, 100vw"
           priority
           width={1200}
           height={1324}
         />
+        <RoundBadge text={t.badge} className="hero-badge" />
       </div>
       <div className="hero-content">
         {hint && <a className="hero-lang" href={withBase(lang === 'es' ? '/en' : '/')} hrefLang={lang === 'es' ? 'en' : 'es'}>{t.hero.langHint} <ArrowRight size={14} /></a>}
         <RatingChip className="hero-rating" />
         <p className="hero-eyebrow">{t.hero.eyebrow}</p>
         <h1 id="hero-title">
-          {t.hero.titleA} <em>{t.hero.titleB}</em>
+          {t.hero.titleA}{' '}
+          <em>
+            {t.hero.titleB}
+            {/* Un trazo dorado a mano bajo «sin cirugía», que se dibuja al abrir la web. */}
+            <svg className="scribble" viewBox="0 0 320 22" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path d="M3 15 C 70 5, 150 3, 210 8 S 300 16, 317 9" />
+            </svg>
+          </em>
         </h1>
         <p className="hero-text">{t.hero.text}</p>
         <div className="hero-actions">
@@ -115,6 +124,85 @@ export function TrustStrip({ compact = false }: { compact?: boolean }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+/**
+ * Una cinta que pasa despacio con los nombres de los tratamientos: da ritmo entre bloques y,
+ * de paso, enseña de un vistazo todo lo que se hace. Es decoración (la lista de verdad está más
+ * abajo), así que el lector de pantalla la salta; con menos movimiento, se queda quieta.
+ */
+function Marquee() {
+  const { t, lang } = useSite()
+  const names = TREATMENTS.map((treatment) => treatment.name[lang])
+  const row = (copy: number) => (
+    <span className="marquee-row" key={copy}>
+      {names.map((name) => <span key={name}>{name}<i>✦</i></span>)}
+    </span>
+  )
+  return (
+    <div className="marquee" aria-label={t.marquee} role="img">
+      <div className="marquee-track" aria-hidden="true">{row(0)}{row(1)}</div>
+    </div>
+  )
+}
+
+/**
+ * «¿Qué te gustaría conseguir?»: se elige un objetivo y salen los tratamientos por los que
+ * empezar, con su precio y su botón de reserva. Para quien llega de un anuncio sin saber qué es
+ * la maderoterapia, es más fácil elegir por lo que quiere que por el nombre de una técnica.
+ */
+function Finder() {
+  const { t, lang, book } = useSite()
+  const copy = t.finder
+  const labels = usePriceLabels()
+  const [goalId, setGoalId] = useState(copy.goals[0].id)
+  const goal = copy.goals.find((entry) => entry.id === goalId) ?? copy.goals[0]
+  const picks = goal.ids.map((id) => TREATMENTS.find((item) => item.id === id)).filter(Boolean) as Treatment[]
+
+  return (
+    <div className="finder reveal" role="group" aria-labelledby="finder-title">
+      <div className="finder-head">
+        <span className="eyebrow">{copy.eyebrow}</span>
+        <h3 id="finder-title">{copy.title}</h3>
+        <p>{copy.text}</p>
+      </div>
+      <div className="finder-goals" role="radiogroup" aria-label={copy.label}>
+        {copy.goals.map((entry) => (
+          <button
+            key={entry.id}
+            type="button"
+            role="radio"
+            aria-checked={entry.id === goalId}
+            className={cx('finder-goal', entry.id === goalId && 'is-on')}
+            onClick={() => setGoalId(entry.id)}
+          >
+            {entry.label}
+          </button>
+        ))}
+      </div>
+      <div className="finder-result" aria-live="polite">
+        <p className="finder-goal-text">{goal.text}</p>
+        <span className="finder-result-label">{copy.result}</span>
+        <ol className="finder-picks">
+          {picks.map((item, index) => (
+            <li key={item.id} className="finder-pick" style={{ animationDelay: `${index * 70}ms` }}>
+              <span className="finder-pick-index" aria-hidden="true">{index + 1}</span>
+              <div className="finder-pick-body">
+                <strong>{item.name[lang]}</strong>
+                <span className="finder-pick-meta">{labels.price(item.tiers ? item.tiers[0].price : item.price)} · {labels.minutes(item.tiers ? item.tiers[0].minutes : item.minutes)}</span>
+              </div>
+              <button type="button" className="btn btn-ghost btn-sm" onClick={() => book(item.tiers ? undefined : item.id)} aria-label={t.treatments.bookAria(item.name[lang])}>
+                {t.treatments.book}
+              </button>
+            </li>
+          ))}
+        </ol>
+        {goal.id === 'lipedema' && (
+          <a className="text-link" {...linkTo(publicRoute({ view: 'lipedema', lang }))}>{copy.lipedema} <ArrowRight size={16} /></a>
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -237,6 +325,7 @@ function Treatments() {
   return (
     <section className="treatments" id="tratamientos" aria-labelledby="treatments-title">
       <SectionHead eyebrow={copy.eyebrow} title={copy.title} text={copy.text} id="treatments-title" />
+      <Finder />
       <div className="treatment-tabs" role="tablist" aria-label={copy.tabsLabel}>
         {tabs.map((tab) => (
           <button

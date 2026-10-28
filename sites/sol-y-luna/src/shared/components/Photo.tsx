@@ -42,12 +42,19 @@ export function thumbSrc(src: string, width: number) {
   return size ? `${base}-${size}.webp` : src
 }
 
-export function Photo({ src, sizes = '100vw', priority = false, ...rest }: Props) {
+export function Photo({ src, sizes = '100vw', priority = false, style, ...rest }: Props) {
   const srcSet = srcSetFor(src)
+  /**
+   * Mientras llega la foto, su versión de 24 px desenfocada hace de fondo: se ve la foto «viniendo»
+   * y no un hueco gris que de golpe se llena. Cuando carga, la foto la tapa entera.
+   */
+  const blur = PHOTO_VARIANTS[src]?.blur
+  const placeholder = blur ? { backgroundImage: `url("${blur}")`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined
 
   return (
     <img
       {...rest}
+      style={placeholder ? { ...placeholder, ...(typeof style === 'object' ? style : {}) } : style}
       src={src}
       srcSet={srcSet}
       sizes={srcSet ? sizes : undefined}

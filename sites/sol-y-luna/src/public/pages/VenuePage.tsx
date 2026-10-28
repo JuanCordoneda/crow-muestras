@@ -3,7 +3,7 @@ import { ArrowLeft, CalendarDays, Clock, Images, Leaf, MapPin, Navigation, Phone
 import { WEEK_ORDER, hoursOn, rangesLabel, weekdayName, weekdayOf } from '../../shared/hours'
 import { linkTo, publicRoute } from '../../shared/routing'
 import { cx, directionsLink, telLink, whatsappLink } from '../../shared/utils'
-import { Photo } from '../../shared/components/Photo'
+import { Photo, srcSetFor } from '../../shared/components/Photo'
 import { Lightbox, type GalleryPhoto } from '../../shared/components/Lightbox'
 import { OpenStatus } from '../components/OpenStatus'
 import { PapelPicado, StarIcon, WhatsAppIcon } from '../components/Brand'
@@ -60,7 +60,14 @@ function VenueHero({ venue, eyebrow }: { venue: Venue; eyebrow: string }) {
   return (
     <section className={cx('hero', 'is-venue', !venue.photo && 'no-photo')} aria-labelledby="hero-title">
       <div className="hero-media">
-        {venue.photo
+        {venue.photo && venue.photoWide ? (
+          // Dirección de arte: la vertical en el móvil, la apaisada en pantallas anchas. Con
+          // <picture> el navegador solo descarga la que va a pintar.
+          <picture>
+            <source media="(min-width: 761px)" srcSet={srcSetFor(venue.photoWide)} sizes="100vw" />
+            <Photo src={venue.photo} alt="" className="hero-shot is-on" sizes="100vw" priority />
+          </picture>
+        ) : venue.photo
           ? <Photo src={venue.photo} alt="" className="hero-shot is-on" sizes="100vw" priority />
           : <PhotoSoon name={venue.name} label={t.venue.photoSoon} className="hero-soon" />}
       </div>

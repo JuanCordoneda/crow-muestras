@@ -78,9 +78,9 @@
       La carta se pide aquí, antes del CSS: son 10 kB que no compiten con nada y quitan del camino
       un viaje entero al servidor. El panel pide la suya aparte, con contraseña y con lo oculto.
       `#/admin` es la dirección antigua con almohadilla, que el router sigue entendiendo.
-      Bajo una subcarpeta (monorepo de muestras) no hay servidor: se pinta la carta empaquetada.
     -->
     <script>
+      // Bajo una subcarpeta (monorepo de muestras) no hay servidor: se pinta la carta empaquetada.
       if ('%BASE_URL%' === '/' && !/^\/admin(\/|$)/.test(location.pathname) && !/^#\/admin(\/|$)/.test(location.hash)) {
         window.__menu = fetch('/api/menu')
           .then(function (response) { return response.ok ? response.json() : null })

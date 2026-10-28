@@ -72,6 +72,26 @@ const es = {
     photoAlt: 'Michele Costa, masoterapeuta de Sculpt Detox, en su cabina de Eivissa',
     langHint: 'View in English',
   },
+  badge: 'Sin cirugía · Remodelación corporal · Ibiza · ',
+  marquee: 'Tratamientos de Sculpt Detox',
+  finder: {
+    eyebrow: 'Encuentra tu tratamiento',
+    title: '¿Qué te gustaría conseguir?',
+    text: 'Elige un objetivo y te decimos por dónde empezar. En la primera visita lo ajustamos a ti.',
+    label: 'Tu objetivo',
+    result: 'Te recomendamos empezar por',
+    lipedema: 'Leer más sobre lipedema',
+    goals: [
+      { id: 'moldear', label: 'Moldear la silueta', text: 'Definir cintura, piernas y glúteos sin pasar por quirófano.', ids: ['maderoterapia', 'drenaje-brasileno', 'reafirmante'] },
+      { id: 'deshinchar', label: 'Deshinchar el cuerpo', text: 'Si notas retención de líquidos, hinchazón o el cuerpo pesado.', ids: ['drenaje-brasileno', 'detox-corporal', 'infrarrojo'] },
+      { id: 'celulitis', label: 'Mejorar la celulitis', text: 'Una piel más lisa y uniforme en piernas, glúteos y abdomen.', ids: ['anticelulitis', 'maderoterapia', 'infrarrojo'] },
+      { id: 'lipedema', label: 'Aliviar el lipedema', text: 'Pesadez, dolor al tacto y piernas cargadas. Complementario a tu seguimiento médico.', ids: ['drenaje-brasileno', 'drenaje-postquirurgico'] },
+      { id: 'postop', label: 'Recuperarme de una cirugía', text: 'Liposucción, abdominoplastia o lipoescultura, siempre con la indicación de tu cirujano.', ids: ['drenaje-postquirurgico', 'drenaje-brasileno'] },
+      { id: 'relax', label: 'Soltar tensión', text: 'Contracturas, estrés acumulado o, simplemente, desconectar.', ids: ['descontracturante', 'relajante', 'masaje-facial'] },
+      { id: 'rostro', label: 'Cuidar mi rostro', text: 'Piel apagada, rostro hinchado o un óvalo menos definido.', ids: ['hydrafacial', 'sculpt-face', 'drenaje-facial'] },
+      { id: 'embarazo', label: 'Estoy embarazada', text: 'Un masaje pensado para esta etapa, con el visto bueno de tu matrona.', ids: ['embarazadas'] },
+    ],
+  },
   trust: {
     label: 'Por qué Sculpt Detox',
     items: [

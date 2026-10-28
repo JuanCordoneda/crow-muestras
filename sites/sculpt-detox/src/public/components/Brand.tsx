@@ -44,3 +44,24 @@ export function Stars({ label, size = 15 }: { label: string; size?: number }) {
     </span>
   )
 }
+
+/**
+ * El sello redondo del héroe: el emblema en el centro y una frase que gira despacio a su
+ * alrededor. El texto se ajusta al círculo (`textLength`), así que cabe en los dos idiomas.
+ * Quien pide menos movimiento lo ve quieto.
+ */
+export function RoundBadge({ text, className = '' }: { text: string; className?: string }) {
+  return (
+    <span className={`round-badge ${className}`} aria-hidden="true">
+      <svg className="round-badge-ring" viewBox="0 0 120 120">
+        <defs>
+          <path id="round-badge-path" d="M60,60 m-47,0 a47,47 0 1,1 94,0 a47,47 0 1,1 -94,0" />
+        </defs>
+        <text>
+          <textPath href="#round-badge-path" textLength="292" lengthAdjust="spacingAndGlyphs">{text.toUpperCase()}</textPath>
+        </text>
+      </svg>
+      <img src="/img/sculptdetox/emblema-120.webp" alt="" width={40} height={50} decoding="async" />
+    </span>
+  )
+}

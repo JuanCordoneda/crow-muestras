@@ -17,8 +17,13 @@ const root = fileURLToPath(new URL('../public', import.meta.url))
  * móvil normal, 720 para las tarjetas de especialidades en pantallas densas, 900 para los bloques
  * a media pantalla y 1200 para la foto ancha en un móvil de tres puntos por píxel.
  */
-const WIDTHS = [240, 480, 720, 900, 1200]
-const QUALITY = { 240: 62, 480: 68, 720: 72, 900: 74, 1200: 74 }
+const WIDTHS = [240, 480, 720, 900, 1200, 1600]
+/**
+ * Calidad alta en todas: en una web de estética la foto es el producto, y una piel con bloques de
+ * compresión se nota mucho más que 10 kB de más. `-sharp_yuv` evita que los bordes de color (el
+ * uniforme verde sobre la pared blanca) se vean borrosos al pasar a webp.
+ */
+const QUALITY = { 240: 74, 480: 80, 720: 82, 900: 82, 1200: 84, 1600: 84 }
 
 const walk = async (dir) => {
   const out = []
@@ -68,7 +73,7 @@ async function main() {
       await mkdir(dirname(out), { recursive: true })
       // `-resize W 0` mantiene la proporción; nunca amplía porque se filtra por ancho abajo.
       if (!existing || existing.mtimeMs < source.mtimeMs) {
-        await run('cwebp', ['-quiet', '-q', String(QUALITY[target]), '-resize', String(target), '0', '-m', '6', file, '-o', out])
+        await run('cwebp', ['-quiet', '-q', String(QUALITY[target]), '-sharp_yuv', '-resize', String(target), '0', '-m', '6', file, '-o', out])
         made++
       }
       variants.push(target)

@@ -339,3 +339,58 @@
 .action-bar{grid-template-columns:auto 1fr}
 .action-bar .btn{padding:0 16px;min-width:0}
 @media(max-width:359px){.action-bar .btn-white{font-size:0;gap:0}.action-bar .btn-white svg{width:21px;height:21px}}
+
+/* ---------- stories (las fotos del ateliê como en Instagram) ---------- */
+/* El anillo de «hay story nueva», en los colores de la marca: manteca → bordó. */
+.story-ring{display:block;flex:none;width:76px;height:76px;padding:3px;border-radius:50%;background:conic-gradient(from 210deg,var(--butter),#e08a4f,var(--wine),var(--butter));cursor:pointer}
+/* Alto definido en el anillo: la foto (vertical) se recorta en círculo y no se estira. */
+.story-ring img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid var(--paper)}
+.story-ring.is-small{width:38px;height:38px;padding:2px}
+.story-ring.is-small img{border-width:2px}
+.story-ring.is-large{width:124px;height:124px;padding:4px;animation:ring-pulse 2.8s ease-in-out infinite}
+@keyframes ring-pulse{0%,100%{box-shadow:0 0 0 0 rgba(233,196,106,.45)}50%{box-shadow:0 0 0 8px rgba(233,196,106,0)}}
+
+.stories{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(14,9,8,.94);animation:fade-in .2s ease-out}
+.stories-frame{position:relative;display:flex;flex-direction:column;width:100%;height:100%;height:100dvh;background:#120c0a;color:#fff;overflow:hidden;outline:none;animation:pop-in .22s ease-out}
+.stories-bars{position:absolute;top:calc(10px + var(--safe-top));left:10px;right:10px;z-index:3;display:flex;gap:4px}
+.stories-bars span{position:relative;flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.32);overflow:hidden}
+.stories-bars span.is-done{background:#fff}
+.stories-bars i{position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(0);animation-name:story-progress;animation-timing-function:linear;animation-fill-mode:forwards}
+.stories-bars i.is-still{animation:none;transform:scaleX(1)}
+.stories-frame.is-paused .stories-bars i{animation-play-state:paused}
+@keyframes story-progress{to{transform:scaleX(1)}}
+.stories-head{position:absolute;top:calc(20px + var(--safe-top));left:10px;right:6px;z-index:3;display:flex;align-items:center;gap:7px;font-size:14px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.stories-avatar{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(255,255,255,.8)}
+.stories-head b{flex:none}
+.stories-head small{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.8;font-size:13px}
+.stories-head small::before{content:'· '}
+.stories-icon{display:grid;place-items:center;flex:none;width:44px;height:44px;margin-left:auto;color:#fff;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.stories-icon+.stories-icon{margin-left:0}
+.stories-stage{position:relative;flex:1;min-height:0;touch-action:manipulation;-webkit-user-select:none;user-select:none;cursor:pointer}
+.stories-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .25s;-webkit-user-drag:none;pointer-events:none}
+.stories-photo.is-on{opacity:1}
+.stories-stage::before,.stories-stage::after{content:'';position:absolute;left:0;right:0;z-index:1;pointer-events:none}
+.stories-stage::before{top:0;height:140px;background:linear-gradient(180deg,rgba(0,0,0,.5),transparent)}
+.stories-stage::after{bottom:0;height:46%;background:linear-gradient(0deg,rgba(18,12,10,.85),transparent)}
+.stories-caption{position:absolute;left:18px;right:18px;bottom:18px;z-index:2;pointer-events:none}
+.stories-caption p{font-family:var(--font-display);font-size:clamp(25px,7vw,32px);font-weight:500;font-style:italic;line-height:1.2;text-wrap:balance;text-shadow:0 2px 12px rgba(0,0,0,.45)}
+.stories-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px calc(14px + var(--safe-bottom));background:#120c0a}
+/* El botón de reservar, con la forma del sticker de enlace de las stories. */
+.stories-cta{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 20px;border-radius:14px;background:#fff;color:var(--wine);font-size:15.5px;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.stories-cta svg{color:var(--wine)}
+.stories-nav{display:none;gap:6px}
+.stories-nav button{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.14);color:#fff;font-size:26px;line-height:1}
+.stories-nav button:disabled{opacity:.3}
+@media(min-width:761px){
+  /* En el ordenador, la story con forma de teléfono en el centro, como en instagram.com. */
+  .stories-frame{width:auto;height:min(92vh,880px);aspect-ratio:9/16;border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .stories-nav{display:flex}
+}
+
+/* Las tábuas de línea fina se dibujan solas al entrar en pantalla (pathLength=1 en cada trazo). */
+/* Cada tábua tiene su opacidad (`--art-opacity`): la entrada en pantalla no se la puede pisar. */
+.board-draw.rv,.board-draw.rv.is-in{opacity:var(--art-opacity,1);transform:none}
+.board-draw.rv :is(path,circle){stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 2.4s cubic-bezier(.45,.05,.3,1)}
+.board-draw.rv.is-in :is(path,circle){stroke-dashoffset:0}
+.board-draw.rv.is-in :is(path,circle):nth-child(n+4){transition-delay:.35s}
+.board-draw.rv.is-in :is(path,circle):nth-child(n+8){transition-delay:.7s}

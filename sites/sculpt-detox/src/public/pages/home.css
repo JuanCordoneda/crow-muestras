@@ -333,3 +333,118 @@
   .hero{padding-bottom:96px}
   .specialty{margin-top:-70px;padding-top:150px}
 }
+
+/* =====================================================================
+   Héroe del móvil y la tableta: la foto a su proporción de verdad.
+   Antes iba a pantalla completa y, para llenar un móvil en vertical, el
+   navegador la estiraba casi al doble: se veía blanda. Ahora ocupa el ancho
+   con su forma natural (1200 × 1324) y a 3 puntos por píxel sobra resolución.
+   ===================================================================== */
+@media(max-width:1023px){
+  .hero{display:block;min-height:0;max-height:none;padding:0 0 4px;background:var(--sand) var(--grain);color:var(--ink)}
+  .hero-media{position:relative;inset:auto;z-index:0;aspect-ratio:1200/1324;max-height:78svh;width:100%;overflow:visible}
+  .hero-media .hero-shot{border-radius:0 0 50% 50%/0 0 9% 9%;object-position:50% 12%}
+  /* Solo arriba: lo justo para que la cabecera en blanco se lea sobre la pared clara. */
+  .hero-media::after{border-radius:0 0 50% 50%/0 0 9% 9%;background:linear-gradient(180deg,rgba(43,43,43,.48) 0%,rgba(43,43,43,0) 26%)}
+  .hero-content{margin-top:-22px;padding:0 20px 64px;z-index:1}
+  .hero .rating-chip{background:var(--cream);border-color:var(--line);color:var(--ink);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:var(--shadow-sm)}
+  .hero .stars{color:var(--gold)}
+  .hero-lang{order:-1;color:var(--sage-deep)}
+  .hero-eyebrow{color:var(--sage-deep)}
+  .hero h1{font-size:clamp(42px,11.6vw,72px)}
+  .hero h1 em{color:var(--terracotta-deep)}
+  .hero-text{color:var(--muted)}
+  .hero .btn-light{background:transparent;color:var(--ink);border-color:var(--line-strong);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .hero-actions{grid-template-columns:1fr}
+  .hero-badge{right:14px;bottom:-34px}
+}
+
+/* ---------- sello giratorio ---------- */
+.round-badge{position:absolute;z-index:2;display:grid;place-items:center;width:112px;height:112px;border-radius:50%;background:var(--cream);box-shadow:0 14px 34px rgba(60,50,40,.16)}
+.round-badge-ring{position:absolute;inset:0;width:100%;height:100%;animation:badge-spin 26s linear infinite;will-change:transform}
+.round-badge-ring text{font-family:var(--font-body);font-size:9.6px;font-weight:700;letter-spacing:0;fill:var(--sage-deep)}
+.round-badge img{width:34px;height:auto}
+@keyframes badge-spin{to{transform:rotate(360deg)}}
+
+/* ---------- trazo dorado bajo «sin cirugía» ---------- */
+.hero h1 em{position:relative;display:inline-block}
+.scribble{position:absolute;left:-2%;right:-2%;bottom:-.12em;width:104%;height:.3em;overflow:visible}
+.scribble path{fill:none;stroke:var(--gold);stroke-width:2.4;stroke-linecap:round;stroke-dasharray:340;stroke-dashoffset:340;animation:scribble 1.4s cubic-bezier(.6,.1,.2,1) .7s forwards}
+@keyframes scribble{to{stroke-dashoffset:0}}
+
+/* ---------- cinta de tratamientos ---------- */
+.marquee{overflow:hidden;margin-top:34px;padding:16px 0;border-block:1px solid var(--line);background:var(--paper);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-track{display:flex;width:max-content;animation:marquee 60s linear infinite;will-change:transform}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-row{display:flex;flex:none}
+.marquee-row span{display:inline-flex;align-items:center;gap:22px;padding-right:22px;font-family:var(--font-display);font-size:24px;font-style:italic;font-weight:500;color:var(--ink);white-space:nowrap}
+.marquee-row i{font-style:normal;font-size:13px;color:var(--gold)}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---------- buscador de tratamientos ---------- */
+.finder{margin:30px 12px 0;padding:24px 18px;border-radius:28px;background:var(--sage-ink) var(--grain);color:#fff;box-shadow:var(--shadow)}
+.finder .eyebrow{color:#dfe6d8}
+.finder .eyebrow::before{background:var(--gold)}
+.finder-head h3{margin-top:10px;font-family:var(--font-display);font-size:clamp(32px,8.4vw,44px);font-weight:600;line-height:1.05}
+.finder-head p{margin-top:8px;font-size:15px;line-height:1.6;color:#d6ddd0}
+.finder-goals{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.finder-goal{min-height:42px;padding:0 16px;border-radius:999px;border:1px solid rgba(255,255,255,.28);font-size:14px;font-weight:600;color:#eef1ea;transition:background .2s,color .2s,border-color .2s}
+.finder-goal:hover{border-color:rgba(255,255,255,.6)}
+.finder-goal.is-on{background:var(--cream);border-color:var(--cream);color:var(--ink)}
+.finder-result{margin-top:20px;padding:18px 16px;border-radius:20px;background:var(--cream);color:var(--ink)}
+.finder-goal-text{font-family:var(--font-display);font-size:20px;line-height:1.35}
+.finder-result-label{display:block;margin-top:14px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--sage-deep)}
+.finder-picks{list-style:none;margin:8px 0 0;padding:0;display:grid}
+.finder-pick{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);animation:pick-in .45s cubic-bezier(.2,.7,.2,1) both}
+.finder-pick:last-child{border-bottom:0}
+.finder-pick-index{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);font-family:var(--font-display);font-size:17px;font-style:italic;color:var(--sage-deep)}
+.finder-pick-body{display:grid;gap:2px;min-width:0}
+.finder-pick-body strong{font-family:var(--font-display);font-size:21px;font-weight:600;line-height:1.15}
+.finder-pick-meta{font-size:13px;font-weight:700;color:var(--terracotta-deep)}
+.finder-result .text-link{margin-top:6px}
+@keyframes pick-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- textura de papel en los fondos de arena ---------- */
+:root{--grain:url(/img/sculptdetox/grano.png)}
+.specialty,.steps,.reviews,.faq,.lp-hero,.site-footer,.aside-card{background-image:var(--grain)}
+
+/* ---------- las fotos se asientan al entrar en pantalla ---------- */
+/* Solo donde el navegador lo hace sin JavaScript (animación ligada al scroll). Acaba siempre a
+   su tamaño exacto: la foto se ve nítida en cuanto está a la vista. */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion:no-preference){
+    .specialty-photo img,.steps-photo img,.about-main img,.results-photo img,.article-aside .figure img{animation:settle-in linear both;animation-timeline:view();animation-range:entry 0% cover 35%}
+    @keyframes settle-in{from{transform:scale(1.08)}to{transform:none}}
+  }
+}
+
+@media(min-width:761px){
+  .finder{margin:36px 40px 0;padding:34px 34px 30px;display:grid;grid-template-columns:1fr 1.1fr;gap:12px 40px;align-items:start}
+  .finder-head,.finder-goals{grid-column:1}
+  .finder-result{grid-column:2;grid-row:1/span 2;margin-top:0}
+  .marquee-row span{font-size:28px}
+}
+@media(min-width:1024px){
+  .hero-media{overflow:visible}
+  .hero-media .hero-shot{border-radius:inherit}
+  .hero-badge{left:-46px;bottom:56px;width:128px;height:128px}
+  .round-badge img{width:40px}
+}
+@media (prefers-reduced-motion:reduce){
+  .round-badge-ring,.marquee-track{animation:none}
+  .marquee-track{flex-wrap:wrap;width:auto}
+  .marquee-row:last-child{display:none}
+  .scribble path{stroke-dashoffset:0}
+}
+
+/* Con la cinta entre medias, la especialidad ya no se mete debajo de la franja de confianza. */
+.specialty{margin-top:0;padding-top:72px}
+@media(min-width:1024px){.specialty{margin-top:0;padding-top:110px}}
+
+/* En el móvil los objetivos van en una fila que se desliza con el dedo, como las historias de
+   Instagram: ocho botones apilados eran media pantalla antes de llegar a la recomendación. */
+@media(max-width:760px){
+  .finder-goals{flex-wrap:nowrap;overflow-x:auto;margin:18px -18px 0;padding:2px 18px 6px;scroll-snap-type:x proximity;scrollbar-width:none;overscroll-behavior-x:contain;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent)}
+  .finder-goals::-webkit-scrollbar{display:none}
+  .finder-goal{flex:none;scroll-snap-align:start}
+}

@@ -179,6 +179,28 @@
 .venue-card-actions .btn{padding:0 12px;font-size:15px}
 .venue-card.is-pending .venue-card-actions{grid-template-columns:1fr}
 
+/* ---------- «Ce soir, on va où ?» ---------- */
+.mood{padding:56px 0 6px}
+.mood-chips{display:flex;gap:8px;overflow-x:auto;padding:20px 14px 6px;scrollbar-width:none;overscroll-behavior-x:contain}
+.mood-chips::-webkit-scrollbar{display:none}
+.mood-chip{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1.5px solid var(--line);background:#fff;font-size:14.5px;font-weight:700;color:var(--indigo-ink);transition:background .2s,color .2s,border-color .2s,transform .15s}
+.mood-chip svg{color:var(--terracotta)}
+.mood-chip.is-on{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.mood-chip.is-on svg{color:var(--saffron)}
+.mood-chip:active{transform:scale(.96)}
+.mood-card{display:grid;margin:14px 14px 0;border-radius:26px;overflow:hidden;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);animation:mood-in .45s cubic-bezier(.2,.7,.2,1) both}
+@keyframes mood-in{from{opacity:0;transform:translateY(12px) scale(.985)}}
+.mood-photo{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--sand)}
+.mood-photo img{width:100%;height:100%;object-fit:cover;display:block;animation:kenburns 14s ease-out both}
+.mood-body{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:18px 18px 20px}
+.mood-kicker{font-size:12px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--terracotta)}
+.mood-body h3{font-family:var(--font-display);font-size:34px;font-weight:400;line-height:1;color:var(--indigo-ink)}
+.mood-body h3 a{text-decoration:none}
+.mood-why{font-size:16px;line-height:1.55;color:var(--muted)}
+.mood-dishes{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.mood-dishes li{padding:6px 12px;border-radius:999px;background:var(--saffron-soft);color:#6a4508;font-size:13.5px;font-weight:800}
+.mood-actions{display:grid;gap:8px;width:100%;margin-top:4px}
+
 /* ---------- grupos y eventos ---------- */
 .events{position:relative;margin-top:44px;padding-top:38px;background:radial-gradient(120% 60% at 100% 0%,rgba(194,80,46,.28),transparent 60%),var(--indigo-deep);color:#fff}
 .events-photo{aspect-ratio:16/10;margin:0 14px;border-radius:22px;overflow:hidden;background:#101727}
@@ -305,6 +327,8 @@
 .booking-sent p{margin-top:3px;font-size:14.5px;font-weight:700;color:var(--ink)}
 .booking-sent small{display:block;margin-top:6px;font-size:13px;line-height:1.45;color:var(--muted)}
 .booking-sent a{font-weight:800;color:var(--whatsapp-deep)}
+.booking-sent-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.booking-sent-actions .btn{color:var(--indigo-ink);text-decoration:none;border-color:#bfe6cb}
 .day-chip,.slot,.people-chip,.venue-option{transition:transform .15s ease,background .2s,border-color .2s,color .2s}
 .day-chip:not(:disabled):active,.slot:not(:disabled):active,.venue-option:active{transform:scale(.97)}
 
@@ -324,7 +348,17 @@
   .section-foot{padding:6px 32px 0}
   .featured,.place,.visit,.venues,.reviews,.shop,.booking{max-width:1160px;margin-left:auto;margin-right:auto;width:100%}
   .hero.is-venue{min-height:min(84svh,760px)}
+  /* En pantalla ancha el texto va a la izquierda: ese lado se oscurece un poco más para que se lea
+     aunque detrás haya una lámpara encendida. */
+  .hero-media::before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(14,20,36,.62) 0%,rgba(14,20,36,.28) 42%,rgba(14,20,36,0) 65%);pointer-events:none}
   .venues-grid{grid-template-columns:repeat(3,minmax(0,1fr));padding:28px 32px 0;gap:18px}
+  .mood{max-width:1160px;margin:0 auto;width:100%;padding-top:80px}
+  .mood-chips{flex-wrap:wrap;overflow:visible;padding:26px 32px 4px}
+  .mood-card{grid-template-columns:1.05fr 1fr;margin:20px 32px 0}
+  .mood-photo{aspect-ratio:auto;min-height:420px}
+  .mood-body{justify-content:center;padding:36px 40px}
+  .mood-body h3{font-size:44px}
+  .mood-actions{display:flex;flex-wrap:wrap;width:auto}
   .venue-card-actions{grid-template-columns:1fr}
   .events{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:10px;padding:70px max(32px,calc((100% - 1160px) / 2 + 32px)) 30px}
   .events-photo{margin:0;aspect-ratio:4/5}

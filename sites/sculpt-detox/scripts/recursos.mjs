@@ -3,7 +3,7 @@
  * originales descargados de la web anterior (solo lo que estaba en /wp-content/uploads/ y era del
  * negocio: la web vieja tenía spam inyectado y de ahí no se ha copiado nada más).
  *
- * - Las fotos que usa la web → `public/img/sculptdetox/<nombre>.webp` (1600 px como mucho).
+ * - Las fotos que usa la web → `public/img/sculptdetox/<nombre>.webp`, a su resolución original.
  *   Las variantes de 240…1200 px las hace después `npm run images`.
  * - El emblema (la figura con la hoja, sin el texto) recortado del logo original, para la
  *   cabecera, los iconos y la carátula.
@@ -62,8 +62,10 @@ async function fotos() {
     if (out && out.mtimeMs >= src.mtimeMs) continue
     await sharp(source)
       .rotate()
-      .resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
-      .webp({ quality: 80, effort: 6 })
+      // Nunca se agranda: una foto estirada se ve pastosa. Se guarda a toda la resolución que haya
+      // (hasta 2400 px) y con calidad alta; las variantes para el móvil las saca `npm run images`.
+      .resize({ width: 2400, height: 2400, fit: 'inside', withoutEnlargement: true })
+      .webp({ quality: 88, effort: 6, smartSubsample: true })
       .toFile(target)
     hechas += 1
   }
@@ -229,7 +231,26 @@ async function mapa() {
   console.log('[recursos] mapa.webp listo (© OpenStreetMap contributors)')
 }
 
+/**
+ * La textura de papel de los fondos de arena: un mosaico de ruido de 180 px, casi transparente.
+ * Va como PNG hecho aquí y no como filtro SVG en el CSS, que el navegador tendría que calcular
+ * en cada visita con el hilo principal ocupado.
+ */
+async function grano() {
+  const SIZE = 180
+  const pixels = Buffer.alloc(SIZE * SIZE * 4)
+  let seed = 7
+  const random = () => ((seed = (seed * 16807) % 2147483647) / 2147483647)
+  for (let i = 0; i < SIZE * SIZE; i++) {
+    const tone = 40 + Math.floor(random() * 40)
+    pixels.set([tone, tone - 6, tone - 12, Math.floor(random() * 26)], i * 4)
+  }
+  await sharp(pixels, { raw: { width: SIZE, height: SIZE, channels: 4 } }).png({ compressionLevel: 9, palette: true, colours: 64 }).toFile(join(IMG, 'grano.png'))
+  console.log('[recursos] grano.png listo')
+}
+
 await fotos()
+await grano()
 const figura = await emblema()
 await iconos(figura)
 await og(figura)

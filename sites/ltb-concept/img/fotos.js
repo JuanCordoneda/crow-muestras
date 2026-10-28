@@ -1,0 +1,2 @@
+/* Generado por npm run fotos: proporción (ancho / alto) de cada foto */
+window.FOTOS = {"atelier":0.6667,"bbglow":1.5002,"blonds":1,"blonds-v":0.5625,"bronzage":0.6667,"brushing-blond":0.6667,"brushing-blond-v":0.5625,"brushing":1.4981,"coloration":1.7788,"epilation":0.6669,"hero-brune":1.3328,"hero-brune-v":0.5625,"lissage":0.5622,"lissage-v":0.5625,"manucure":0.7499,"microneedling":1.5038,"soin":1.5002,"sourire":1.5002};

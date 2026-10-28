@@ -1,0 +1,3 @@
+# Originales de las fotos (pesadas): se convierten con `npm run fotos` y lo que va a la web queda en img/
+fotos/
+node_modules/

@@ -20,7 +20,8 @@
 // que si no un visitante de siempre seguiría viendo la ola antigua en la pestaña.
 // v4: el panel tiene su propio manifiesto; fuera las copias de /admin que llevaban el de la web.
 // parisabor-v1: la web del ateliê sustituye a la plantilla; nada de lo guardado antes sirve.
-const VERSION = 'parisabor-v1'
+// parisabor-v2: fotos nuevas en AVIF y a resolución completa, con los mismos nombres que las viejas.
+const VERSION = 'parisabor-v2'
 const PAGES = `${VERSION}-pages`
 const ASSETS = `${VERSION}-assets`
 const STATIC = `${VERSION}-static`

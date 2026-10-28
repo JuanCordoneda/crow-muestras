@@ -33,25 +33,26 @@ export function VineLeaf({ size = 24, ...props }: Svg) {
 
 /**
  * Tábua de quesos en línea fina (la tabla con mango, una cuña, un queso redondo y uvas). Va de
- * adorno, muy apagada, junto a los títulos y en los huecos de las fotos que faltan.
+ * adorno, muy apagada, junto a los títulos y en los huecos de las fotos que faltan. Cada trazo
+ * mide 1 (`pathLength`): con la clase `board-draw` se dibuja sola al entrar en pantalla.
  */
 export function CheeseBoard({ size = 96, ...props }: Svg) {
   return (
     <svg width={size} height={size * 0.62} viewBox="0 0 160 100" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false" {...props}>
       {/* la tabla y su mango */}
-      <path d="M14 70h112a8 8 0 0 1 0 16H14a8 8 0 0 1 0-16z" />
-      <path d="M134 78h11" />
-      <circle cx="150" cy="78" r="5" />
+      <path pathLength="1" d="M14 70h112a8 8 0 0 1 0 16H14a8 8 0 0 1 0-16z" />
+      <path pathLength="1" d="M134 78h11" />
+      <circle pathLength="1" cx="150" cy="78" r="5" />
       {/* cuña de comté */}
-      <path d="M26 70l10-30 34 18v12" />
-      <path d="M36 40l34 18" />
-      <circle cx="46" cy="60" r="2" /><circle cx="56" cy="64" r="1.5" />
+      <path pathLength="1" d="M26 70l10-30 34 18v12" />
+      <path pathLength="1" d="M36 40l34 18" />
+      <circle pathLength="1" cx="46" cy="60" r="2" /><circle pathLength="1" cx="56" cy="64" r="1.5" />
       {/* queso redondo con corte */}
-      <path d="M78 70c0-10 10-17 22-17s22 7 22 17" />
-      <path d="M100 53v17M100 53l14 4" opacity=".7" />
+      <path pathLength="1" d="M78 70c0-10 10-17 22-17s22 7 22 17" />
+      <path pathLength="1" d="M100 53v17M100 53l14 4" opacity=".7" />
       {/* uvas */}
-      <circle cx="120" cy="44" r="4" /><circle cx="128" cy="46" r="4" /><circle cx="124" cy="52" r="4" /><circle cx="116" cy="51" r="4" />
-      <path d="M124 40c1-4 4-6 8-6" />
+      <circle pathLength="1" cx="120" cy="44" r="4" /><circle pathLength="1" cx="128" cy="46" r="4" /><circle pathLength="1" cx="124" cy="52" r="4" /><circle pathLength="1" cx="116" cy="51" r="4" />
+      <path pathLength="1" d="M124 40c1-4 4-6 8-6" />
     </svg>
   )
 }

@@ -3,7 +3,6 @@ import './public.css'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BookOpen, CalendarDays, ChevronRight, Instagram, Link2, Mail, Menu as MenuIcon, X } from 'lucide-react'
 import { PAGE_PATHS, SITE_LANGS, linkTo, navigate, publicRoute, type PublicRoute, type SiteLang } from '../shared/routing'
-import { withBase } from '../shared/base'
 import { useScrollLock } from '../shared/useMedia'
 import { cx } from '../shared/utils'
 import { textsFor, type Texts } from './content'
@@ -14,6 +13,7 @@ import { LangSwitch } from './components/LangPicker'
 import { HomePage } from './pages/HomePage'
 import { LinksPage } from './pages/LinksPage'
 import { PrivacyPage } from './pages/PrivacyPage'
+import { withBase } from '../shared/base'
 
 type Props = { route: PublicRoute }
 
@@ -142,7 +142,7 @@ export function PublicApp({ route }: Props) {
           observer?.unobserve(element)
         }
       }, { rootMargin: '0px 0px -8% 0px' })
-      const selector = '.section-head, .live-item, .live-photos, .host-photo, .date-card, .booking-card, .gift-inner, .groups-list li, .more-card, .review, .faq-item'
+      const selector = '.section-head, .live-item, .live-photos, .host-photo, .date-card, .booking-card, .gift-inner, .groups-list li, .more-card, .review, .faq-item, .quiz-card, .highlights, .board-draw'
       for (const element of document.querySelectorAll<HTMLElement>(selector)) {
         if (element.classList.contains('rv') || element.getBoundingClientRect().top < window.innerHeight) continue
         element.classList.add('rv')

@@ -65,7 +65,7 @@ const escape = (text) => text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').rep
 const json = (value) => JSON.stringify(value).replace(/</g, '\\u003c')
 const absolute = (path) => `${SITIO}${path === '/' ? '/' : path}`
 
-const HERO = /\n\s*<!--\s*\n\s*La foto de la portada[\s\S]*?-->\s*\n\s*<link\s+rel="preload"[\s\S]*?\/>\n/
+const HERO = /\n\s*<!--\s*\n\s*La foto de la portada[\s\S]*?-->(\s*\n\s*<link\s+rel="preload"\s+as="image"[\s\S]*?\/>)+\n/
 const ALTERNATE_LOCALES = /(\s*<meta property="og:locale:alternate"[^>]*>)+/
 
 const source = await readFile(join(dist, 'index.html'), 'utf8')

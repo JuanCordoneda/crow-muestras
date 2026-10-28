@@ -1,19 +1,38 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
-import { CalendarDays, Check, MessageCircle, PartyPopper, Users, Zap } from 'lucide-react'
+import { CalendarDays, CalendarPlus, Check, MessageCircle, PartyPopper, Send, Users, Zap } from 'lucide-react'
 import type { DayHours } from '../../shared/types'
 import { addDays, dayNumber, dayRanges, hoursOn, longDate, shortMonth, shortWeekday, toMinutes } from '../../shared/hours'
 import { cx, whatsappLink } from '../../shared/utils'
-import { BOOKING_WHATSAPP, EL_SOL, MEXI, say, scheduleOf, type FrEs } from '../venues'
+import { BOOKING_WHATSAPP, EL_SOL, MEXI, SITE_URL, fullAddress, say, scheduleOf, type FrEs } from '../venues'
 import { LE_1492 } from './Le1492' // LE-1492
 import { useSite } from '../site'
 import { WhatsAppIcon } from './Brand'
 
 /** Los locales que se pueden elegir. Sin horario (`hours` vacío) se ofrecen todas las horas. */
-const CHOICES: { id: string; name: string; cuisine: FrEs; hours: DayHours[] }[] = [
-  EL_SOL,
-  MEXI,
-  { ...LE_1492, hours: [] }, // LE-1492
+const CHOICES: { id: string; name: string; cuisine: FrEs; hours: DayHours[]; where: string }[] = [
+  { ...EL_SOL, where: fullAddress(EL_SOL) },
+  { ...MEXI, where: fullAddress(MEXI) },
+  { ...LE_1492, hours: [], where: `${LE_1492.address}, ${LE_1492.postcode} ${LE_1492.town}` }, // LE-1492
 ]
+
+/** Una cita de calendario (.ics) para la reserva: dos horas, en hora de París, con la dirección. */
+function calendarFile(title: string, date: string, time: string, where: string, note: string) {
+  const stamp = (day: string, clock: string) => `${day.replace(/-/g, '')}T${clock.replace(':', '')}00`
+  const [hours, minutes] = time.split(':').map(Number)
+  // Las reservas acaban como muy tarde a las 21:30, así que dos horas después sigue siendo el mismo día.
+  const end = hours + 2 > 23 ? '23:59' : `${String(hours + 2).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+  const escape = (text: string) => text.replace(/([,;\\])/g, '\\$1')
+  const ics = [
+    'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Mexi-and-Co//Reservation//FR', 'CALSCALE:GREGORIAN', 'BEGIN:VEVENT',
+    `UID:${date}-${time.replace(':', '')}-${Math.random().toString(36).slice(2)}@mexiandco`,
+    `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '')}`,
+    `DTSTART;TZID=Europe/Paris:${stamp(date, time)}`,
+    `DTEND;TZID=Europe/Paris:${stamp(date, end)}`,
+    `SUMMARY:${escape(title)}`, `LOCATION:${escape(where)}`, `DESCRIPTION:${escape(note)}`, `URL:${SITE_URL}`,
+    'END:VEVENT', 'END:VCALENDAR',
+  ].join('\r\n')
+  return URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }))
+}
 
 /** Las horas que se ofrecen, en botones: el mediodía y la noche. */
 const SLOTS = {
@@ -45,7 +64,7 @@ export function BookingForm({ initialVenue }: { initialVenue?: string }) {
   const [occasion, setOccasion] = useState('')
   const [errors, setErrors] = useState<Errors>({})
   /** Lo último que se mandó: para el resumen y por si WhatsApp no llegó a abrirse. */
-  const [sent, setSent] = useState<{ url: string; summary: string } | null>(null)
+  const [sent, setSent] = useState<{ url: string; summary: string; calendar: string; invite: string } | null>(null)
   const dateInput = useRef<HTMLInputElement>(null)
 
   /** Al llegar con `?local=` desde otra página, el formulario cambia de local sin recargar. */
@@ -110,7 +129,14 @@ export function BookingForm({ initialVenue }: { initialVenue?: string }) {
     })
     const url = whatsappLink(BOOKING_WHATSAPP, message)
     const summary = [venue.name, capital(longDate(date, lang)), time, people >= 12 ? t.booking.manyPeople : t.booking.people(people)].join(' · ')
-    setSent({ url, summary })
+    const when = `${longDate(date, lang)} · ${time}`
+    setSent({
+      url,
+      summary,
+      calendar: calendarFile(t.booking.calendarTitle(venue.name), date, time, venue.where, t.booking.calendarNote),
+      // Sin número: WhatsApp pregunta a quién mandarlo, que es justo lo que se quiere.
+      invite: `https://wa.me/?text=${encodeURIComponent(t.booking.inviteMessage(venue.name, when, venue.where))}`,
+    })
     // En el móvil, `window.open` abre la app de WhatsApp; si el navegador lo bloquea, se va igual.
     if (!window.open(url, '_blank', 'noopener')) window.location.href = url
   }
@@ -269,6 +295,10 @@ export function BookingForm({ initialVenue }: { initialVenue?: string }) {
             <strong>{t.booking.sentTitle}</strong>
             <p>{sent.summary}</p>
             <small>{t.booking.sentText} <a href={sent.url} target="_blank" rel="noopener noreferrer">{t.booking.sentRetry}</a></small>
+            <div className="booking-sent-actions">
+              <a className="btn btn-white btn-sm" href={sent.calendar} download="reservation.ics"><CalendarPlus size={16} /> {t.booking.calendar}</a>
+              <a className="btn btn-white btn-sm" href={sent.invite} target="_blank" rel="noopener noreferrer"><Send size={16} /> {t.booking.invite}</a>
+            </div>
           </div>
         </div>
       ) : (

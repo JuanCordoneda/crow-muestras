@@ -2,8 +2,9 @@ import type { ImgHTMLAttributes } from 'react'
 import { PHOTO_VARIANTS } from '../photo-variants'
 
 /**
- * Foto de la web. Sirve la variante que de verdad cabe en pantalla:
- * un móvil se lleva la de 480 px (≈20 kB) en vez del original de 1400 px (≈120 kB).
+ * Foto de la web. Sirve la variante que de verdad cabe en pantalla y en su densidad: un móvil de
+ * 3x se lleva una grande (nítida) y uno de 1x una pequeña (ligera). Si la foto tiene versión AVIF
+ * (`scripts/fotos.mjs`), va dentro de un `<picture>`: AVIF a quien lo lee, webp a los demás.
  * Para fotos externas o subidas desde el panel no hay variantes y se pinta el original.
  */
 type Props = ImgHTMLAttributes<HTMLImageElement> & {
@@ -42,10 +43,13 @@ export function thumbSrc(src: string, width: number) {
   return size ? `${base}-${size}.webp` : src
 }
 
+/** El mismo `srcset` en AVIF: mismas anchuras, otra extensión. */
+export const avifSetFor = (src: string) => (PHOTO_VARIANTS[src]?.avif ? srcSetFor(src)?.replace(/\.webp(?= \d+w)/g, '.avif') : undefined)
+
 export function Photo({ src, sizes = '100vw', priority = false, ...rest }: Props) {
   const srcSet = srcSetFor(src)
-
-  return (
+  const avif = avifSetFor(src)
+  const img = (
     <img
       {...rest}
       src={src}
@@ -55,5 +59,13 @@ export function Photo({ src, sizes = '100vw', priority = false, ...rest }: Props
       decoding="async"
       {...(priority ? { fetchpriority: 'high' } : {})}
     />
+  )
+  if (!avif) return img
+  // `picture` va con `display: contents` (base.css): para el CSS, la imagen sigue siendo hija directa.
+  return (
+    <picture>
+      <source type="image/avif" srcSet={avif} sizes={sizes} />
+      {img}
+    </picture>
   )
 }
