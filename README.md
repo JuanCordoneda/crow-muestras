@@ -13,6 +13,13 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/ltb-concept/` | LTB Concept | HTML estático + `config.js` |
 | `/atelie-queijos/` | Ateliê de queijos · PariSabor | Vite + Preact, HTML prerenderizado |
 
+## Dónde está
+
+**https://crow-muestras-production.up.railway.app** · Railway, proyecto `amusing-magic`, servicio
+`crow-muestras`. Cada push a `main` despliega solo. Railway construye con el `Dockerfile` (lo detecta
+en la raíz); `railway.json` queda como referencia, porque los servicios nuevos ya no leen Config as
+Code. Variable cargada: `SITE_URL=https://crow-muestras-production.up.railway.app`.
+
 ## Build y prueba en local
 
 ```bash
