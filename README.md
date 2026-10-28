@@ -69,8 +69,14 @@ Instala las dependencias de cada web de Vite la primera vez (`npm ci` en `sites/
 Su web se publica desde su propio proyecto, en su dominio y en `/`, **no** desde aquí: allí no hay
 `noindex`. Después se quita de este repo (o se deja como muestra).
 
-## Lo que no viene de los proyectos originales
+## De dónde salen las muestras
 
-Cada `sites/<sitio>` es una copia de la web pública: sin `server/`, sin `node_modules`, sin
-capturas ni recursos originales. El panel `/admin` de la plantilla no se publica (necesita el
-servidor y la base de datos). Los proyectos originales siguen en `../` sin tocar.
+Desde el 28/10/2026 **este repo es la fuente de las cinco muestras**: se editan aquí, en
+`sites/<sitio>/`, y cada push a `main` las publica. Los proyectos originales (Comptoir Perou, Dany,
+Mexi-and-Co, Sculpt Detox, parisabor) se mandaron a la Papelera con su `server/`, su historial de
+git y el material que no era de la muestra.
+
+Cada `sites/<sitio>` tiene solo la web pública: sin servidor ni `node_modules`. El panel `/admin` de
+la plantilla no se publica (necesita el servidor y la base de datos). Las fotos originales y las
+capturas (`capturas/`, `recursos/`, `ltb-concept/fotos/`) están en la carpeta, pero fuera de git y
+de la imagen de Docker: si se borra esta carpeta de la Mac, se pierden.
