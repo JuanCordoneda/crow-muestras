@@ -13,18 +13,23 @@
   let ses = null
   try { ses = JSON.parse(localStorage.getItem('barberia:sesion')) } catch (e) {}
   // Enlace directo para mostrar la demo: ?como=dueno o ?como=facu
-  const como = (new URLSearchParams(location.search).get('como') || '').toLowerCase()
+  const sinTilde = (t) => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  const params = new URLSearchParams(location.search)
+  // ?barberia=T%20y%20E muestra la demo con el nombre del cliente
+  if (params.get('barberia')) { S.config.nombre = params.get('barberia').slice(0, 40); DB.save(S) }
+  const como = sinTilde(params.get('como') || '')
   if (como) {
-    const b = S.barberos.find((x) => x.activo && x.nombre.toLowerCase() === como)
-    if (como === 'dueno' || como === 'dueño') ses = { rol: 'dueno' }
+    const b = S.barberos.find((x) => x.activo && sinTilde(x.nombre) === como)
+    if (como === 'dueno') ses = { rol: 'dueno' }
     else if (b) ses = { rol: 'barbero', bid: b.id }
     try { localStorage.setItem('barberia:sesion', JSON.stringify(ses)) } catch (e) {}
   }
   const hoy0 = DB.now().day
   const ui = {
-    view: null,
+    view: new URLSearchParams(location.search).get('ver'), // ?ver=reportes abre esa vista
+
     agenda: { modo: innerWidth >= 960 ? 'semana' : 'dia', fecha: hoy0, filtro: 'todos' },
-    rep: { modo: 'semana', semana: weekStart(hoy0) },
+    rep: { modo: new URLSearchParams(location.search).get('rango') === 'mes' ? 'mes' : 'semana', semana: weekStart(hoy0) },
     act: { filtro: 'todos', n: 50 },
     dia: { fecha: hoy0 },
   }
@@ -394,7 +399,7 @@
         <div class="kpi"><div class="lbl">${ic('circle-check')}Atendidos</div><div class="val num">${tot.at}</div></div>
         <div class="kpi accent"><div class="lbl">${ic('door-open')}Sin reserva</div><div class="val num">${tot.sr}</div><div class="hint">${tot.at ? Math.round((tot.sr / tot.at) * 100) : 0}% · ${money(tot.srFact)}</div></div>
         <div class="kpi"><div class="lbl">${ic('receipt')}Ticket promedio</div><div class="val num">${money(tot.ticket)}</div></div>
-        <div class="kpi"><div class="lbl">${ic('user-x')}No-show</div><div class="val num">${Math.round(tot.ns * 100)}%</div><div class="hint">${plural(tot.nv, 'cliente')} no vino${tot.nv === 1 ? '' : 'eron'}</div></div>
+        <div class="kpi"><div class="lbl">${ic('user-x')}No-show</div><div class="val num">${Math.round(tot.ns * 100)}%</div><div class="hint">${plural(tot.nv, 'cliente')} ${tot.nv === 1 ? 'no vino' : 'no vinieron'}</div></div>
       </div>
       <h2 class="sec">${ic('trophy', 'ic-sm')}Ranking de barberos</h2>
       <div class="card rank">${filas.map((f, i) => `<div class="rank-item"><span class="rank-pos ${medal[i] || ''}">${i === 0 ? ic('crown') : i + 1}</span>${av(f.b, 'av-lg')}<div class="rank-main"><div class="top"><b>${esc(f.b.nombre)}</b><span class="money">${money(f.fact)}</span></div><div class="stats"><span>Atendidos <b>${f.at}</b></span><span>Sin reserva <b>${f.sr}</b></span><span>Ticket <b>${money(f.ticket)}</b></span><span>No-show <b>${Math.round(f.ns * 100)}%</b></span><span>Más hecho <b>${esc(f.top)}</b></span></div></div></div>`).join('')}</div>
