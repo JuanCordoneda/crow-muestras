@@ -4,6 +4,9 @@ Muestra para enseñar a un dueño de barbería: agenda por barbero, control de t
 no vino / sin cargar, reportes y registro de actividad. Sin backend: los datos de ejemplo se
 generan en el navegador (`data.js`) y los cambios quedan en `localStorage` (`barberia:*`).
 
+- La pantalla «Hoy» del dueño está pensada para clientes **sin reserva** (la mitad de los datos de
+  ejemplo): lo cargado por barbero, quién no carga nada hace más de 75 min y clientes por hora.
+  Las reservas quedan más abajo.
 - HTML + CSS + JS sin build. `icons.js` son los íconos de lucide que usa la app.
 - Horas siempre en **hora de Argentina** (el dueño la mira desde el exterior).
 - Los datos de ejemplo se regeneran solos cada día (semana actual + 3 anteriores, mar a sáb).

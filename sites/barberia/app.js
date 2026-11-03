@@ -43,7 +43,7 @@
   const absMin = (k, min) => { const [y, m, d] = k.split('-').map(Number); return Date.UTC(y, m - 1, d) / 60000 + min }
   const tsAbs = (ts) => { const [k, h] = ts.split(' '); const [hh, mm] = h.split(':').map(Number); return absMin(k, hh * 60 + mm) }
   const iniciales = (n) => n.trim().split(/\s+/).map((p) => p[0]).join('').slice(0, 2).toUpperCase()
-  const corto = (n) => { if (!n) return 'Cliente sin turno'; const p = n.trim().split(/\s+/); return p.length > 1 ? `${p[0]} ${p[p.length - 1][0]}.` : p[0] }
+  const corto = (n) => { if (!n) return 'Sin nombre'; const p = n.trim().split(/\s+/); return p.length > 1 ? `${p[0]} ${p[p.length - 1][0]}.` : p[0] }
   const plural = (n, s, p) => `${n} ${n === 1 ? s : p || s + 's'}`
 
   const B = (id) => S.barberos.find((b) => b.id === id) || { nombre: '—', color: '#777' }
@@ -173,70 +173,120 @@
   }
 
   // ——— Hoy (dueño) ———
+  // Pensada para una barbería donde la mayoría entra sin reserva: lo que importa es que cada
+  // cliente quede cargado. Un barbero que no carga nada hace rato es la señal de control.
+  const QUIETO = 75 // minutos sin cargar nada con la barbería abierta
+  const minDe = (ts) => { const [, h] = ts.split(' '); const [hh, mm] = h.split(':').map(Number); return hh * 60 + mm }
+  const haceTxt = (m) => (m < 60 ? `${m} min` : `${Math.floor(m / 60)} h${m % 60 ? ' ' + pad(m % 60) : ''}`)
+
   function vHoy() {
     const k = NOW.day
     const ts = delDia(k).filter((t) => t.estado !== 'cancelado')
     const at = atendidos(ts)
-    const nv = ts.filter((t) => t.estado === 'novino')
+    const walk = at.filter((t) => t.sinReserva).sort((a, b) => b.hora - a.hora)
+    const res = at.filter((t) => !t.sinReserva)
     const sc = ts.filter((t) => vis(t) === 'sincargar')
-    const futuros = ts.filter((t) => t.estado === 'pendiente' && !isPast(t))
     const fact = sum(at)
-    const estimado = fact + sum(ts.filter((t) => t.estado === 'pendiente'))
     const viejos = sinCargar()
+    const abiertoAhora = abierto(k) && NOW.min >= S.config.abre && NOW.min < S.config.cierra
 
-    const porB = activos().map((b) => ({ b, ts: viejos.filter((t) => t.barberoId === b.id) })).filter((x) => x.ts.length).sort((a, b) => b.ts.length - a.ts.length)
-    const alerta = viejos.length
-      ? `<section class="alert">
-          <div class="alert-head"><span class="alert-icon">${ic('triangle-alert')}</span><div><h3>${plural(viejos.length, 'turno pasado', 'turnos pasados')} sin cargar</h3><p>Ya pasó la hora y el barbero no marcó si lo atendió o si no vino.</p></div></div>
-          <div class="alert-rows">${porB.map(({ b, ts }) => `<button class="alert-row" data-a="sincargar" data-b="${b.id}">${av(b)}<div class="who"><b>${esc(b.nombre)}</b><small>${ts[0].fecha === k ? 'De hoy' : 'El más viejo: ' + fCorto(ts[0].fecha)} · ${money(sum(ts))} sin confirmar</small></div><span class="count num">${ts.length}</span>${ic('chevron-right', 'faint')}</button>`).join('')}</div>
-        </section>`
-      : `<section class="alert ok"><div class="alert-head"><span class="alert-icon">${ic('circle-check')}</span><div><h3>Todo cargado al día</h3><p>Todos los turnos que ya pasaron tienen estado.</p></div></div></section>`
-
-    const live = activos().map((b) => {
+    // Por barbero: cuánto cargó y hace cuánto que no carga nada
+    const filas = activos().map((b) => {
       const mine = ts.filter((t) => t.barberoId === b.id)
-      const ahora = mine.find((t) => enCurso(t) && t.estado !== 'novino')
-      const prox = mine.find((t) => t.estado === 'pendiente' && t.hora > NOW.min)
-      const nAt = mine.filter((t) => t.estado === 'atendido').length
-      const nSc = mine.filter((t) => vis(t) === 'sincargar').length
-      const seg = (n, c) => (n ? `<i style="width:${(n / mine.length) * 100}%;background:${c}"></i>` : '')
-      const estado = !mine.length ? '<span class="pill st-cancelado">Sin turnos</span>' : ahora ? pill('encurso') : prox ? '<span class="pill st-pendiente">' + ic('clock') + 'Libre</span>' : '<span class="pill st-cancelado">' + ic('check') + 'Terminó</span>'
-      const box = (lbl, t) => `<div class="live-now"><span class="t">${hm(t.hora)}</span><div class="c"><span class="k">${lbl}</span><b>${esc(corto(t.cliente))}</b><small>${esc(SV(t.servicioId).nombre)} · ${hm(t.hora + t.dur)}</small></div></div>`
-      return `<article class="card live-card" data-a="verAgenda" data-b="${b.id}">
-        <div class="live-top">${av(b, 'av-lg')}<div><div class="name">${esc(b.nombre)}</div><div class="sub">${plural(mine.length, 'turno')} hoy</div></div>${estado}</div>
-        ${ahora ? box('Atendiendo ahora', ahora) : ''}${prox ? box('Próximo', prox) : ''}
-        ${mine.length ? `<div class="bar">${seg(nAt, 'var(--ok)')}${seg(mine.filter((t) => t.estado === 'novino').length, 'var(--bad)')}${seg(nSc, 'var(--warn)')}</div>` : ''}
-        <div class="live-foot"><span><b>${nAt}</b> de ${mine.length} atendidos</span><span><b>${money(sum(mine.filter((t) => t.estado === 'atendido')))}</b></span>${nSc ? `<span style="color:var(--warn)"><b style="color:inherit">${nSc}</b> sin cargar</span>` : ''}</div>
+      const cargas = mine.filter((t) => t.cargadoEn && t.cargadoEn.startsWith(k) && t.cargadoPor === b.id).map((t) => t.cargadoEn).sort()
+      const ultimo = cargas.length ? cargas[cargas.length - 1] : null
+      const desde = NOW.min - (ultimo ? minDe(ultimo) : S.config.abre)
+      return {
+        b, mine, ultimo, desde,
+        quieto: abiertoAhora && desde >= QUIETO,
+        wk: walk.filter((t) => t.barberoId === b.id),
+        rs: mine.filter((t) => !t.sinReserva),
+        ahora: mine.find((t) => enCurso(t) && t.estado !== 'novino'),
+        prox: mine.find((t) => t.estado === 'pendiente' && t.hora > NOW.min),
+      }
+    })
+    const quietos = filas.filter((f) => f.quieto)
+
+    // El que no carga va primero: en el celular es lo primero que se ve
+    const cards = [...filas].sort((a, b) => b.quieto - a.quieto).map((f) => {
+      const { b } = f
+      const nAt = f.mine.filter((t) => t.estado === 'atendido')
+      const estado = f.quieto ? `<span class="pill st-sincargar">${ic('triangle-alert')}Sin cargar hace ${haceTxt(f.desde)}</span>` : f.ahora ? pill('encurso') : abiertoAhora ? `<span class="pill st-pendiente">${ic('clock')}Libre</span>` : `<span class="pill st-cancelado">${ic('store')}Cerrado</span>`
+      return `<article class="card live-card ${f.quieto ? 'is-quieto' : ''}" data-a="verAgenda" data-b="${b.id}">
+        <div class="live-top">${av(b, 'av-lg')}<div style="min-width:0"><div class="name">${esc(b.nombre)}</div><div class="sub">${f.ultimo ? `Última carga ${f.ultimo.slice(11)} · ${f.desde < 1 ? 'recién' : 'hace ' + haceTxt(f.desde)}` : 'Todavía no cargó nada hoy'}</div></div>${estado}</div>
+        <div class="mini3">
+          <div><span>Sin reserva</span><b class="num">${f.wk.length}</b></div>
+          <div><span>Con turno</span><b class="num">${f.rs.filter((t) => t.estado === 'atendido').length}<small>/${f.rs.length}</small></b></div>
+          <div><span>Facturó</span><b class="num">${moneyK(sum(nAt))}</b></div>
+        </div>
+        ${f.quieto ? `<div class="live-now warnbox">${ic('triangle-alert', 'ic-sm')}<div class="c"><b>Puede estar atendiendo sin cargar</b><small>La barbería está abierta y no registró ningún cliente en ${haceTxt(f.desde)}.</small></div></div>` : f.ahora ? `<div class="live-now"><span class="t">${hm(f.ahora.hora)}</span><div class="c"><span class="k">Atendiendo ahora</span><b>${esc(corto(f.ahora.cliente))}</b><small>${esc(SV(f.ahora.hechoId || f.ahora.servicioId).nombre)}${f.ahora.sinReserva ? ' · sin reserva' : ''}</small></div></div>` : ''}
+        ${f.prox ? `<div class="live-foot"><span>Próxima reserva <b>${hm(f.prox.hora)}</b> · ${esc(corto(f.prox.cliente))}</span></div>` : ''}
       </article>`
     }).join('')
 
-    // Semana en curso contra la anterior hasta el mismo día
+    // Clientes sin reserva por hora: hoy contra el promedio del mismo día las 3 semanas anteriores
+    const horas = []
+    for (let h = S.config.abre / 60; h < S.config.cierra / 60; h++) horas.push(h)
+    const prevs = [7, 14, 21].map((n) => addDays(k, -n)).filter((d) => delDia(d).length)
+    const cnt = (d, h) => delDia(d).filter((t) => t.sinReserva && t.estado === 'atendido' && Math.floor(t.hora / 60) === h).length
+    const hoyH = horas.map((h) => cnt(k, h))
+    const promH = horas.map((h) => (prevs.length ? prevs.reduce((acc, d) => acc + cnt(d, h), 0) / prevs.length : 0))
+    const maxH = Math.max(1, ...hoyH, ...promH)
+    const pico = horas[promH.indexOf(Math.max(...promH))]
+    const diaNombre = fmt(k, { weekday: 'long' })
+    const porHora = `<div class="hours">${horas.map((h, i) => {
+      const futuro = k === NOW.day && h * 60 > NOW.min
+      return `<div class="hcol" data-tip="${esc(`${h}:00 a ${h + 1}:00\nHoy: ${futuro ? '—' : hoyH[i]} sin reserva\nPromedio de los ${diaNombre}: ${promH[i].toFixed(1).replace('.', ',')}`)}">
+        <div class="hbars2"><i class="avg" style="height:${(promH[i] / maxH) * 100}%"></i>${futuro ? '' : `<i class="now" style="height:${Math.max(hoyH[i] ? 4 : 0, (hoyH[i] / maxH) * 100)}%"></i>`}</div>
+        <span class="${h === pico ? 'pico' : ''}">${h}</span></div>`
+    }).join('')}</div>
+      <div class="hours-legend"><span><i class="now"></i>Hoy</span><span><i class="avg"></i>Promedio de los ${diaNombre}</span>${prevs.length ? `<span class="muted">Hora pico: ${pico} a ${pico + 1} hs</span>` : ''}</div>`
+
+    const feed = walk.length
+      ? `<div class="card">${walk.slice(0, 8).map((t) => { const b = B(t.barberoId); return `<button class="row" data-a="ver" data-id="${t.id}"><span class="num" style="font-weight:600;min-width:44px">${hm(t.hora)}</span>${av(b, 'av-sm')}<div class="grow"><b>${esc(t.cliente || 'Sin nombre')}</b><small>${esc(b.nombre)} · ${esc(SV(t.hechoId).nombre)}${t.extras.length ? ' + ' + t.extras.map((e) => esc(e.n)).join(', ') : ''}</small></div><b class="num">${money(total(t))}</b></button>` }).join('')}
+        ${walk.length > 8 ? `<button class="row" data-a="verActividad" style="justify-content:center;color:var(--accent);font-weight:600">Ver los ${walk.length}${ic('arrow-right', 'ic-sm')}</button>` : ''}</div>`
+      : `<div class="card empty">${ic('door-open')}<div>Todavía no entró nadie sin reserva hoy</div></div>`
+
+    const porB = activos().map((b) => ({ b, ts: viejos.filter((t) => t.barberoId === b.id) })).filter((x) => x.ts.length).sort((a, b) => b.ts.length - a.ts.length)
+    const alertaReservas = viejos.length
+      ? `<section class="alert" style="margin-top:0">
+          <div class="alert-head"><span class="alert-icon">${ic('calendar-days')}</span><div><h3>${plural(viejos.length, 'reserva pasada', 'reservas pasadas')} sin cargar</h3><p>Clientes con turno: ya pasó la hora y el barbero no marcó si vino o no.</p></div></div>
+          <div class="alert-rows">${porB.map(({ b, ts }) => `<button class="alert-row" data-a="sincargar" data-b="${b.id}">${av(b)}<div class="who"><b>${esc(b.nombre)}</b><small>${ts[0].fecha === k ? 'De hoy' : 'La más vieja: ' + fCorto(ts[0].fecha)} · ${money(sum(ts))} sin confirmar</small></div><span class="count num">${ts.length}</span>${ic('chevron-right', 'faint')}</button>`).join('')}</div>
+        </section>`
+      : `<section class="alert ok" style="margin-top:0"><div class="alert-head"><span class="alert-icon">${ic('circle-check')}</span><div><h3>Reservas al día</h3><p>Todos los turnos reservados que ya pasaron tienen estado.</p></div></div></section>`
+
+    // Semana en curso contra la anterior hasta la misma hora
     const ws = weekStart(k), wsPrev = addDays(ws, -7)
     const mismoDia = addDays(k, -7)
     const sem = atendidos(enRango(ws, k)), prev = atendidos(enRango(wsPrev, mismoDia)).filter((t) => t.fecha < mismoDia || t.hora + t.dur <= NOW.min)
     const d = prev.length ? (sum(sem) - sum(prev)) / sum(prev) : 0
-    const noShowSem = enRango(ws, k).filter((t) => t.estado === 'novino').length
-    const pctNS = sem.length + noShowSem ? Math.round((noShowSem / (sem.length + noShowSem)) * 100) : 0
+    const semWalk = sem.filter((t) => t.sinReserva)
 
     return `<div class="page-head"><div><h1>Hoy</h1><p>${fLargo(k)}</p></div><button class="btn btn-gold" data-a="nuevo">${ic('plus')}Nuevo turno</button></div>
       <div class="kpis">
-        <div class="kpi money"><div class="lbl">${ic('banknote')}Facturado hoy</div><div class="val num">${money(fact)}</div><div class="hint">Estimado del día: ${money(estimado)}</div></div>
-        <div class="kpi"><div class="lbl">${ic('calendar-days')}Turnos del día</div><div class="val num">${ts.length}</div><div class="hint">${futuros.length} por venir</div></div>
-        <div class="kpi"><div class="lbl" style="color:var(--ok)">${ic('circle-check')}Atendidos</div><div class="val num">${at.length}</div><div class="hint">${ts.length ? Math.round((at.length / ts.length) * 100) : 0}% del día</div></div>
-        <div class="kpi"><div class="lbl" style="color:var(--bad)">${ic('user-x')}No vinieron</div><div class="val num">${nv.length}</div><div class="hint">${money(sum(nv))} perdidos</div></div>
-        <div class="kpi ${sc.length ? 'warn' : ''}"><div class="lbl" style="color:var(--warn)">${ic('triangle-alert')}Sin cargar</div><div class="val num">${sc.length}</div><div class="hint">Turnos de hoy ya pasados</div></div>
+        <div class="kpi money"><div class="lbl">${ic('banknote')}Facturado hoy</div><div class="val num">${money(fact)}</div><div class="hint">Sin reserva ${money(sum(walk))} · Con turno ${money(sum(res))}</div></div>
+        <div class="kpi accent"><div class="lbl">${ic('door-open')}Sin reserva</div><div class="val num">${walk.length}</div><div class="hint">${at.length ? Math.round((walk.length / at.length) * 100) : 0}% de los clientes</div></div>
+        <div class="kpi"><div class="lbl" style="color:var(--ok)">${ic('circle-check')}Clientes atendidos</div><div class="val num">${at.length}</div><div class="hint">${res.length} con turno</div></div>
+        <div class="kpi"><div class="lbl">${ic('receipt')}Ticket promedio</div><div class="val num">${money(at.length ? fact / at.length : 0)}</div><div class="hint">Por cliente</div></div>
+        <div class="kpi ${quietos.length ? 'warn' : ''}"><div class="lbl" style="color:var(--warn)">${ic('triangle-alert')}Sin cargar hace rato</div><div class="val num">${quietos.length}</div><div class="hint">${quietos.length ? quietos.map((f) => esc(f.b.nombre)).join(', ') : 'Todos cargando'}</div></div>
       </div>
-      ${alerta}
-      <h2 class="sec">${ic('scissors', 'ic-sm')}En vivo<span class="right muted">${hm(NOW.min)} · hora de Argentina</span></h2>
-      <div class="live">${live}</div>
+      <h2 class="sec">${ic('users', 'ic-sm')}Por barbero<span class="right muted">${hm(NOW.min)} · hora de Argentina</span></h2>
+      <div class="live">${cards}</div>
+      <div class="grid-2" style="margin-top:4px">
+        <div><h2 class="sec">${ic('door-open', 'ic-sm')}Entraron sin reserva hoy<span class="right muted">${plural(walk.length, 'cliente')}</span></h2>${feed}</div>
+        <div><h2 class="sec">${ic('clock', 'ic-sm')}Por hora</h2><div class="card chart-card">${porHora}</div></div>
+      </div>
+      <h2 class="sec">${ic('calendar-days', 'ic-sm')}Reservas</h2>
+      ${alertaReservas}
       <h2 class="sec">${ic('eye', 'ic-sm')}La app de los barberos</h2>
-      <div class="card pad"><p class="muted" style="margin:0 0 12px;font-size:14px">Mirá lo que ve cada barbero en su celular: sus turnos del día, los botones para cargar y su resumen.</p>
-        <div class="verComo">${activos().map((b) => `<button class="role" data-a="verComo" data-b="${b.id}">${av(b)}<div><strong>${esc(b.nombre)}</strong><span>${plural(sinCargar(b.id).length, 'turno')} sin cargar</span></div><span class="go">${ic('chevron-right')}</span></button>`).join('')}</div>
+      <div class="card pad"><p class="muted" style="margin:0 0 12px;font-size:14px">Mirá lo que ve cada barbero en su celular: el botón para cargar a cada cliente que entra, sus reservas y su resumen.</p>
+        <div class="verComo">${activos().map((b) => `<button class="role" data-a="verComo" data-b="${b.id}">${av(b)}<div><strong>${esc(b.nombre)}</strong><span>${plural(walk.filter((t) => t.barberoId === b.id).length, 'cliente')} sin reserva hoy</span></div><span class="go">${ic('chevron-right')}</span></button>`).join('')}</div>
       </div>
       <h2 class="sec">${ic('trending-up', 'ic-sm')}Esta semana<span class="right"><button class="btn btn-ghost btn-sm" data-a="nav" data-v="reportes">Ver reportes${ic('arrow-right', 'ic-sm')}</button></span></h2>
       <div class="week-strip">
         <div class="kpi"><div class="lbl">Facturado</div><div class="val num">${moneyK(sum(sem))}</div><div class="hint">${prev.length ? `<span class="delta ${d >= 0 ? 'up' : 'down'}">${d >= 0 ? '▲' : '▼'} ${Math.abs(Math.round(d * 100))}%</span> vs. sem. pasada` : '&nbsp;'}</div></div>
-        <div class="kpi"><div class="lbl">Atendidos</div><div class="val num">${sem.length}</div><div class="hint">Ticket ${money(sem.length ? sum(sem) / sem.length : 0)}</div></div>
-        <div class="kpi"><div class="lbl">No-show</div><div class="val num">${pctNS}%</div><div class="hint">${plural(noShowSem, 'cliente')}</div></div>
+        <div class="kpi"><div class="lbl">Sin reserva</div><div class="val num">${semWalk.length}</div><div class="hint">${sem.length ? Math.round((semWalk.length / sem.length) * 100) : 0}% · ${moneyK(sum(semWalk))}</div></div>
+        <div class="kpi"><div class="lbl">Clientes</div><div class="val num">${sem.length}</div><div class="hint">Ticket ${money(sem.length ? sum(sem) / sem.length : 0)}</div></div>
       </div>`
   }
 
@@ -289,10 +339,10 @@
     const h = t.dur * px - 2
     const b = B(t.barberoId)
     const serv = SV(t.hechoId || t.servicioId).nombre
-    const tip = `${hm(t.hora)}–${hm(t.hora + t.dur)} · ${t.cliente || 'Cliente sin turno'}\n${serv} · ${money(total(t))}\n${b.nombre} · ${LBL[st]}`
+    const tip = `${hm(t.hora)}–${hm(t.hora + t.dur)} · ${t.cliente || 'Sin nombre'}\n${serv} · ${money(total(t))}\n${b.nombre} · ${LBL[st]}`
     const inner = angosto
       ? `<span class="t">${hm(t.hora)}</span>${h > 34 ? `<span>${esc(corto(t.cliente).split(' ')[0])}</span>` : ''}`
-      : h < 34 ? `<b><span class="t" style="display:inline">${hm(t.hora)}</span> ${esc(corto(t.cliente))}</b>` : `<span class="t">${hm(t.hora)}</span><b>${esc(t.cliente || 'Cliente sin turno')}</b>${h > 52 ? `<span>${esc(serv)}</span>` : ''}`
+      : h < 34 ? `<b><span class="t" style="display:inline">${hm(t.hora)}</span> ${esc(corto(t.cliente))}</b>` : `<span class="t">${hm(t.hora)}</span><b>${esc(t.cliente || 'Sin nombre')}</b>${h > 52 ? `<span>${esc(serv)}</span>` : ''}`
     return `<button class="ev e-${st === 'encurso' ? 'pendiente' : st} ${angosto ? 'tiny' : ''}" style="top:${(t.hora - S.config.abre) * px + 1}px;height:${h}px;--bc:${b.color}${st === 'encurso' ? ';box-shadow:0 0 0 2px var(--accent)' : ''}" data-a="ver" data-id="${t.id}" data-tip="${esc(tip)}">${['atendido', 'novino', 'sincargar'].includes(st) ? ic(ICO[st], 'mark') : ''}${inner}</button>`
   }
 
@@ -308,7 +358,8 @@
     const cuenta = {}
     for (const t of at) cuenta[t.hechoId] = (cuenta[t.hechoId] || 0) + 1
     const top = Object.entries(cuenta).sort((a, b) => b[1] - a[1])[0]
-    return { at: at.length, fact: sum(at), ticket: at.length ? sum(at) / at.length : 0, ns: at.length + nv.length ? nv.length / (at.length + nv.length) : 0, nv: nv.length, top: top ? SV(top[0]).nombre : '—', cuenta }
+    const sr = at.filter((t) => t.sinReserva)
+    return { sr: sr.length, srFact: sum(sr), at: at.length, fact: sum(at), ticket: at.length ? sum(at) / at.length : 0, ns: at.length + nv.length ? nv.length / (at.length + nv.length) : 0, nv: nv.length, top: top ? SV(top[0]).nombre : '—', cuenta }
   }
   function vReportes() {
     const r = ui.rep
@@ -341,11 +392,12 @@
       <div class="kpis" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
         <div class="kpi money" style="grid-column:auto"><div class="lbl">${ic('banknote')}Facturación</div><div class="val num">${money(tot.fact)}</div></div>
         <div class="kpi"><div class="lbl">${ic('circle-check')}Atendidos</div><div class="val num">${tot.at}</div></div>
+        <div class="kpi accent"><div class="lbl">${ic('door-open')}Sin reserva</div><div class="val num">${tot.sr}</div><div class="hint">${tot.at ? Math.round((tot.sr / tot.at) * 100) : 0}% · ${money(tot.srFact)}</div></div>
         <div class="kpi"><div class="lbl">${ic('receipt')}Ticket promedio</div><div class="val num">${money(tot.ticket)}</div></div>
         <div class="kpi"><div class="lbl">${ic('user-x')}No-show</div><div class="val num">${Math.round(tot.ns * 100)}%</div><div class="hint">${plural(tot.nv, 'cliente')} no vino${tot.nv === 1 ? '' : 'eron'}</div></div>
       </div>
       <h2 class="sec">${ic('trophy', 'ic-sm')}Ranking de barberos</h2>
-      <div class="card rank">${filas.map((f, i) => `<div class="rank-item"><span class="rank-pos ${medal[i] || ''}">${i === 0 ? ic('crown') : i + 1}</span>${av(f.b, 'av-lg')}<div class="rank-main"><div class="top"><b>${esc(f.b.nombre)}</b><span class="money">${money(f.fact)}</span></div><div class="stats"><span>Atendidos <b>${f.at}</b></span><span>Ticket <b>${money(f.ticket)}</b></span><span>No-show <b>${Math.round(f.ns * 100)}%</b></span><span>Más hecho <b>${esc(f.top)}</b></span></div></div></div>`).join('')}</div>
+      <div class="card rank">${filas.map((f, i) => `<div class="rank-item"><span class="rank-pos ${medal[i] || ''}">${i === 0 ? ic('crown') : i + 1}</span>${av(f.b, 'av-lg')}<div class="rank-main"><div class="top"><b>${esc(f.b.nombre)}</b><span class="money">${money(f.fact)}</span></div><div class="stats"><span>Atendidos <b>${f.at}</b></span><span>Sin reserva <b>${f.sr}</b></span><span>Ticket <b>${money(f.ticket)}</b></span><span>No-show <b>${Math.round(f.ns * 100)}%</b></span><span>Más hecho <b>${esc(f.top)}</b></span></div></div></div>`).join('')}</div>
       <div class="grid-2" style="margin-top:12px">
         <div class="card chart-card"><h3>Facturación por barbero</h3><p class="cap">Solo turnos atendidos</p>
           <div class="hbars">${filas.map((f) => `<div class="hbar"><span class="n"><i style="background:${f.b.color}"></i>${esc(f.b.nombre)}</span><div class="track"><div class="fill" style="width:${(f.fact / maxF) * 100}%;background:${f.b.color}" data-tip="${esc(`${f.b.nombre}\n${money(f.fact)} · ${f.at} atendidos`)}"></div></div><span class="v">${money(f.fact)}</span></div>`).join('')}</div>
@@ -358,8 +410,8 @@
       <div class="card chart-card" style="margin-top:12px"><h3>Facturación diaria</h3><p class="cap">Total de turnos atendidos por día</p>${linea(from, to)}</div>
       <h2 class="sec">${ic('clipboard-list', 'ic-sm')}Detalle</h2>
       <div class="card" style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13.5px;min-width:560px">
-        <thead><tr style="color:var(--muted);text-align:left">${['Barbero', 'Atendidos', 'Facturación', 'Ticket', 'No vino', 'No-show', 'Más hecho'].map((h, i) => `<th style="padding:12px 14px;font-weight:600;${i ? 'text-align:right' : ''}">${h}</th>`).join('')}</tr></thead>
-        <tbody>${filas.map((f) => `<tr style="border-top:1px solid var(--line)"><td style="padding:10px 14px"><span style="display:flex;align-items:center;gap:8px">${av(f.b, 'av-sm')}${esc(f.b.nombre)}</span></td><td class="num" style="text-align:right;padding:10px 14px">${f.at}</td><td class="num" style="text-align:right;padding:10px 14px;font-weight:600">${money(f.fact)}</td><td class="num" style="text-align:right;padding:10px 14px">${money(f.ticket)}</td><td class="num" style="text-align:right;padding:10px 14px">${f.nv}</td><td class="num" style="text-align:right;padding:10px 14px">${Math.round(f.ns * 100)}%</td><td style="text-align:right;padding:10px 14px">${esc(f.top)}</td></tr>`).join('')}</tbody>
+        <thead><tr style="color:var(--muted);text-align:left">${['Barbero', 'Atendidos', 'Sin reserva', 'Facturación', 'Ticket', 'No vino', 'No-show', 'Más hecho'].map((h, i) => `<th style="padding:12px 14px;font-weight:600;${i ? 'text-align:right' : ''}">${h}</th>`).join('')}</tr></thead>
+        <tbody>${filas.map((f) => `<tr style="border-top:1px solid var(--line)"><td style="padding:10px 14px"><span style="display:flex;align-items:center;gap:8px">${av(f.b, 'av-sm')}${esc(f.b.nombre)}</span></td><td class="num" style="text-align:right;padding:10px 14px">${f.at}</td><td class="num" style="text-align:right;padding:10px 14px">${f.sr}</td><td class="num" style="text-align:right;padding:10px 14px;font-weight:600">${money(f.fact)}</td><td class="num" style="text-align:right;padding:10px 14px">${money(f.ticket)}</td><td class="num" style="text-align:right;padding:10px 14px">${f.nv}</td><td class="num" style="text-align:right;padding:10px 14px">${Math.round(f.ns * 100)}%</td><td style="text-align:right;padding:10px 14px">${esc(f.top)}</td></tr>`).join('')}</tbody>
       </table></div>`
   }
 
@@ -453,7 +505,7 @@
     return `<article class="card turno ${st === 'sincargar' ? 'is-sincargar' : ''} ${st === 'encurso' ? 'is-encurso' : ''} ${['atendido', 'novino', 'cancelado'].includes(st) ? 'is-done' : ''}" ${t.estado === 'cancelado' ? 'style="opacity:.55"' : ''}>
       <div class="turno-top">
         <div class="hora">${hm(t.hora)}<small>${opts.fecha ? fCorto(t.fecha) : 'hasta ' + hm(t.hora + t.dur)}</small></div>
-        <div class="info"><b>${esc(t.cliente || 'Cliente sin turno')}</b><div class="serv">${hecho ? `<s>${esc(SV(t.servicioId).nombre)}</s>${ic('arrow-right', 'ic-sm')}` : ''}${esc(SV(t.hechoId || t.servicioId).nombre)} · ${money(total(t))}</div>${t.extras.length ? `<div class="serv" style="font-size:13px">+ ${t.extras.map((e) => esc(e.n)).join(', ')}</div>` : ''}</div>
+        <div class="info"><b>${esc(t.cliente || 'Sin nombre')}</b><div class="serv">${hecho ? `<s>${esc(SV(t.servicioId).nombre)}</s>${ic('arrow-right', 'ic-sm')}` : ''}${esc(SV(t.hechoId || t.servicioId).nombre)} · ${money(total(t))}</div>${t.extras.length ? `<div class="serv" style="font-size:13px">+ ${t.extras.map((e) => esc(e.n)).join(', ')}</div>` : ''}</div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">${pill(st)}${t.tel ? `<a class="wa" href="${waLink(t.tel)}" target="_blank" rel="noopener" aria-label="WhatsApp">${ic('message-circle', 'ic-sm')}</a>` : ''}</div>
       </div>
       ${t.nota ? `<div class="note">${ic('sticky-note')}<span>${esc(t.nota)}</span></div>` : ''}
@@ -542,7 +594,7 @@
 
     let foot = ''
     if (modal.confirmar) {
-      return sheet('¿Cancelar este turno?', `${esc(t.cliente || 'Cliente sin turno')} · ${fCorto(t.fecha)} ${hm(t.hora)} con ${esc(b.nombre)}`, '<p class="muted" style="margin:0 0 14px">El horario queda libre para otro cliente. Queda registrado en la actividad.</p>', `<button class="btn" data-a="noConfirmar">Volver</button><button class="btn btn-danger" data-a="cancelarTurno">${ic('ban', 'ic-sm')}Sí, cancelar</button>`)
+      return sheet('¿Cancelar este turno?', `${esc(t.cliente || 'Sin nombre')} · ${fCorto(t.fecha)} ${hm(t.hora)} con ${esc(b.nombre)}`, '<p class="muted" style="margin:0 0 14px">El horario queda libre para otro cliente. Queda registrado en la actividad.</p>', `<button class="btn" data-a="noConfirmar">Volver</button><button class="btn btn-danger" data-a="cancelarTurno">${ic('ban', 'ic-sm')}Sí, cancelar</button>`)
     }
     if (t.estado === 'pendiente') {
       foot += `<div class="actions" style="width:100%"><button class="act act-ok" data-a="marcar" data-e="atendido" data-id="${t.id}">${ic('check')}Atendido</button><button class="act act-bad" data-a="marcar" data-e="novino" data-id="${t.id}">${ic('user-x')}No vino</button></div>`
@@ -553,7 +605,7 @@
     } else if (t.estado === 'novino') {
       foot += `<button class="btn btn-ghost" data-a="marcar" data-e="pendiente" data-id="${t.id}">${ic('undo-2', 'ic-sm')}Volver a pendiente</button>`
     }
-    return sheet(esc(t.cliente || 'Cliente sin turno'), `${t.sinReserva ? 'Entró sin reserva · ' : ''}${fCorto(t.fecha)} · ${hm(t.hora)} · ${esc(b.nombre)}`, `<div class="detail">${rows.map(([a, v]) => `<div><span>${a}</span><span>${v}</span></div>`).join('')}</div>`, foot)
+    return sheet(esc(t.cliente || 'Sin nombre'), `${t.sinReserva ? 'Entró sin reserva · ' : ''}${fCorto(t.fecha)} · ${hm(t.hora)} · ${esc(b.nombre)}`, `<div class="detail">${rows.map(([a, v]) => `<div><span>${a}</span><span>${v}</span></div>`).join('')}</div>`, foot)
   }
 
   // Formulario de turno: los cambios de barbero, servicio o fecha recalculan los horarios libres
@@ -593,7 +645,7 @@
     const t = S.turnos.find((x) => x.id === modal.id)
     const sid = modal.hechoId
     const tot = SV(sid).precio + DB.EXTRAS.filter((e) => modal.extras.includes(e.n)).reduce((s, e) => s + e.p, 0)
-    return sheet('¿Qué le hiciste?', `${esc(t.cliente || 'Cliente sin turno')} · reservó ${esc(SV(t.servicioId).nombre)}`, `
+    return sheet('¿Qué le hiciste?', `${esc(t.cliente || 'Sin nombre')} · reservó ${esc(SV(t.servicioId).nombre)}`, `
       <div class="field"><span class="lbl">Servicio hecho</span><div class="opt-grid">${S.servicios.filter((s) => s.activo || s.id === sid).map((s) => `<button class="opt ${s.id === sid ? 'on' : ''}" data-a="ajServ" data-s="${s.id}"><b>${esc(s.nombre)}</b><span>${money(s.precio)}</span></button>`).join('')}</div></div>
       <div class="field"><span class="lbl">Extras</span><div class="opt-grid">${DB.EXTRAS.map((e) => `<button class="opt chk ${modal.extras.includes(e.n) ? 'on' : ''}" data-a="ajExtra" data-n="${esc(e.n)}"><b style="font-size:13.5px">${esc(e.n)}</b><span>+${money(e.p)}</span></button>`).join('')}</div></div>
       <div class="field"><label for="aj-nota">Nota</label><textarea class="input" id="aj-nota" placeholder="Ej: quiere volver en 15 días">${esc(modal.nota)}</textarea></div>
@@ -617,7 +669,7 @@
       return sheet('Turnos sin cargar', 'De días anteriores. Marcá cada uno.', ts.length ? `<div class="list">${ts.map((t) => tarjeta(t, { fecha: true })).join('')}</div>` : `<div class="empty">${ic('circle-check')}<div>¡Listo! Está todo cargado.</div></div>`)
     }
     const msg = `Hola ${b.nombre}! Te quedaron ${ts.length} turnos sin cargar en la app (${[...new Set(ts.map((t) => fCorto(t.fecha)))].join(', ')}). ¿Los cargás cuando puedas? Gracias!`
-    return sheet(`${esc(b.nombre)} · sin cargar`, `${plural(ts.length, 'turno')} que ya pasaron y no tienen estado`, ts.length ? `<div class="card" style="margin-bottom:14px">${ts.map((t) => `<button class="row" data-a="ver" data-id="${t.id}"><div class="num" style="font-weight:600;min-width:84px">${fCorto(t.fecha)}<small>${hm(t.hora)}</small></div><div class="grow"><b>${esc(t.cliente || 'Cliente sin turno')}</b><small>${esc(SV(t.servicioId).nombre)} · ${money(total(t))}</small></div>${ic('chevron-right', 'faint')}</button>`).join('')}</div>` : `<div class="empty">${ic('circle-check')}<div>Todo cargado</div></div>`,
+    return sheet(`${esc(b.nombre)} · sin cargar`, `${plural(ts.length, 'turno')} que ya pasaron y no tienen estado`, ts.length ? `<div class="card" style="margin-bottom:14px">${ts.map((t) => `<button class="row" data-a="ver" data-id="${t.id}"><div class="num" style="font-weight:600;min-width:84px">${fCorto(t.fecha)}<small>${hm(t.hora)}</small></div><div class="grow"><b>${esc(t.cliente || 'Sin nombre')}</b><small>${esc(SV(t.servicioId).nombre)} · ${money(total(t))}</small></div>${ic('chevron-right', 'faint')}</button>`).join('')}</div>` : `<div class="empty">${ic('circle-check')}<div>Todo cargado</div></div>`,
       b.tel && ts.length ? `<a class="btn btn-gold" style="text-decoration:none" href="${waLink(b.tel, msg)}" target="_blank" rel="noopener">${ic('message-circle', 'ic-sm')}Avisarle por WhatsApp</a>` : '')
   }
 
@@ -673,6 +725,7 @@
     close: () => closeModal(),
     overlay: (el, e) => { if (e.target === el) closeModal() },
 
+    verActividad: () => { ui.view = 'actividad'; ui.act.filtro = 'todos'; scrollTo(0, 0); render() },
     verAgenda: (el) => { ui.view = 'agenda'; ui.agenda = { ...ui.agenda, modo: 'dia', fecha: NOW.day, filtro: el.dataset.b }; scrollTo(0, 0); render() },
     agModo: (el) => { ui.agenda.modo = el.dataset.m; render() },
     agMover: (el) => { ui.agenda.fecha = addDays(ui.agenda.fecha, +el.dataset.d * (ui.agenda.modo === 'dia' ? 1 : 7)); render() },

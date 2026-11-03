@@ -8,7 +8,7 @@
 (function () {
   const TZ = 'America/Argentina/Buenos_Aires'
   const STORE = 'barberia:datos'
-  const VERSION = 3
+  const VERSION = 5
 
   const pad = (n) => String(n).padStart(2, '0')
   const key = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
@@ -85,10 +85,11 @@
 
     // Cómo carga cada uno: Matías al día, Facu se atrasa (para que se vea el control)
     const perfil = {
-      b1: { olvidaPasado: 0.0, olvidaHoy: 0.15, tarde: 0.05, min: 8, max: 10, falta: 0.05 },
-      b2: { olvidaPasado: 0.03, olvidaHoy: 0.3, tarde: 0.2, min: 7, max: 9, falta: 0.08 },
-      b3: { olvidaPasado: 0.015, olvidaHoy: 0.25, tarde: 0.15, min: 6, max: 9, falta: 0.07 },
-      b4: { olvidaPasado: 0.11, olvidaHoy: 0.75, tarde: 0.55, min: 6, max: 8, falta: 0.12 },
+      // sinCargar: clientes sin reserva que atendió y nunca cargó (no quedan registrados)
+      b1: { olvidaPasado: 0.0, olvidaHoy: 0.15, tarde: 0.05, min: 8, max: 10, falta: 0.05, sinCargar: 0, sinCargarHoy: 0 },
+      b2: { olvidaPasado: 0.03, olvidaHoy: 0.1, tarde: 0.2, min: 7, max: 9, falta: 0.08, sinCargar: 0.05, sinCargarHoy: 0 },
+      b3: { olvidaPasado: 0.015, olvidaHoy: 0.1, tarde: 0.15, min: 7, max: 10, falta: 0.07, sinCargar: 0.03, sinCargarHoy: 0 },
+      b4: { olvidaPasado: 0.11, olvidaHoy: 1, tarde: 0.55, min: 6, max: 9, falta: 0.12, sinCargar: 0.15, sinCargarHoy: 1 },
     }
 
     const { day: hoy, min: ahora } = now()
@@ -115,11 +116,15 @@
           if (t + s.dur > 1200) break
           const fin = t + s.dur
           const pasado = esPasado || (esHoy && fin <= ahora)
-          const sinReserva = (esPasado || (esHoy && t <= ahora)) && chance(0.06)
+          const yaEmpezo = esPasado || (esHoy && t <= ahora)
+          // Lo que viene solo tiene reservas, con huecos: ahí van a entrar los que llegan sin turno
+          if (!yaEmpezo && chance(0.4)) { t = Math.ceil(fin / 15) * 15 + 15; continue }
+          const sinReserva = yaEmpezo && chance(esHoy ? 0.65 : 0.5)
+          if (sinReserva && chance(esHoy ? p.sinCargarHoy : p.sinCargar)) { t = Math.ceil(fin / 15) * 15 + pick([0, 15]); hechos++; continue }
           const cli = sid === 's6' ? pick(chicos) : pick(clientes)
           const turno = {
             id: id(), barberoId: b.id, fecha, hora: t, dur: s.dur,
-            cliente: sinReserva && chance(0.4) ? '' : cli.nombre, tel: sinReserva ? '' : cli.tel,
+            cliente: sinReserva && chance(0.5) ? '' : cli.nombre, tel: sinReserva ? '' : cli.tel,
             servicioId: sid, hechoId: null, precio: s.precio, extras: [], estado: 'pendiente',
             nota: '', cargadoEn: null, cargadoPor: null, sinReserva,
             creadoEn: `${addDays(fecha, -between(0, 6))} ${hm(between(9, 22) * 60 + between(0, 59))}`,
@@ -144,7 +149,7 @@
             } else {
               turno.estado = 'cancelado'
             }
-            let cuando = turno.estado === 'novino' ? t + between(15, 30) : fin + between(1, 18)
+            let cuando = turno.estado === 'novino' ? t + between(15, 30) : sinReserva ? fin + between(0, 6) : fin + between(1, 18)
             if (chance(p.tarde)) cuando = esPasado ? between(1205, 1250) : Math.max(fin + 40, cuando + between(40, 120))
             if (turno.estado === 'cancelado') { cuando = Math.max(540, t - between(60, 180)) }
             if (esHoy && cuando > ahora) cuando = ahora
