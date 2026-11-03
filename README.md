@@ -6,12 +6,13 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 
 | Ruta | Web | Hecha con |
 | --- | --- | --- |
-| `/` | Índice con las cinco muestras (uso interno) | `scripts/index-page.mjs` |
+| `/` | Índice con las muestras (uso interno) | `scripts/index-page.mjs` |
 | `/comptoir/` | Le Comptoir du Pérou | HTML estático (`sites/comptoir/public`) |
 | `/sol-y-luna/` | El Sol & La Luna · Mexi & Co (Le 1492 oculto, ver su README) | Vite + Preact |
 | `/sculpt-detox/` | Sculpt Detox (Ibiza) | Vite + Preact, HTML prerenderizado |
 | `/ltb-concept/` | LTB Concept | HTML estático + `config.js` |
 | `/atelie-queijos/` | Ateliê de queijos · PariSabor | Vite + Preact, HTML prerenderizado |
+| `/barberia/` | Barbería · app de turnos (demo con datos de ejemplo) | HTML + JS sin build (`sites/barberia`) |
 
 ## Dónde está
 
@@ -47,7 +48,7 @@ Instala las dependencias de cada web de Vite la primera vez (`npm ci` en `sites/
 - Bajo una subcarpeta **no se registra el service worker** (con scope `/` se metería en las otras
   muestras) y Mexi-and-Co no pide `/api/menu`: pinta la carta empaquetada.
 - Las claves de `localStorage` llevan el prefijo de cada web (`mexiandco:`, `sculptdetox:`,
-  `parisabor:`): las cinco comparten dominio.
+  `parisabor:`, `barberia:`): las cinco comparten dominio.
 
 ## Variables
 

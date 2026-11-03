@@ -1,5 +1,5 @@
 /**
- * Compila las cinco muestras y las junta en `dist/<sitio>/`, con el índice en `dist/index.html`.
+ * Compila las muestras y las junta en `dist/<sitio>/`, con el índice en `dist/index.html`.
  *
  *   node scripts/build.mjs            → todas
  *   node scripts/build.mjs comptoir   → solo esa (las demás se quedan como estaban en dist/)
@@ -48,6 +48,11 @@ export const SITES = [
   {
     name: 'atelie-queijos', kind: 'vite',
     title: 'Ateliê de queijos · PariSabor', what: 'Degustación de quesos · París', origin: 'https://atelie.parisabor.com',
+  },
+  {
+    name: 'barberia', kind: 'static', from: '.',
+    include: ['index.html', 'styles.css', 'app.js', 'data.js', 'icons.js', 'og.jpg', 'fonts'],
+    title: 'Barbería · Gestión de turnos', what: 'App de turnos para barbería · Argentina', origin: '__ORIGIN__',
   },
 ]
 
