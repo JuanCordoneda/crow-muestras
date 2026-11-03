@@ -13,5 +13,7 @@ generan en el navegador (`data.js`) y los cambios quedan en `localStorage` (`bar
 ## Enlaces para la demo
 
 - `/barberia/?como=dueno` entra directo como dueño; `?como=facu` (o `matias`, `lucas`, `nico`) como barbero.
+- Desde el panel del dueño («La app de los barberos» en Hoy, o el ícono de la corona) se entra a la app
+  de cada barbero con un aviso arriba y «Volver al panel».
 - `?hora=15:30` simula esa hora de Argentina (para mostrarla de noche con el día "en curso").
 - En Configuración: «Restablecer datos de demo».

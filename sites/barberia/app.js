@@ -152,10 +152,9 @@
           <span class="clock"><i class="dot"></i><span class="num">${hm(NOW.min)}</span> hora AR</span>
           <button class="me" data-a="cuenta" aria-label="Cuenta">${me}</button>
         </header>
-        <main class="view">${body}</main>
+        <main class="view">${ses.rol === 'barbero' && ses.desdeDueno ? `<div class="banner">${ic('eye')}<span class="grow">Estás viendo la app de <b>${esc(B(ses.bid).nombre)}</b>, tal como la usa en el celular.</span><button class="btn btn-sm" data-a="volverDueno">${ic('crown', 'ic-sm')}Volver al panel</button></div>` : ''}${body}</main>
       </div>
       <nav class="bottomnav">${views.map((v) => `<button class="${ui.view === v.id ? 'on' : ''}" data-a="nav" data-v="${v.id}">${ic(v.icon, 'ic-lg')}${v.label}${v.id === badgeOn && pend ? `<span class="badge">${pend}</span>` : ''}</button>`).join('')}</nav>
-      ${ses.rol === 'barbero' && ui.view === 'dia' && ui.dia.fecha === NOW.day ? `<button class="walkin" data-a="walkin">${ic('door-open')}Cargar sin reserva</button>` : ''}
     </div>`
   }
 
@@ -212,7 +211,8 @@
 
     // Semana en curso contra la anterior hasta el mismo día
     const ws = weekStart(k), wsPrev = addDays(ws, -7)
-    const sem = atendidos(enRango(ws, k)), prev = atendidos(enRango(wsPrev, addDays(k, -7)))
+    const mismoDia = addDays(k, -7)
+    const sem = atendidos(enRango(ws, k)), prev = atendidos(enRango(wsPrev, mismoDia)).filter((t) => t.fecha < mismoDia || t.hora + t.dur <= NOW.min)
     const d = prev.length ? (sum(sem) - sum(prev)) / sum(prev) : 0
     const noShowSem = enRango(ws, k).filter((t) => t.estado === 'novino').length
     const pctNS = sem.length + noShowSem ? Math.round((noShowSem / (sem.length + noShowSem)) * 100) : 0
@@ -228,6 +228,10 @@
       ${alerta}
       <h2 class="sec">${ic('scissors', 'ic-sm')}En vivo<span class="right muted">${hm(NOW.min)} · hora de Argentina</span></h2>
       <div class="live">${live}</div>
+      <h2 class="sec">${ic('eye', 'ic-sm')}La app de los barberos</h2>
+      <div class="card pad"><p class="muted" style="margin:0 0 12px;font-size:14px">Mirá lo que ve cada barbero en su celular: sus turnos del día, los botones para cargar y su resumen.</p>
+        <div class="verComo">${activos().map((b) => `<button class="role" data-a="verComo" data-b="${b.id}">${av(b)}<div><strong>${esc(b.nombre)}</strong><span>${plural(sinCargar(b.id).length, 'turno')} sin cargar</span></div><span class="go">${ic('chevron-right')}</span></button>`).join('')}</div>
+      </div>
       <h2 class="sec">${ic('trending-up', 'ic-sm')}Esta semana<span class="right"><button class="btn btn-ghost btn-sm" data-a="nav" data-v="reportes">Ver reportes${ic('arrow-right', 'ic-sm')}</button></span></h2>
       <div class="week-strip">
         <div class="kpi"><div class="lbl">Facturado</div><div class="val num">${moneyK(sum(sem))}</div><div class="hint">${prev.length ? `<span class="delta ${d >= 0 ? 'up' : 'down'}">${d >= 0 ? '▲' : '▼'} ${Math.abs(Math.round(d * 100))}%</span> vs. sem. pasada` : '&nbsp;'}</div></div>
@@ -476,6 +480,7 @@
         <div class="datenav grow"><button class="icon-btn" data-a="diaMover" data-d="-1" aria-label="Día anterior">${ic('chevron-left')}</button><span class="lbl">${k === NOW.day ? 'Hoy' : k === addDays(NOW.day, -1) ? 'Ayer' : k === addDays(NOW.day, 1) ? 'Mañana' : fCorto(k)}</span><button class="icon-btn" data-a="diaMover" data-d="1" aria-label="Día siguiente">${ic('chevron-right')}</button></div>
         ${k !== NOW.day ? '<button class="btn btn-sm" data-a="diaHoy">Volver a hoy</button>' : `<span class="muted" style="font-size:13px">${plural(ts.filter((t) => t.estado !== 'cancelado').length, 'turno')}</span>`}
       </div>
+      ${k === NOW.day ? `<button class="btn btn-gold btn-lg btn-block" style="margin-bottom:12px" data-a="walkin">${ic('door-open')}Cargar cliente sin reserva</button>` : ''}
       <div class="list">${orden.length ? orden.map((t) => tarjeta(t)).join('') : `<div class="card empty">${ic('calendar')}<div>${abierto(k) ? 'No tenés turnos este día' : 'La barbería está cerrada'}</div></div>`}</div>`
   }
 
@@ -622,7 +627,8 @@
     return sheet(dueno ? 'Dueño' : esc(B(ses.bid).nombre), esc(S.config.nombre), `<div class="card" style="margin-bottom:14px">
       <div class="cfg-row">${ic(tema === 'light' ? 'sun' : 'moon')}<div class="grow"><b>Modo oscuro</b></div><button class="switch ${tema !== 'light' ? 'on' : ''}" data-a="tema"></button></div>
       <div class="cfg-row">${ic('clock')}<div class="grow"><b>Hora de Argentina</b><small>${fLargo(NOW.day)} · ${hm(NOW.min)}</small></div></div>
-    </div>`, `<button class="btn btn-block" data-a="logout">${ic('log-out', 'ic-sm')}Cambiar de usuario</button>`)
+    </div>
+    ${dueno ? `<div class="field"><span class="lbl">Ver la app de un barbero</span><div class="chips" style="flex-wrap:wrap">${activos().map((b) => `<button class="chip" data-a="verComo" data-b="${b.id}">${av(b, 'av-sm')}${esc(b.nombre)}</button>`).join('')}</div></div>` : ses.desdeDueno ? `<button class="btn btn-block btn-gold" style="margin-bottom:8px" data-a="volverDueno">${ic('crown', 'ic-sm')}Volver al panel del dueño</button>` : ''}`, `<button class="btn btn-block" data-a="logout">${ic('log-out', 'ic-sm')}Cambiar de usuario</button>`)
   }
 
   const COLORES = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#9085e9', '#e66767', '#008300']
@@ -654,8 +660,11 @@
 
   // ═══════════ Acciones ═══════════
   const turno = (id) => S.turnos.find((t) => t.id === id)
+  const guardarSesion = () => { try { localStorage.setItem('barberia:sesion', JSON.stringify(ses)) } catch (e) {} }
   const A = {
     login: (el) => { ses = el.dataset.rol === 'dueno' ? { rol: 'dueno' } : { rol: 'barbero', bid: el.dataset.b }; try { localStorage.setItem('barberia:sesion', JSON.stringify(ses)) } catch (e) {} ui.view = null; ui.dia.fecha = NOW.day; scrollTo(0, 0); render() },
+    verComo: (el) => { ses = { rol: 'barbero', bid: el.dataset.b, desdeDueno: true }; guardarSesion(); modal = null; $modal.innerHTML = ''; ui.view = null; ui.dia.fecha = NOW.day; scrollTo(0, 0); render() },
+    volverDueno: () => { ses = { rol: 'dueno' }; guardarSesion(); modal = null; $modal.innerHTML = ''; ui.view = 'hoy'; scrollTo(0, 0); render() },
     logout: () => { ses = null; try { localStorage.removeItem('barberia:sesion') } catch (e) {} modal = null; $modal.innerHTML = ''; render() },
     nav: (el) => { ui.view = el.dataset.v; scrollTo(0, 0); render() },
     cuenta: () => openModal({ type: 'cuenta' }),
