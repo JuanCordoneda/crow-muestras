@@ -1,0 +1,252 @@
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:500 700;font-display:swap;src:url(fonts/fraunces-latin.woff2) format("woff2")}
+@font-face{font-family:"Inter Tight";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/inter-tight-latin.woff2) format("woff2")}
+
+/* Cocina peruana, en sobrio: crema de papa, rocoto, ají amarillo y maíz morado. */
+:root{
+  color-scheme:light;
+  --bg:#f4eee5;
+  --surface:#fffaf2;
+  --ink:#231c18;
+  --muted:#6c6058;
+  --line:#e4d9ca;
+  --rocoto:#a23a26;
+  --rocoto-ink:#8a2f1e;
+  --aji:#d49a2a;
+  --morado:#3b2236;
+  --morado-soft:#5a3a52;
+  --cream-on-dark:#f6ecdc;
+  --ok:#2f7a4b;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter Tight",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --col:480px;
+  --bar:76px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#e9e0d3;color:var(--ink);font:16px/1.5 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--aji);outline-offset:2px}
+
+/* Todo es de celular: en la compu, la misma columna centrada. */
+.page{max-width:var(--col);margin:0 auto;background:var(--bg);min-height:100vh;padding-bottom:calc(var(--bar) + env(safe-area-inset-bottom));box-shadow:0 0 0 1px var(--line)}
+
+/* Cabecera */
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:saturate(1.2) blur(10px);-webkit-backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.scrolled{border-bottom-color:var(--line)}
+.brand{display:flex;align-items:baseline;gap:8px;text-decoration:none}
+.brand b{font:700 24px/1 var(--serif);letter-spacing:.06em;color:var(--morado)}
+.brand span{font:500 13px/1 var(--sans);color:var(--muted);letter-spacing:.02em}
+.status{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:13px;font-weight:600;white-space:nowrap}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok)}
+.status.closed i{background:var(--muted)}
+
+/* Portada */
+.hero{padding:4px 16px 8px}
+.hero figure{margin:0;border-radius:20px;overflow:hidden;aspect-ratio:4/3;background:var(--line)}
+.hero figure img{width:100%;height:100%;object-fit:cover}
+.hero h1{margin:20px 0 8px;font:600 clamp(30px,8.4vw,38px)/1.08 var(--serif);letter-spacing:-.015em;color:var(--morado)}
+.hero h1 em{font-style:normal;color:var(--rocoto)}
+.hero p{margin:0;color:var(--muted);font-size:17px}
+.rating{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:15px}
+.rating .stars{color:var(--aji);letter-spacing:1px;font-size:15px}
+.rating strong{font-weight:700}
+.rating span{color:var(--muted)}
+
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 16px 8px;padding:0;list-style:none}
+.facts li{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 10px;font-size:13px;line-height:1.3;color:var(--muted)}
+.facts strong{display:block;font:600 17px/1.2 var(--serif);color:var(--ink);margin-bottom:3px}
+
+/* Carta */
+section{padding:28px 16px 4px}
+.kicker{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--rocoto)}
+h2{margin:0 0 6px;font:600 28px/1.15 var(--serif);letter-spacing:-.01em;color:var(--morado)}
+h3{margin:0;font:600 20px/1.2 var(--serif)}
+.lede{margin:0 0 18px;color:var(--muted)}
+.group-title{display:flex;align-items:center;gap:10px;margin:26px 0 12px;font:700 13px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.group-title::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.dish{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:14px}
+.dish img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--line)}
+.dish .body{padding:14px 16px 16px}
+.dish .row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.price{font:600 17px/1 var(--sans);color:var(--rocoto-ink);white-space:nowrap}
+.dish p{margin:6px 0 0;color:var(--muted);font-size:15px;line-height:1.45}
+.tag{display:inline-block;margin-top:10px;padding:3px 9px;border-radius:999px;background:#f3e6c6;color:#6b4a0c;font-size:12px;font-weight:600}
+.tag-soft{background:#efe6da;color:#5b4c41}
+.tag-veg{background:#e3efe2;color:#2f5e33}
+
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:72%;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:16px;margin:0 -16px;padding:0 16px 6px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail .dish{scroll-snap-align:start;margin:0}
+.rail .dish .body{padding:12px 14px 14px}
+.rail h3{font-size:18px}
+.rail .dish p{font-size:14px}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.duo .dish{margin:0}
+.duo .dish .body{padding:12px 12px 14px}
+.duo h3{font-size:17px}
+.duo .dish p{font-size:13.5px}
+.duo .row{flex-direction:column;gap:4px}
+.note{margin:14px 0 0;font-size:13px;color:var(--muted)}
+
+/* Bloques oscuros: maíz morado */
+.band{margin:28px 16px 0;padding:22px 20px;border-radius:20px;background:var(--morado);color:var(--cream-on-dark)}
+.band .kicker{color:#f0c35f}
+.band h2{color:#fff}
+.band p{margin:0;color:#e3d3c4}
+.band a.more{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#fff;font-weight:600;text-decoration:underline;text-underline-offset:4px;text-decoration-color:#f0c35f}
+.band + .band{margin-top:12px;background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.band + .band .kicker{color:var(--rocoto)}
+.band + .band h2{color:var(--morado)}
+.band + .band p{color:var(--muted)}
+.band + .band a.more{color:var(--ink);text-decoration-color:var(--rocoto)}
+
+.info{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:18px}
+.info li{display:flex;gap:14px;padding:14px 16px;border-top:1px solid var(--line)}
+.info li:first-child{border-top:0}
+.info svg{flex:none;width:22px;height:22px;margin-top:1px;color:var(--rocoto)}
+.info strong{display:block;font-weight:600}
+.info span{color:var(--muted);font-size:15px}
+.info a{font-weight:600;color:var(--rocoto-ink)}
+
+footer{padding:28px 16px 24px;color:var(--muted);font-size:13px;line-height:1.6}
+footer .name{font:600 18px/1.2 var(--serif);color:var(--morado);margin-bottom:4px}
+footer details{margin-top:12px}
+footer summary{cursor:pointer;font-weight:600}
+footer ul{margin:8px 0 0;padding-left:18px}
+
+/* Los dos únicos botones */
+.cta{position:fixed;left:0;right:0;bottom:0;z-index:10;max-width:var(--col);margin:0 auto;display:grid;grid-template-columns:1fr 1.35fr;gap:10px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 12px;border-radius:14px;border:1.5px solid var(--rocoto);font-weight:700;font-size:clamp(14px,4vw,16px);white-space:nowrap;text-decoration:none;cursor:pointer;transition:transform .12s ease,background .15s}
+.btn:active{transform:scale(.98)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-main{background:var(--rocoto);color:#fff}
+.btn-main:hover{background:var(--rocoto-ink)}
+.btn-alt{background:var(--surface);color:var(--rocoto-ink)}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* ——— Chat (WhatsApp, visto desde el teléfono del cliente) ——— */
+.chat{position:fixed;inset:0;z-index:50;display:flex;padding:0;flex-direction:column;max-width:var(--col);margin:0 auto;background:#efe7dd;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:15.5px;line-height:1.38;animation:chat-in .28s ease}
+.chat[hidden]{display:none}
+@keyframes chat-in{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.chat-head{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 12px 10px 6px;background:#f6f5f3;border-bottom:1px solid #ddd6cc}
+.chat-head .back{display:grid;place-items:center;width:40px;height:40px;border:0;background:none;border-radius:50%;cursor:pointer;color:#1f7a63}
+.chat-head .back svg{width:24px;height:24px}
+.avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--morado);color:var(--cream-on-dark);font:700 11.5px/1 var(--serif);letter-spacing:.04em;flex:none}
+.chat-head .who{flex:1;min-width:0}
+.chat-head .who b{display:flex;align-items:center;gap:5px;font-size:16px;font-weight:600}
+.chat-head .who b svg{width:15px;height:15px;color:#25a35a;flex:none}
+.chat-head .who small{display:block;color:#667781;font-size:13px;transition:color .2s}
+.chat-head .who small.typing{color:#1f9e5a}
+
+.chat-log{flex:1;overflow-y:auto;padding:12px 10px 18px;display:flex;flex-direction:column;gap:3px;
+  background:#efe7dd url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' fill='none' stroke='rgba(120,95,70,.13)' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 40c10-9 24-9 32 0-8 9-22 9-32 0zM46 40l9-7v14z'/%3E%3Ccircle cx='22' cy='38' r='1.2'/%3E%3Cpath d='M118 22c10 2 14 14 8 28-4 9-12 14-20 14 8-6 13-16 12-28-1-6 0-11 0-14zM118 22c0-4 3-7 7-7'/%3E%3Cellipse cx='45' cy='125' rx='7' ry='17'/%3E%3Cpath d='M38 125h14M39 117h12M39 133h12M45 108v34M45 142c-8-2-14-10-14-20M45 142c8-2 14-10 14-20'/%3E%3Ccircle cx='135' cy='125' r='13'/%3E%3Cpath d='M135 112v26M122 125h26'/%3E%3Ccircle cx='92' cy='84' r='5'/%3E%3Cpath d='M92 72v4M92 92v4M80 84h4M100 84h4'/%3E%3C/svg%3E") 0 0/180px 180px;overscroll-behavior:contain}
+.pill{align-self:center;margin:6px 0 8px;padding:5px 12px;border-radius:8px;background:#fff;color:#54656f;font-size:12.5px;box-shadow:0 1px .5px rgba(11,20,26,.13);text-align:center;max-width:88%}
+.pill.notice{background:#fdf4c5;color:#54656f;line-height:1.4}
+.msg{position:relative;max-width:82%;padding:6px 8px 8px 10px;border-radius:9px;box-shadow:0 1px .5px rgba(11,20,26,.13);white-space:pre-line;word-wrap:break-word;animation:pop .18s ease-out}
+@keyframes pop{from{transform:translateY(6px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+.msg.in{align-self:flex-start;background:#fff}
+.msg.out{align-self:flex-end;background:#d9fdd3}
+.msg.first.in{border-top-left-radius:2px;margin-top:6px}
+.msg.first.out{border-top-right-radius:2px;margin-top:6px}
+.msg .meta{float:right;display:inline-flex;align-items:center;gap:3px;margin:6px 0 -4px 10px;color:#667781;font-size:11px;line-height:1}
+.msg .ticks{width:16px;height:11px;color:#8696a0;transition:color .3s}
+.msg .ticks.read{color:#53bdeb}
+.msg strong{font-weight:600}
+.typing-bubble{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;margin-top:6px;border-radius:9px;border-top-left-radius:2px;background:#fff;box-shadow:0 1px .5px rgba(11,20,26,.13)}
+.typing-bubble i{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:dot 1.2s infinite ease-in-out}
+.typing-bubble i:nth-child(2){animation-delay:.15s}
+.typing-bubble i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+
+/* Botones de respuesta rápida (los de WhatsApp Business) */
+.choices{align-self:flex-start;display:grid;gap:3px;width:min(82%,300px);margin-top:3px;animation:pop .18s ease-out}
+.choices button{padding:10px;border:0;border-radius:9px;background:#fff;color:#027eb5;font-size:15px;font-weight:500;box-shadow:0 1px .5px rgba(11,20,26,.13);cursor:pointer;transition:background .15s}
+.choices button:disabled{cursor:default;color:#8696a0}
+.choices button.picked{background:#e7f6ff;color:#027eb5}
+.choices.live button{animation:breathe 1.6s ease-in-out infinite}
+@keyframes breathe{50%{background:#f2f9fd}}
+
+.composer{display:flex;align-items:flex-end;gap:8px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:#f6f5f3;border-top:1px solid #ddd6cc}
+.composer .field{flex:1;min-height:42px;max-height:96px;overflow:hidden;padding:10px 14px;border-radius:21px;background:#fff;color:#111b21;font-size:15.5px;line-height:1.4}
+.composer .field:empty::before{content:"Message";color:#8696a0}
+.composer .field.typing::after{content:"";display:inline-block;width:1.5px;height:1.1em;margin-left:1px;vertical-align:-2px;background:#25a35a;animation:caret 1s steps(1) infinite}
+@keyframes caret{50%{opacity:0}}
+.composer .send{display:grid;place-items:center;width:42px;height:42px;border-radius:50%;border:0;background:#1f9e5a;color:#fff;flex:none}
+.composer .send svg{width:20px;height:20px}
+
+/* Lo que le llega al restaurante (para el dueño, en castellano) */
+.owner{position:absolute;left:0;right:0;bottom:0;z-index:2;max-height:82%;overflow-y:auto;scrollbar-width:none;padding:10px 16px calc(18px + env(safe-area-inset-bottom));background:var(--surface);color:var(--ink);font-family:var(--sans);border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(35,28,24,.25);animation:sheet .35s cubic-bezier(.2,.8,.2,1)}
+.owner[hidden]{display:none}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+.owner .grip{display:block;width:100%;height:22px;margin:-6px 0 6px;padding:0;border:0;background:none;cursor:pointer}
+.owner .grip::before{content:"";display:block;width:40px;height:5px;margin:0 auto;border-radius:3px;background:var(--line)}
+.owner .eyebrow,.owner h3{cursor:pointer}
+.owner.min > :not(.grip):not(.eyebrow):not(h3){display:none}
+.owner.min h3{margin-bottom:0}
+.owner .eyebrow{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--rocoto)}
+.owner h3{margin:0 0 14px;font:600 22px/1.2 var(--serif);color:var(--morado)}
+.ticket{border:1px solid var(--line);border-radius:16px;background:#fff;overflow:hidden}
+.ticket header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:#f8f1e6;border-bottom:1px dashed var(--line);font-weight:700}
+.ticket header span{padding:3px 9px;border-radius:999px;background:#e3f2e8;color:var(--ok);font-size:12px;font-weight:700;white-space:nowrap}
+.ticket header span.wait{background:#f6e7c3;color:#7a5410}
+.ticket dl{margin:0;padding:6px 14px 10px;display:grid;grid-template-columns:auto 1fr;column-gap:14px}
+.ticket dt,.ticket dd{padding:8px 0;border-top:1px solid #f1eadf;font-size:15px}
+.ticket dt{color:var(--muted)}
+.ticket dd{margin:0;font-weight:600}
+.ticket dt:first-of-type,.ticket dd:first-of-type{border-top:0}
+.owner .hint{margin:12px 2px 0;color:var(--muted);font-size:14.5px;line-height:1.45}
+.owner .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.owner .actions .btn{min-height:46px;font-size:15px}
+
+/* Ocupación por turno (reserva) */
+.slots{padding:12px 14px 14px;border-top:1px dashed var(--line)}
+.slots p{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--muted)}
+.slot{display:grid;grid-template-columns:44px 1fr 40px;align-items:center;gap:10px;padding:4px 0;font-size:14px}
+.slot span{color:var(--muted);font-variant-numeric:tabular-nums}
+.slot .bar{height:8px;border-radius:4px;background:#f1e9dc;overflow:hidden}
+.slot .bar i{display:block;height:100%;border-radius:4px;background:#cdbfae;transform-origin:left;animation:grow .6s .2s both cubic-bezier(.2,.8,.2,1)}
+@keyframes grow{from{transform:scaleX(0)}}
+.slot.mine .bar i{background:var(--rocoto)}
+.slot.mine span,.slot.mine b{color:var(--rocoto-ink);font-weight:700}
+.slot b{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+
+/* El dueño pone el precio del catering */
+.quote{position:sticky;bottom:calc(-18px - env(safe-area-inset-bottom));margin:14px -16px calc(-18px - env(safe-area-inset-bottom));padding:12px 16px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--surface);box-shadow:0 -10px 24px rgba(35,28,24,.08)}
+.quote label{display:block;margin-bottom:8px;font-size:14px;font-weight:700}
+.quote-row{display:flex;gap:10px}
+.quote-row .btn{flex:none;min-height:52px;padding:0 22px}
+.price-input{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:52px;padding:0 14px;border:1.5px solid var(--rocoto);border-radius:12px;background:#fff}
+.price-input:focus-within{border-color:var(--rocoto);box-shadow:0 0 0 3px rgba(162,58,38,.15)}
+.price-input input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--ink);font:600 22px var(--sans)}
+.price-input span{color:var(--muted);font:600 20px var(--sans)}
+.quote .total{margin:8px 0 0;color:var(--muted);font-size:14.5px}
+.quote .total strong{color:var(--ink)}
+
+/* En la compu: la web dentro de un celular, con la guía de la demo al lado (en castellano). */
+.guide{display:none}
+@media (min-width:900px) and (min-height:640px){
+  body{background:radial-gradient(1100px 760px at 68% 42%,#4b2c45,#251522 72%)}
+  .stage{display:flex;align-items:center;justify-content:center;gap:clamp(40px,6vw,96px);min-height:100vh;padding:28px}
+  .guide{display:block;max-width:400px;color:#f6ecdc}
+  .guide-kicker{margin:0 0 14px;color:#f0c35f;font:700 12px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase}
+  .guide .guide-title{margin:0 0 14px;color:#fff;font:600 36px/1.12 var(--serif);letter-spacing:-.01em}
+  .guide p{margin:0 0 20px;color:#dccbbd;font-size:17px}
+  .guide nav{display:grid;gap:10px}
+  .guide nav a{display:block;padding:14px 16px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.06);text-decoration:none;transition:background .15s,border-color .15s}
+  .guide nav a:hover,.guide nav a.on{border-color:#f0c35f;background:rgba(255,255,255,.1)}
+  .guide nav b{display:block;color:#fff;font-weight:600}
+  .guide nav span{display:block;margin-top:2px;color:#cdb9ab;font-size:14px}
+  .guide .guide-note{margin:16px 0 0;color:#a8958a;font-size:14px}
+  .device{flex:none;padding:12px;border-radius:60px;background:#0f0b0e;box-shadow:0 0 0 2px #3a2c35,0 40px 90px rgba(0,0,0,.5)}
+  /* transform: los elementos fixed (botones, chat) quedan dentro de la pantalla del teléfono */
+  .screen{position:relative;width:390px;height:min(844px,calc(100vh - 80px));overflow:hidden;border-radius:48px;background:var(--bg);transform:translateZ(0)}
+  .scroller{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+  .scroller::-webkit-scrollbar{display:none}
+  .page{min-height:100%;box-shadow:none}
+  .top,.chat-head{padding-top:18px}
+}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

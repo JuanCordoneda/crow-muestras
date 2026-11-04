@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Latin's Barber Shop · WhatsApp</title>
+<meta name="description" content="Demo: el WhatsApp de Latin's Barber Shop contesta solo, en francés o en español, y manda al cliente a su link de reserva.">
+<meta name="theme-color" content="#0c0c0d">
+<link rel="canonical" href="__ORIGIN__/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Latin's Barber Shop · Su WhatsApp contesta solo">
+<meta property="og:description" content="Precio, barbero y horario libre al instante, en francés o en español. Y el botón a su reserva de siempre.">
+<meta property="og:url" content="__ORIGIN__/">
+<meta property="og:image" content="__ORIGIN__/og.jpg?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__ORIGIN__/og.jpg?v=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141518'/%3E%3Cg fill='none' stroke='%23d4ad6a' stroke-width='4' stroke-linecap='round' stroke-linejoin='round' transform='translate(12 12) scale(1.67)'%3E%3Ccircle cx='6' cy='6' r='3'/%3E%3Cpath d='M8.12 8.12 12 12'/%3E%3Cpath d='M20 4 8.12 15.88'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Cpath d='M14.8 14.8 20 20'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preload" href="fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Anton';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/anton-latin.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/inter-normal-latin.woff2) format('woff2')}
+
+:root{
+  color-scheme:dark;
+  --bg:#0c0c0d; --surface:#151517; --surface-2:#1c1c1f; --line:#2a2a2e;
+  --ink:#f3efe8; --muted:#a59f95; --faint:#6f6b65;
+  --gold:#d4ad6a; --gold-soft:rgba(212,173,106,.12);
+  --pole-red:#b8322a; --pole-blue:#2b4c9b;
+  /* WhatsApp, tema oscuro */
+  --wa-bg:#0b141a; --wa-bar:#202c33; --wa-in:#202c33; --wa-out:#005c4b; --wa-ink:#e9edef;
+  --wa-meta:rgba(233,237,239,.6); --wa-icon:#aebac1; --wa-sub:#8696a0; --wa-link:#53bdeb; --wa-green:#00a884;
+  --display:'Anton','Oswald','Impact',sans-serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --wa-font:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(ellipse 90% 50% at 50% -10%,rgba(212,173,106,.10),transparent 70%)}
+p{margin:0}
+a{color:inherit}
+
+/* Franja de poste de barbería arriba */
+.pole{height:5px;background:repeating-linear-gradient(135deg,var(--pole-red) 0 12px,var(--ink) 12px 24px,var(--pole-blue) 24px 36px,var(--ink) 36px 48px)}
+
+main{max-width:460px;margin:0 auto;padding:28px max(16px,env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+
+/* ——— Cabecera ——— */
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 11.5px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.eyebrow::before{content:"";width:18px;height:1px;background:currentColor}
+h1{margin:18px 0 0;font:400 clamp(44px,14vw,60px)/.92 var(--display);text-transform:uppercase;letter-spacing:.005em}
+h1 span{display:block;color:var(--gold)}
+.where{margin-top:12px;color:var(--muted);font-size:14px}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.fact{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:13px;color:var(--ink)}
+.fact svg{width:14px;height:14px;flex:none}
+.fact .star{color:var(--gold)}
+.fact small{color:var(--muted);font-size:13px}
+.lead{margin-top:22px;font-size:17px;line-height:1.45}
+.lead strong{color:var(--gold);font-weight:600}
+.keep{display:flex;gap:10px;align-items:flex-start;margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--gold-soft);border:1px solid rgba(212,173,106,.25);font-size:14px}
+.keep svg{width:18px;height:18px;flex:none;color:var(--gold);margin-top:1px}
+.team{display:flex;align-items:center;gap:10px;margin-top:20px}
+.team-faces{display:flex}
+.face{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:400 15px/1 var(--display);color:var(--bg);background:var(--gold);border:2px solid var(--bg)}
+.face+.face{margin-left:-8px}
+.face:nth-child(2){background:#c9c2b6}
+.face:nth-child(3){background:#9b8a6c}
+.team p{font-size:13.5px;color:var(--muted)}
+.team p b{color:var(--ink);font-weight:600}
+
+/* ——— Secciones ——— */
+section{margin-top:44px}
+.step-label{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.step-label .n{font:400 34px/1 var(--display);color:var(--gold)}
+.step-label h2{margin:0;font:600 17px/1.3 var(--sans)}
+.step-label h2 small{display:block;font-weight:400;font-size:13.5px;color:var(--muted)}
+
+/* ——— Chat de WhatsApp ——— */
+.wa{border-radius:22px;overflow:hidden;background:var(--wa-bg);border:1px solid #1d272d;box-shadow:0 24px 60px -24px rgba(0,0,0,.8),0 0 0 6px #121214;font-family:var(--wa-font);color:var(--wa-ink)}
+.wa-top{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 8px;background:var(--wa-bar)}
+.wa-top .back{width:22px;height:22px;color:var(--wa-icon);flex:none}
+.wa-avatar{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;background:#111;border:1.5px solid var(--gold);color:var(--gold);font:400 14px/1 var(--display);letter-spacing:.02em}
+.wa-who{flex:1;min-width:0}
+.wa-name{font-size:15.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wa-status{font-size:12.5px;color:var(--wa-sub);transition:color .2s}
+.wa-status.is-typing{color:var(--wa-green)}
+.wa-actions{display:flex;gap:18px;color:var(--wa-icon);padding-right:4px}
+.wa-actions svg{width:20px;height:20px}
+.wa-body{padding:12px 10px 14px;display:flex;flex-direction:column;gap:3px;
+  background-color:var(--wa-bg);
+  background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px);background-size:18px 18px}
+.wa-date{align-self:center;margin:2px 0 10px;padding:5px 12px;border-radius:8px;background:#182229;color:var(--wa-sub);font-size:12px;text-transform:uppercase;letter-spacing:.02em}
+.msg{position:relative;display:flex;flex-direction:column;max-width:84%}
+.msg.in{align-self:flex-start}
+.msg.out{align-self:flex-end;align-items:flex-end}
+.msg.gap{margin-top:9px}
+.bubble{position:relative;padding:6px 8px 7px 9px;border-radius:8px;font-size:14.6px;line-height:1.38;box-shadow:0 1px .5px rgba(0,0,0,.13);word-wrap:break-word}
+.in .bubble{background:var(--wa-in)}
+.out .bubble{background:var(--wa-out)}
+.bubble strong{font-weight:600}
+.bubble p+p{margin-top:4px}
+.tail.in .bubble{border-top-left-radius:0}
+.tail.out .bubble{border-top-right-radius:0}
+.tail.in .bubble::before,.tail.out .bubble::before{content:"";position:absolute;top:0;width:8px;height:13px}
+.tail.in .bubble::before{left:-8px;background:var(--wa-in);clip-path:polygon(100% 0,0 0,100% 100%)}
+.tail.out .bubble::before{right:-8px;background:var(--wa-out);clip-path:polygon(0 0,100% 0,0 100%)}
+.meta{float:right;display:inline-flex;align-items:center;gap:3px;margin:6px 0 -4px 10px;font-size:11px;color:var(--wa-meta);line-height:1}
+.ticks{width:16px;height:11px;color:var(--wa-meta);transition:color .3s}
+.ticks.read{color:var(--wa-link)}
+.replies{display:flex;flex-direction:column;gap:2px;margin-top:2px}
+.reply{display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 12px;border-radius:8px;background:var(--wa-in);color:var(--wa-link);font-size:14.2px;font-weight:500;box-shadow:0 1px .5px rgba(0,0,0,.13);transition:background .25s}
+.reply svg{width:15px;height:15px}
+.reply.tapped{background:#2a3942}
+.cta-btn{display:flex;align-items:center;justify-content:center;gap:7px;margin:9px -8px -7px -9px;padding:11px 12px;border-top:1px solid rgba(134,150,160,.15);color:var(--wa-link);font-size:14.6px;font-weight:500;text-decoration:none;border-radius:0 0 8px 8px;-webkit-tap-highlight-color:transparent}
+.cta-btn:hover,.cta-btn:focus-visible{background:rgba(83,189,235,.08);outline:none}
+.cta-btn svg{width:17px;height:17px}
+.dots{display:none;position:absolute;left:0;top:0;padding:12px 14px;border-radius:0 8px 8px 8px;background:var(--wa-in);gap:4px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--wa-sub);animation:blink 1.2s infinite both}
+.dots i:nth-child(2){animation-delay:.18s}
+.dots i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-2px)}}
+.wa-compose{display:flex;align-items:center;gap:8px;padding:8px 8px 10px;background:var(--wa-bg)}
+.wa-input{flex:1;display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:24px;background:var(--wa-bar);color:var(--wa-sub);font-size:15px}
+.wa-input svg{width:20px;height:20px;color:var(--wa-icon);flex:none}
+.wa-input span{flex:1}
+.wa-mic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--wa-green);color:#0b141a;flex:none}
+.wa-mic svg{width:20px;height:20px}
+
+/* Reproducción: los mensajes ocupan su lugar desde el principio (sin saltos) y aparecen en orden */
+.wa.armed [data-step]{visibility:hidden}
+.wa.armed [data-step].shown{visibility:visible;animation:pop .28s ease-out both}
+.wa.armed [data-step].typing{visibility:visible}
+.wa.armed [data-step].typing>:not(.dots){visibility:hidden}
+.wa.armed [data-step].typing .dots{display:flex}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+
+.under{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-top:14px}
+.notes{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:13px;color:var(--muted)}
+.notes li{display:flex;gap:8px}
+.notes li::before{content:"";width:5px;height:5px;margin-top:7px;border-radius:50%;background:var(--gold);flex:none}
+.replay{flex:none;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 13px/1 var(--sans);cursor:pointer}
+.replay:hover{border-color:var(--gold)}
+.replay:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.replay svg{width:14px;height:14px}
+
+.lang-note{display:flex;align-items:center;gap:10px;margin-top:44px;color:var(--muted);font-size:13.5px}
+.lang-note::before,.lang-note::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* ——— Tarjeta: clientes fijos ——— */
+.card{position:relative;overflow:hidden;padding:24px 20px 22px;border-radius:20px;background:linear-gradient(160deg,#1d1a15,var(--surface) 55%);border:1px solid rgba(212,173,106,.3)}
+.card::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(212,173,106,.18),transparent 70%)}
+.card .tag{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.card .tag svg{width:14px;height:14px}
+.card h2{margin:12px 0 0;font:400 30px/1.02 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.card h2 em{font-style:normal;color:var(--gold)}
+.mini{margin:18px 0 0;padding:12px 10px;border-radius:14px;background:var(--wa-bg);display:flex;flex-direction:column;gap:6px;font-family:var(--wa-font);color:var(--wa-ink)}
+.mini .who{align-self:flex-end;font-size:11.5px;color:var(--wa-sub);margin-bottom:-2px}
+.mini .bubble{font-size:14px}
+.mini .msg{max-width:88%}
+.perks{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:12px}
+.perks li{display:flex;gap:12px;font-size:14.5px;line-height:1.4}
+.perks svg{width:20px;height:20px;flex:none;color:var(--gold);margin-top:1px}
+
+/* ——— Cómo funciona ——— */
+.how{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:how}
+.how li{position:relative;display:grid;grid-template-columns:36px 1fr;gap:12px;padding:0 0 18px}
+.how li:last-child{padding-bottom:0}
+.how li::before{counter-increment:how;content:counter(how);width:36px;height:36px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--gold);color:var(--gold);font:400 17px/1 var(--display);background:var(--bg);position:relative;z-index:1}
+.how li:not(:last-child)::after{content:"";position:absolute;left:17.5px;top:36px;bottom:0;width:1px;background:var(--line)}
+.how b{display:block;font-weight:600;font-size:15px}
+.how span{color:var(--muted);font-size:14px}
+
+footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;text-align:center}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,20px);max-width:calc(100% - 32px);padding:11px 16px;border-radius:12px;background:#f3efe8;color:#141414;font-size:14px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:10}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ——— Sello de la cabecera ——— */
+.hero{position:relative}
+.seal{position:absolute;right:-2px;top:-6px;width:76px;height:76px;color:var(--gold);opacity:.9}
+.seal-text{transform-origin:50px 50px;animation:spin 28s linear infinite}
+.seal text{font-family:var(--sans);font-weight:600}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ——— Navegación fija ——— */
+.jump{position:sticky;top:0;z-index:5;display:flex;gap:6px;margin:28px -16px 0;padding:10px 16px;background:rgba(12,12,13,.86);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;padding:7px 13px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted);text-decoration:none;border:1px solid transparent;transition:color .2s,background .2s,border-color .2s}
+.jump a.on{color:var(--bg);background:var(--gold)}
+.jump a:not(.on):hover{color:var(--ink);border-color:var(--line)}
+.jump a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+section{scroll-margin-top:64px}
+.jump+section{margin-top:28px}
+
+/* ——— Respuestas que se pueden tocar ——— */
+button.reply{width:100%;border:0;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button.reply:hover{background:#26343c}
+button.reply:focus-visible{outline:2px solid var(--wa-link);outline-offset:1px}
+button.reply.tapped{background:#2a3942;color:#7fd0f2}
+.chosen .reply:not(.tapped){opacity:.5}
+.chosen .reply:not(.tapped):hover{opacity:.85}
+.hint{display:none;align-self:center;margin-top:8px;padding:5px 11px;border-radius:999px;background:rgba(212,173,106,.14);color:var(--gold);font:500 12px/1.2 var(--sans)}
+.asking .hint{display:block;animation:pop .3s ease-out both}
+.asking .reply{animation:nudge 1.6s ease-in-out infinite}
+.asking .reply:nth-child(2){animation-delay:.15s}
+.asking .reply:nth-child(3){animation-delay:.3s}
+@keyframes nudge{0%,100%{box-shadow:0 1px .5px rgba(0,0,0,.13)}50%{box-shadow:0 0 0 2px rgba(83,189,235,.45)}}
+
+/* ——— Lo que cambia ——— */
+.compare{display:grid;gap:12px}
+.case{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line)}
+.when{display:flex;align-items:center;gap:8px;font:400 19px/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.when svg{width:17px;height:17px;color:var(--gold)}
+.rows{display:grid;gap:8px;margin-top:12px}
+.rows p{position:relative;padding:10px 12px 10px 14px;border-radius:10px;font-size:14px;line-height:1.4}
+.rows b{display:block;margin-bottom:2px;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.before{background:var(--surface-2);color:var(--muted)}
+.before b{color:var(--faint)}
+.after{background:rgba(0,168,132,.1);box-shadow:inset 3px 0 0 var(--wa-green)}
+.after b{color:var(--wa-green)}
+
+/* ——— Cierre ——— */
+.close{margin-top:52px;padding:28px 20px;border-radius:20px;text-align:center;background:var(--surface);border:1px solid var(--line);position:relative;overflow:hidden}
+.close::before{content:"";position:absolute;inset:0 0 auto;height:5px;background:repeating-linear-gradient(135deg,var(--pole-red) 0 12px,var(--ink) 12px 24px,var(--pole-blue) 24px 36px,var(--ink) 36px 48px)}
+.close h2{margin:0;font:400 34px/1 var(--display);text-transform:uppercase}
+.close h2 span{display:block;color:var(--gold)}
+.close p{margin-top:12px;color:var(--muted);font-size:14.5px}
+.close-btn{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:13px 20px;border-radius:999px;background:var(--wa-green);color:#06231c;font-weight:600;font-size:15px;text-decoration:none}
+.close-btn[hidden]{display:none}
+.close-btn svg{width:18px;height:18px}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="pole" aria-hidden="true"></div>
+<main>
+
+  <header class="hero">
+    <svg class="seal" viewBox="0 0 100 100" aria-hidden="true">
+      <defs><path id="ring" d="M50 50m-38 0a38 38 0 1 1 76 0a38 38 0 1 1-76 0"/></defs>
+      <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="1"/>
+      <circle cx="50" cy="50" r="28" fill="none" stroke="currentColor" stroke-width="1" opacity=".5"/>
+      <g class="seal-text"><text font-size="8.6" fill="currentColor"><textPath href="#ring" textLength="236" lengthAdjust="spacing">LATIN'S BARBER SHOP · PARIS 17 · </textPath></text></g>
+      <g transform="translate(38 38)" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></g>
+    </svg>
+    <span class="eyebrow">Demo · WhatsApp</span>
+    <h1>Latin's <span>Barber Shop</span></h1>
+    <p class="where">112 Rue la Condamine, 75017 París · Batignolles</p>
+    <div class="facts">
+      <span class="fact"><svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg>4,7 <small>· 299 reseñas en Google</small></span>
+      <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Todos los días 10–20 <small>· dom. 11–19</small></span>
+    </div>
+    <p class="lead">El cliente pregunta precio y si hay lugar. <strong>Le contesta al instante</strong>, le ofrece barbero y horario, y lo manda a reservar.</p>
+    <div class="keep">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+      <p>No cambia su sistema de reservas: el botón <b>«Réserver»</b> abre el link que ya usan.</p>
+    </div>
+    <div class="team">
+      <div class="team-faces" aria-hidden="true"><span class="face">D</span><span class="face">D</span><span class="face">S</span></div>
+      <p>Ofrece horario con <b>Deiby</b>, <b>David</b> o <b>Santiago</b></p>
+    </div>
+  </header>
+
+  <nav class="jump" aria-label="Secciones">
+    <a href="#fr" data-jump>Français</a><a href="#es" data-jump>Español</a><a href="#fijos" data-jump>Clientes fijos</a>
+  </nav>
+
+  <!-- 1 · Francés -->
+  <section id="fr" aria-labelledby="t-fr">
+    <div class="step-label">
+      <span class="n">01</span>
+      <h2 id="t-fr">El cliente escribe en francés <small>Corte + barba y si hay lugar hoy</small></h2>
+    </div>
+
+    <div class="wa" lang="fr" data-chat data-online="en ligne" data-typing="écrit…">
+      <div class="wa-top">
+        <svg class="back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <div class="wa-avatar" aria-hidden="true">LB</div>
+        <div class="wa-who">
+          <div class="wa-name">Latin's Barber Shop</div>
+          <div class="wa-status" data-status>en ligne</div>
+        </div>
+        <div class="wa-actions" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+        </div>
+      </div>
+      <div class="wa-body">
+        <div class="wa-date">Aujourd'hui</div>
+
+        <div class="msg out tail" data-step>
+          <div class="bubble"><p>Bonjour&#8239;! C'est combien une coupe + barbe&#8239;? Et vous avez de la place aujourd'hui&#8239;?</p><span class="meta">14:02 <svg class="ticks" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+        </div>
+
+        <div class="msg in tail gap" data-step>
+          <div class="bubble"><p>Bonjour 👋 Bienvenue chez Latin's Barber Shop&#8239;!</p><p>Coupe + barbe&#8239;: <strong>35 €</strong> (environ 45 min).</p><span class="meta">14:02</span></div>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="msg in" data-step>
+          <div class="bubble"><p>Aujourd'hui, il reste de la place&#8239;:</p><span class="meta">14:02</span></div>
+          <div class="replies">
+            <button type="button" class="reply" data-slot="15:30" data-barber="Deiby"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>15:30 · Deiby</button>
+            <button type="button" class="reply pick" data-slot="16:15" data-barber="David"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>16:15 · David</button>
+            <button type="button" class="reply" data-slot="18:00" data-barber="Santiago"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>18:00 · Santiago</button>
+          </div>
+          <p class="hint" aria-hidden="true">Toque un horario para probar</p>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="msg out tail gap" data-step>
+          <div class="bubble"><p><span data-fill="slot">16:15</span> · <span data-fill="barber">David</span></p><span class="meta">14:03 <svg class="ticks" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+        </div>
+
+        <div class="msg in tail gap" data-step>
+          <div class="bubble"><p>Parfait&#8239;! <span data-fill="barber">David</span> à <strong data-fill="slot">16:15</strong>, coupe + barbe.</p><p>Il ne reste qu'à confirmer ici 👇</p><span class="meta">14:03</span>
+            <a class="cta-btn" href="#" data-book><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>Réserver</a>
+          </div>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="msg in" data-step>
+          <div class="bubble"><p>📍 112 Rue la Condamine, 75017 Paris. À tout à l'heure&#8239;!</p><span class="meta">14:03</span></div>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <div class="wa-compose" aria-hidden="true">
+        <div class="wa-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+          <span>Message</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        </div>
+        <div class="wa-mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></div>
+      </div>
+    </div>
+
+    <div class="under">
+      <ul class="notes">
+        <li>Contesta el asistente, en segundos y a cualquier hora.</li>
+        <li>Toque otro horario: la respuesta cambia.</li>
+        <li>Precio y horarios de ejemplo.</li>
+        <li>«Réserver» abre su página de reservas.</li>
+      </ul>
+      <button class="replay" type="button" data-replay><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ver de nuevo</button>
+    </div>
+  </section>
+
+  <p class="lang-note">Contesta en el idioma del cliente</p>
+
+  <!-- 2 · Español -->
+  <section id="es" aria-labelledby="t-es" style="margin-top:28px">
+    <div class="step-label">
+      <span class="n">02</span>
+      <h2 id="t-es">El mismo chat, en español <small>Más corto: precio, horario y reservar</small></h2>
+    </div>
+
+    <div class="wa" lang="es" data-chat data-online="en línea" data-typing="escribiendo…">
+      <div class="wa-top">
+        <svg class="back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <div class="wa-avatar" aria-hidden="true">LB</div>
+        <div class="wa-who">
+          <div class="wa-name">Latin's Barber Shop</div>
+          <div class="wa-status" data-status>en línea</div>
+        </div>
+        <div class="wa-actions" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 13 5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 11"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+        </div>
+      </div>
+      <div class="wa-body">
+        <div class="wa-date">Hoy</div>
+
+        <div class="msg out tail" data-step>
+          <div class="bubble"><p>¡Hola! ¿Cuánto cuesta corte + barba? ¿Hay lugar hoy?</p><span class="meta">14:10 <svg class="ticks" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+        </div>
+
+        <div class="msg in tail gap" data-step>
+          <div class="bubble"><p>¡Hola! 👋 Corte + barba: <strong>35 €</strong>.</p><p>Hoy hay lugar:</p><span class="meta">14:10</span></div>
+          <div class="replies">
+            <button type="button" class="reply" data-slot="16:15" data-barber="David"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>16:15 · David</button>
+            <button type="button" class="reply pick" data-slot="18:00" data-barber="Santiago"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>18:00 · Santiago</button>
+          </div>
+          <p class="hint" aria-hidden="true">Toque un horario para probar</p>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+
+        <div class="msg out tail gap" data-step>
+          <div class="bubble"><p><span data-fill="slot">18:00</span> · <span data-fill="barber">Santiago</span></p><span class="meta">14:11 <svg class="ticks" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+        </div>
+
+        <div class="msg in tail gap" data-step>
+          <div class="bubble"><p>¡Listo! Confirma tu cita con <span data-fill="barber">Santiago</span> a las <span data-fill="slot">18:00</span> aquí 👇</p><span class="meta">14:11</span>
+            <a class="cta-btn" href="#" data-book><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>Reservar</a>
+          </div>
+          <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+      <div class="wa-compose" aria-hidden="true">
+        <div class="wa-input">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+          <span>Mensaje</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        </div>
+        <div class="wa-mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></div>
+      </div>
+    </div>
+
+    <div class="under">
+      <ul class="notes">
+        <li>Mismo asistente, mismas reglas.</li>
+        <li>El cliente no espera a que alguien suelte la máquina.</li>
+      </ul>
+      <button class="replay" type="button" data-replay><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ver de nuevo</button>
+    </div>
+  </section>
+
+  <!-- 3 · Clientes fijos -->
+  <section id="fijos" aria-labelledby="t-fijos">
+    <article class="card">
+      <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg>03 · Sus clientes de siempre</span>
+      <h2 id="t-fijos">Clientes fijos reservan <em>directo por WhatsApp</em>, sin pasar por la plataforma</h2>
+
+      <div class="mini" aria-label="Ejemplo de chat con un cliente fijo">
+        <span class="who">Jhon · viene cada 3 semanas</span>
+        <div class="msg out tail"><div class="bubble"><p>Hola, ¿el sábado a las 11 con Deiby?</p><span class="meta">21:47</span></div></div>
+        <div class="msg in tail"><div class="bubble"><p>¡Hola Jhon! ✅ Sábado 11:00 con Deiby, como siempre. ¡Nos vemos!</p><span class="meta">21:47</span></div></div>
+      </div>
+
+      <ul class="perks">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m16 11 2 2 4-4"/></svg><span>Los reconoce por su número y les propone su barbero de siempre.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg><span>Dos mensajes y listo: sin descargar la app ni ver otras barberías.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>La plataforma sigue para los clientes nuevos.</span></li>
+      </ul>
+    </article>
+  </section>
+
+  <!-- Lo que cambia -->
+  <section aria-labelledby="t-cambia">
+    <div class="step-label"><h2 id="t-cambia">Lo que cambia <small>Dos momentos de todos los días</small></h2></div>
+    <div class="compare">
+      <article class="case">
+        <p class="when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>21:47 · ya cerraron</p>
+        <div class="rows">
+          <p class="before"><b>Hoy</b>Lo lee alguien mañana, entre corte y corte. El cliente quizás ya reservó en otro lado.</p>
+          <p class="after"><b>Con el asistente</b>Respuesta al instante: precio, horario y el botón para reservar.</p>
+        </div>
+      </article>
+      <article class="case">
+        <p class="when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg>Sábado lleno</p>
+        <div class="rows">
+          <p class="before"><b>Hoy</b>Nadie puede contestar con la máquina en la mano.</p>
+          <p class="after"><b>Con el asistente</b>Los mensajes se contestan solos y los barberos siguen cortando.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section aria-labelledby="t-how">
+    <div class="step-label"><h2 id="t-how">Cómo funciona</h2></div>
+    <ol class="how">
+      <li><div><b>El cliente escribe al WhatsApp de siempre</b><span>En francés o en español, a la hora que sea.</span></div></li>
+      <li><div><b>Le contesta al instante</b><span>Con sus precios, sus barberos y los horarios libres.</span></div></li>
+      <li><div><b>Lo manda a su link de reserva</b><span>La agenda sigue donde está hoy.</span></div></li>
+    </ol>
+  </section>
+
+  <section class="close" aria-labelledby="t-close">
+    <h2 id="t-close">Su WhatsApp, <span>atendiendo solo</span></h2>
+    <p>Se arma con sus precios, Deiby, David y Santiago, y el link de reserva que ya usan.</p>
+    <a class="close-btn" href="#" data-contact hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></svg>Hablemos por WhatsApp</a>
+  </section>
+
+  <footer>Demo con precios y horarios de ejemplo · Crow Agency</footer>
+</main>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms) }) }
+  var params = new URLSearchParams(location.search)
+  var toast = document.querySelector('.toast'), toastTimer
+
+  function say(text) {
+    toast.textContent = text
+    toast.classList.add('on')
+    clearTimeout(toastTimer)
+    toastTimer = setTimeout(function () { toast.classList.remove('on') }, 2600)
+  }
+
+  // «Réserver»: con ?reserva=https://… abre ese link (el de la barbería); sin él, explica qué hace.
+  var reserva = params.get('reserva')
+  document.querySelectorAll('[data-book]').forEach(function (a) {
+    if (reserva && /^https?:\/\//i.test(reserva)) { a.href = reserva; a.target = '_blank'; a.rel = 'noopener'; return }
+    a.addEventListener('click', function (e) { e.preventDefault(); say('Aquí se abre su página de reservas de siempre.') })
+  })
+
+  // Botón final: solo con ?wa=33612345678 (el número al que escribe el dueño).
+  var wa = (params.get('wa') || '').replace(/\D/g, '')
+  if (wa.length >= 8) {
+    var contact = document.querySelector('[data-contact]')
+    contact.href = 'https://wa.me/' + wa + '?text=' + encodeURIComponent("Hola, quiero el asistente de WhatsApp para Latin's Barber Shop")
+    contact.target = '_blank'; contact.rel = 'noopener'; contact.hidden = false
+  }
+
+  // ——— Chats ———
+  // Pone el horario y el barbero elegidos en los mensajes que siguen.
+  function choose(chat, btn) {
+    chat.querySelectorAll('.reply').forEach(function (r) { r.classList.toggle('tapped', r === btn) })
+    chat.classList.add('chosen')
+    chat.querySelectorAll('[data-fill="slot"]').forEach(function (e) { e.textContent = btn.dataset.slot })
+    chat.querySelectorAll('[data-fill="barber"]').forEach(function (e) { e.textContent = btn.dataset.barber })
+  }
+
+  function setStatus(chat, typing) {
+    var status = chat.querySelector('[data-status]')
+    status.textContent = typing ? chat.dataset.typing : chat.dataset.online
+    status.classList.toggle('is-typing', typing)
+  }
+
+  // Espera a que toquen un horario; si nadie toca, elige el de ejemplo.
+  function ask(chat, run) {
+    return new Promise(function (resolve) {
+      chat.classList.add('asking')
+      chat._answer = function (btn) { chat._answer = null; chat.classList.remove('asking'); resolve(btn) }
+      setTimeout(function () {
+        if (chat._run === run && chat._answer) chat._answer(chat.querySelector('.reply.pick'))
+      }, 4500)
+    })
+  }
+
+  // Reproduce el chat desde el paso `from` (0 = desde el principio).
+  async function play(chat, from) {
+    var run = chat._run = (chat._run || 0) + 1
+    var steps = [].slice.call(chat.querySelectorAll('[data-step]'))
+    chat._answer = null; chat.classList.remove('asking', 'done')
+    steps.forEach(function (s, i) {
+      if (i < from) return
+      s.classList.remove('shown', 'typing')
+      var t = s.querySelector('.ticks'); if (t) t.classList.remove('read')
+    })
+    if (!from) {
+      choose(chat, chat.querySelector('.reply.pick'))
+      chat.querySelectorAll('.reply').forEach(function (r) { r.classList.remove('tapped') })
+      chat.classList.remove('chosen')
+    }
+    setStatus(chat, false)
+    chat.classList.add('armed')
+    await wait(from ? 150 : 400)
+
+    for (var i = from; i < steps.length; i++) {
+      var step = steps[i]
+      if (step.classList.contains('out')) {
+        await wait(i === 0 ? 200 : i === from ? 250 : 1100)
+        if (chat._run !== run) return
+        step.classList.add('shown')
+      } else {
+        await wait(step.classList.contains('tail') ? 700 : 250)
+        if (chat._run !== run) return
+        setStatus(chat, true)
+        step.classList.add('typing')
+        await wait(Math.min(1700, Math.max(800, step.querySelector('.bubble').textContent.length * 16)))
+        if (chat._run !== run) return
+        step.classList.remove('typing'); step.classList.add('shown')
+        setStatus(chat, false)
+        chat.querySelectorAll('.ticks').forEach(function (t) { t.classList.add('read') })
+        if (step.querySelector('.replies')) {
+          var btn = await ask(chat, run)
+          if (chat._run !== run) return
+          choose(chat, btn)
+          await wait(350)
+        }
+      }
+    }
+    chat.classList.add('done')
+  }
+
+  function showAll(chat) {
+    chat.classList.remove('armed'); chat.classList.add('done')
+    chat.querySelectorAll('.ticks').forEach(function (t) { t.classList.add('read') })
+    choose(chat, chat.querySelector('.reply.pick'))
+  }
+
+  document.querySelectorAll('[data-chat]').forEach(function (chat) {
+    var section = chat.closest('section')
+    var replay = section.querySelector('[data-replay]')
+    var steps = [].slice.call(chat.querySelectorAll('[data-step]'))
+    var afterReplies = steps.indexOf(chat.querySelector('.replies').closest('[data-step]')) + 1
+
+    // Tocar un horario: responde a la pregunta, o (después) rehace el final con ese horario.
+    chat.querySelectorAll('.reply').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (chat._answer) return chat._answer(btn)
+        if (btn.classList.contains('tapped')) return
+        choose(chat, btn)
+        if (reduce || !chat.classList.contains('armed')) return
+        play(chat, afterReplies)
+      })
+    })
+
+    if (reduce || !('IntersectionObserver' in window)) { showAll(chat); return }
+    chat.classList.add('armed')
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { io.disconnect(); play(chat, 0) }
+    }, { threshold: 0.35 })
+    io.observe(chat)
+    if (replay) replay.addEventListener('click', function () { play(chat, 0) })
+  })
+
+  // Navegación: marca la sección que se está viendo.
+  var links = document.querySelectorAll('[data-jump]')
+  if ('IntersectionObserver' in window) {
+    var seen = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return
+        links.forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id) })
+      })
+    }, { rootMargin: '-45% 0px -50% 0px' })
+    links.forEach(function (a) { seen.observe(document.querySelector(a.getAttribute('href'))) })
+  }
+})()
+</script>
+</body>
+</html>

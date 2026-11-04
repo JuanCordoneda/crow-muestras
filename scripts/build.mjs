@@ -54,6 +54,41 @@ export const SITES = [
     include: ['index.html', 'styles.css', 'app.js', 'data.js', 'icons.js', 'og.jpg', 'fonts'],
     title: 'Barbería · Gestión de turnos', what: 'App de turnos para barbería · Argentina', origin: '__ORIGIN__',
   },
+  {
+    name: 'tropicalisimo', kind: 'static', from: '.',
+    include: ['index.html', 'styles.css', 'app.js', 'art.js', 'og.jpg', 'fonts'],
+    title: 'Tropicalisimo', what: 'Restaurante colombiano · Clichy · web + chats de WhatsApp', origin: '__ORIGIN__',
+  },
+  {
+    name: 'latins', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: "Latin's Barber Shop · WhatsApp", what: 'Barbería · París 17e', origin: '__ORIGIN__',
+  },
+  {
+    name: 'reijane', kind: 'static', from: '.',
+    include: ['index.html', 'whatsapp.html', 'base.css', 'og.jpg', 'fonts'],
+    title: 'Lissage brésilien Paris by Reijane', what: 'Salón de alisado brasileño + demo de WhatsApp · París 16e', origin: '__ORIGIN__',
+  },
+  {
+    name: 'pangus', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'Pangus', what: 'Restaurante argentino + WhatsApp · París 17e', origin: '__ORIGIN__',
+  },
+  {
+    name: 'la-escondida', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'La Escondida', what: 'Restaurante peruano + WhatsApp · París 14e', origin: '__ORIGIN__',
+  },
+  {
+    name: 'inca', kind: 'static', from: '.',
+    include: ['index.html', 'styles.css', 'app.js', 'og.jpg', 'img', 'fonts'],
+    title: 'INCA fusion latina', what: 'Restaurante peruano + WhatsApp · París 15e', origin: '__ORIGIN__',
+  },
+  {
+    name: 'sol-y-luna-whatsapp', kind: 'static', from: '.',
+    include: ['index.html', 'styles.css', 'app.js', 'og.jpg', 'img', 'fonts'],
+    title: 'El Sol & La Luna · Web + WhatsApp', what: 'Restaurante colombiano y mexicano + WhatsApp · París 5e', origin: '__ORIGIN__',
+  },
 ]
 
 const siteUrl = (process.env.SITE_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '')).replace(/\/+$/, '')

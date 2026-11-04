@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Réserver sur WhatsApp – Lissage brésilien Paris by Reijane</title>
+<meta name="description" content="Démo : l'assistant WhatsApp du salon répond aux clientes, donne un prix et réserve un créneau.">
+<meta name="theme-color" content="#f6efe6">
+<link rel="canonical" href="__ORIGIN__/whatsapp.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Lissage brésilien Paris by Reijane · WhatsApp">
+<meta property="og:description" content="Prix, créneau et rappel la veille : l'assistant WhatsApp répond à vos clientes, même le soir.">
+<meta property="og:url" content="__ORIGIN__/whatsapp.html">
+<meta property="og:image" content="__ORIGIN__/og.jpg?v=1">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%237e4f30'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='32' font-style='italic' fill='%23fffaf4'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/inter-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="base.css?v=1">
+<style>
+/* Colores del chat (los de WhatsApp, con el fondo un poco más cálido) */
+:root{--wa-head:#fbf8f4;--wa-wall:#efe6da;--wa-in:#fff;--wa-out:#dcf5d2;--wa-text:#111b21;--wa-meta:#667781;--wa-link:#027eb5;--wa-tick:#53bdeb;--wa-chip:#fff8ee;--wa-press:#f0ebe4;--wa-dot:rgba(126,79,48,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wa-head:#1f2c33;--wa-wall:#0f1a20;--wa-in:#202c33;--wa-out:#005c4b;--wa-text:#e9edef;--wa-meta:#8696a0;--wa-link:#53bdeb;--wa-chip:#1d282f;--wa-press:#2a3942;--wa-dot:rgba(255,255,255,.035)}}
+:root[data-theme="dark"]{--wa-head:#1f2c33;--wa-wall:#0f1a20;--wa-in:#202c33;--wa-out:#005c4b;--wa-text:#e9edef;--wa-meta:#8696a0;--wa-link:#53bdeb;--wa-chip:#1d282f;--wa-press:#2a3942;--wa-dot:rgba(255,255,255,.035)}
+
+html,body{height:100%}
+body{display:flex;flex-direction:column;overflow:hidden}
+
+/* Barra de la demo (fuera del "teléfono") */
+.demo{display:flex;align-items:center;gap:10px;padding:calc(8px + env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) 8px max(14px,env(safe-area-inset-left));background:var(--bg);border-bottom:1px solid var(--line);font-size:13px}
+.demo p{flex:1;min-width:0;margin:0;color:var(--muted);line-height:1.3}
+.demo p b{color:var(--ink);font-weight:600}
+.seg{display:flex;padding:3px;border-radius:999px;background:var(--surface-2)}
+.seg button{min-width:38px;padding:6px 10px;border:0;border-radius:999px;background:none;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--btn);color:var(--on-btn)}
+.icon-btn{display:grid;place-items:center;width:34px;height:34px;flex:none;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--ink)}
+.icon-btn svg{width:16px;height:16px}
+
+/* El chat */
+.phone{flex:1;min-height:0;display:flex;flex-direction:column;background:var(--wa-wall);color:var(--wa-text)}
+.head{display:flex;align-items:center;gap:10px;padding:8px 12px 8px 6px;background:var(--wa-head);box-shadow:0 1px 0 rgba(0,0,0,.06);position:relative;z-index:1}
+.back{display:grid;place-items:center;width:36px;height:40px;color:var(--wa-text);text-decoration:none}
+.back svg{width:22px;height:22px}
+.avatar{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:50%;background:linear-gradient(140deg,#a36b45,#6a4127);color:#fffaf4;font:italic 600 22px/1 "Cormorant Garamond",Georgia,serif}
+.who{flex:1;min-width:0;line-height:1.25}
+.who strong{display:block;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.who span{display:block;font-size:13px;color:var(--wa-meta)}
+.who span.typing{color:#1fa855}
+.head .acts{display:flex;gap:18px;color:var(--wa-text);opacity:.75}
+.head .acts svg{width:21px;height:21px}
+
+.msgs{flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;padding:10px 12px 14px;background-image:radial-gradient(var(--wa-dot) 1.2px,transparent 1.3px);background-size:18px 18px;scroll-behavior:smooth}
+.chip{display:table;margin:10px auto 12px;padding:5px 12px;border-radius:8px;background:var(--wa-chip);color:var(--wa-meta);font-size:12.5px;box-shadow:0 1px .5px rgba(0,0,0,.08)}
+.chip.note{max-width:300px;text-align:center;line-height:1.4;color:#8a6d3b;background:#fdf3d8}
+:root[data-theme="dark"] .chip.note{color:#ffd279;background:#182229}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .chip.note{color:#ffd279;background:#182229}}
+
+.row{display:flex;flex-direction:column;margin-top:2px}
+.row.tail{margin-top:10px}
+.row.me{align-items:flex-end}
+.row.them{align-items:flex-start}
+.bubble{position:relative;max-width:min(82%,380px);padding:6px 9px 8px;border-radius:8px;font-size:15px;line-height:1.38;box-shadow:0 1px .5px rgba(0,0,0,.13);overflow-wrap:anywhere;animation:pop .22s ease-out}
+.me .bubble{background:var(--wa-out)}
+.them .bubble{background:var(--wa-in)}
+.tail.me .bubble{border-top-right-radius:0}
+.tail.them .bubble{border-top-left-radius:0}
+.tail .bubble::before{content:"";position:absolute;top:0;width:8px;height:13px}
+.tail.me .bubble::before{right:-8px;background:var(--wa-out);clip-path:polygon(0 0,100% 0,0 100%)}
+.tail.them .bubble::before{left:-8px;background:var(--wa-in);clip-path:polygon(0 0,100% 0,100% 100%)}
+.bubble b{font-weight:600}
+/* hora + tildes flotando al final del texto, como en WhatsApp */
+.meta{float:right;display:inline-flex;align-items:center;gap:3px;margin:8px 0 -5px 10px;font-size:11px;line-height:1;color:var(--wa-meta);white-space:nowrap}
+.meta svg{width:16px;height:11px;color:var(--wa-meta);transition:color .3s}
+.meta.read svg{color:var(--wa-tick)}
+
+.btns{display:flex;flex-direction:column;gap:2px;width:min(82%,380px);margin-top:2px}
+.btns button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:40px;border:0;border-radius:8px;background:var(--wa-in);color:var(--wa-link);font-size:15px;font-weight:500;box-shadow:0 1px .5px rgba(0,0,0,.13);cursor:default;transition:background .2s}
+.btns button svg{width:16px;height:16px}
+.btns button.picked{background:var(--wa-press)}
+.btns button:disabled{color:var(--wa-link)}
+.btns.live button{cursor:pointer;animation:nudge 1.6s ease-in-out infinite}
+.btns.live button:nth-child(2){animation-delay:.25s}
+.btns.live button:hover{background:var(--wa-press)}
+@keyframes nudge{0%,100%{box-shadow:0 1px .5px rgba(0,0,0,.13)}50%{box-shadow:0 0 0 2px color-mix(in srgb,var(--wa-link) 35%,transparent)}}
+
+/* Tarjeta final de la demo: lo que hizo el asistente (para la dueña) */
+.recap{margin:22px 4px 8px;padding:20px 18px 18px;border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 10px 30px -18px rgba(60,30,10,.45);animation:pop .35s ease-out}
+.recap .k{margin:0 0 6px;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-ink)}
+.recap h3{margin:0 0 12px;font:600 24px/1.12 "Cormorant Garamond",Georgia,serif}
+.recap ul{margin:0;padding:0;list-style:none;font-size:14px;line-height:1.45}
+.recap li{position:relative;padding:5px 0 5px 26px}
+.recap li::before{content:"";position:absolute;left:2px;top:9px;width:14px;height:14px;border-radius:50%;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12 4 4 8-8'/%3E%3C/svg%3E") center/10px no-repeat}
+.recap .agenda{display:flex;gap:12px;align-items:center;margin:14px 0 16px;padding:10px 12px;border-left:3px solid var(--accent);border-radius:4px 10px 10px 4px;background:var(--surface-2);font-size:13px;line-height:1.35}
+.recap .agenda b{display:block;font-size:14px}
+.recap .agenda span{color:var(--muted)}
+.recap .agenda svg{width:20px;height:20px;flex:none;color:var(--accent-ink)}
+.recap .acts{display:flex;gap:8px}
+.recap .acts>*{flex:1;display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:999px;font-size:14px;font-weight:600;text-decoration:none}
+.recap .again{border:1px solid var(--line);background:none}
+.recap .site{background:var(--btn);color:var(--on-btn)}
+
+.dots{display:inline-flex;gap:4px;padding:6px 2px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--wa-meta);opacity:.4;animation:blink 1.2s infinite}
+.dots i:nth-child(2){animation-delay:.2s}
+.dots i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.25;transform:none}30%{opacity:.8;transform:translateY(-2px)}}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+
+.compose{display:flex;align-items:center;gap:8px;padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:var(--wa-head)}
+.compose .field{flex:1;display:flex;align-items:center;gap:10px;min-height:42px;padding:0 14px;border-radius:999px;background:var(--wa-in);color:var(--wa-meta);font-size:15px;box-shadow:0 1px .5px rgba(0,0,0,.08)}
+.compose .field svg{width:20px;height:20px;flex:none}
+.compose .mic{display:grid;place-items:center;width:44px;height:44px;flex:none;border-radius:50%;background:#1fa855;color:#fff}
+.compose .mic svg{width:20px;height:20px}
+
+/* En pantallas grandes, el chat dentro de un teléfono */
+@media (min-width:640px){
+  body{align-items:center;justify-content:center;gap:18px;padding:20px;background:radial-gradient(90% 70% at 50% 0%,var(--surface-2),var(--bg))}
+  .demo{width:420px;padding:0;border:0;background:none}
+  .phone{flex:none;width:420px;height:min(860px,calc(100dvh - 110px));border:10px solid #1c1512;border-radius:44px;overflow:hidden;box-shadow:var(--shadow),0 40px 80px -40px rgba(60,30,10,.5)}
+  .head{padding-top:14px}
+}
+@media (prefers-reduced-motion:reduce){.bubble,.recap,.btns.live button{animation:none}.dots i{animation:none;opacity:.5}.msgs{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div class="demo">
+  <p id="bar"></p>
+  <div class="seg" role="group" aria-label="Langue">
+    <button type="button" data-lang="fr" aria-pressed="true">FR</button>
+    <button type="button" data-lang="pt" aria-pressed="false">PT</button>
+  </div>
+  <button class="icon-btn" type="button" id="replay" aria-label="Rejouer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+  </button>
+</div>
+
+<div class="phone">
+  <header class="head">
+    <a class="back" href="./" aria-label="Retour au site">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    </a>
+    <span class="avatar" aria-hidden="true">R</span>
+    <div class="who">
+      <strong>Lissage brésilien by Reijane</strong>
+      <span id="status"></span>
+    </div>
+    <div class="acts" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+    </div>
+  </header>
+
+  <div class="msgs" id="msgs" aria-live="polite"></div>
+
+  <div class="compose" aria-hidden="true">
+    <div class="field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>
+      <span id="placeholder">Message</span>
+    </div>
+    <span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></svg></span>
+  </div>
+</div>
+
+<script>
+/*
+ * Demo del asistente de WhatsApp. Sin backend: la conversación está escrita aquí y se reproduce
+ * con pausas y "écrit…". El sábado del turno es siempre el próximo (a 2 días como mínimo, para que
+ * el recordatorio de la víspera quede después de la conversación).
+ * Quien mira puede elegir el horario (si no toca nada, a los pocos segundos elige la clienta) y
+ * tocar el chat para adelantar. Al final, una tarjeta resume lo que hizo el asistente.
+ *   ?lang=pt    versión en portugués
+ *   ?instant=1  todo de una vez (para capturas)
+ */
+var SCRIPTS = {
+  fr: {
+    locale: 'fr-FR',
+    bar: '<b>Démo</b> · 21h42, salon fermé : l’assistant répond quand même.',
+    online: 'en ligne', typing: 'écrit…', today: 'Aujourd’hui', placeholder: 'Message', replay: 'Rejouer',
+    choose: '👆 <b>À vous :</b> choisissez un créneau', back: './',
+    recap: {
+      k: 'Démo · ce que l’assistant a fait', title: 'Pendant ce temps, Reijane n’a rien eu à écrire.',
+      items: ['Réponse en quelques secondes, à 21h42', 'Prix « à partir de » selon la longueur et la texture', 'Rendez-vous noté dans l’agenda', 'Rappel la veille : moins de rendez-vous oubliés'],
+      who: 'Camille Martin', what: 'Lissage brésilien · cheveux longs', again: 'Rejouer', site: 'Voir le site',
+    },
+    note: '🔒 Les messages sont chiffrés de bout en bout.',
+    msgs: [
+      { me: 1, t: '21:42', text: 'Bonsoir ! C’est combien un lissage brésilien pour cheveux longs ? Et vous auriez de la place samedi ?' },
+      { t: '21:42', text: 'Bonsoir et merci pour votre message ✨\nPour vous donner un prix juste, deux petites questions :\n\n1. Vos cheveux arrivent jusqu’où ? (épaules, milieu du dos, bas du dos)\n2. Ils sont plutôt fins ou épais, ondulés ou frisés ? Colorés ?' },
+      { me: 1, t: '21:44', text: 'Milieu du dos, épais et assez frisés. J’ai fait une couleur il y a 2 mois' },
+      { t: '21:44', text: 'Merci ! Pour des cheveux longs et épais, le *lissage brésilien* est *à partir de 190 €* (environ 3h30, soin inclus). Reijane confirme le prix exact en voyant vos cheveux.\nComme ils sont colorés, elle vous parlera aussi du lissage au tanin, plus doux 🌿\n\nPour *{sat}*, il reste deux créneaux :', buttons: ['9h00', '14h00'], pick: 1, choice: 1 },
+      { me: 1, t: '21:45', text: '{slot}' },
+      { t: '21:45', text: 'Parfait ! À quel nom je réserve ?' },
+      { me: 1, t: '21:45', text: 'Camille Martin' },
+      { t: '21:46', text: 'C’est réservé, Camille ✨\n\n📅 *{Sat} · {slot}*\n💇‍♀️ Lissage brésilien · cheveux longs\n📍 32 Rue de l’Annonciation, 75016 Paris\n\nJe vous enverrai un rappel la veille. À samedi !' },
+      { me: 1, t: '21:46', text: 'Merci beaucoup !! 😍' },
+      { day: '{Fri}' },
+      { t: '18:00', text: 'Bonsoir Camille 🌸 Petit rappel : demain, *samedi à {slot}*, lissage brésilien chez Reijane, 32 Rue de l’Annonciation.\n\nRépondez *1* pour confirmer ou *2* pour changer d’horaire.' },
+      { me: 1, t: '18:04', text: '1' },
+      { t: '18:04', text: 'Merci, à demain ! ✨' },
+    ],
+  },
+  pt: {
+    locale: 'pt-BR',
+    bar: '<b>Demo</b> · 21h42, salão fechado: o assistente responde mesmo assim.',
+    online: 'online', typing: 'digitando…', today: 'Hoje', placeholder: 'Mensagem', replay: 'Repetir',
+    choose: '👆 <b>Sua vez:</b> escolha um horário', back: './?lang=pt',
+    recap: {
+      k: 'Demo · o que o assistente fez', title: 'Enquanto isso, a Reijane não precisou escrever nada.',
+      items: ['Resposta em segundos, às 21h42', 'Preço “a partir de” conforme o comprimento e o tipo de cabelo', 'Horário anotado na agenda', 'Lembrete na véspera: menos faltas'],
+      who: 'Juliana Souza', what: 'Progressiva · cabelo longo', again: 'Repetir', site: 'Ver o site',
+    },
+    note: '🔒 As mensagens são protegidas com a criptografia de ponta a ponta.',
+    msgs: [
+      { me: 1, t: '21:42', text: 'Oi! Quanto tá a progressiva pra cabelo longo? Tem horário no sábado?' },
+      { t: '21:42', text: 'Oi, tudo bem? 😊 Me conta: seu cabelo vai até onde? E ele é fino ou grosso, tem química?' },
+      { me: 1, t: '21:43', text: 'Até o meio das costas, grosso e com coloração' },
+      { t: '21:43', text: 'Pra cabelo longo e grosso, a progressiva fica *a partir de 190 €*. A Reijane confirma o valor quando vê o cabelo 💛\n\nNo *{sat}* tenho dois horários:', buttons: ['9h00', '14h00'], pick: 1, choice: 1 },
+      { me: 1, t: '21:44', text: '{slot}' },
+      { t: '21:44', text: 'Agendado ✨\n\n📅 *Sábado {short} às {slot}*\n📍 32 Rue de l’Annonciation, 75016 Paris\n\nTe mando um lembrete na véspera. Até sábado, beijos!' },
+    ],
+  },
+};
+
+var $ = function (id) { return document.getElementById(id) };
+var msgs = $('msgs'), statusEl = $('status');
+var params = new URLSearchParams(location.search);
+var instant = params.get('instant') === '1' || matchMedia('(prefers-reduced-motion: reduce)').matches;
+var lang = params.get('lang') === 'pt' ? 'pt' : 'fr';
+var run = 0;
+if (instant) msgs.style.scrollBehavior = 'auto';
+
+// Fechas: el próximo sábado (al menos a 2 días) y su víspera, contadas en hora de París
+function dates(locale) {
+  var p = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()).split('-');
+  var today = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2], 12));
+  var add = (6 - today.getUTCDay() + 7) % 7;
+  if (add < 2) add += 7;
+  var sat = new Date(today.getTime() + add * 864e5), fri = new Date(sat.getTime() - 864e5);
+  var long = function (d) { return d.toLocaleDateString(locale, { timeZone: 'UTC', weekday: 'long', day: 'numeric', month: 'long' }) };
+  var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1) };
+  return {
+    sat: long(sat), Sat: cap(long(sat)), Fri: cap(long(fri)),
+    short: sat.getUTCDate() + '/' + (sat.getUTCMonth() + 1),
+    agenda: cap(sat.toLocaleDateString(locale, { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short' })),
+  };
+}
+
+var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') };
+// Formato de WhatsApp: *negrita* y saltos de línea
+var fill = function (s, d) { return s.replace(/\{(\w+)\}/g, function (_, k) { return d[k] }) };
+var format = function (s, d) {
+  return esc(fill(s, d)).replace(/\*([^*\n]+)\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+};
+var ticks = '<svg viewBox="0 0 16 11" fill="currentColor" aria-hidden="true"><path d="M11.07.65 4.6 7.12 1.94 4.46.88 5.52l3.72 3.72 7.53-7.53z"/><path d="m14.95.65-6.47 6.47-.79-.79-1.06 1.06 1.85 1.85 7.53-7.53z"/></svg>';
+var replyIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>';
+
+// Cada pausa se puede cortar tocando el chat (skip)
+var skip = null;
+function wait(ms) {
+  if (instant) return Promise.resolve();
+  return new Promise(function (r) {
+    var t = setTimeout(done, ms);
+    function done() { clearTimeout(t); if (skip === done) skip = null; r() }
+    skip = done;
+  });
+}
+var scroll = function () { msgs.scrollTop = msgs.scrollHeight };
+var lastFrom = null;
+
+function addChip(text, cls) {
+  var el = document.createElement('div');
+  el.className = 'chip' + (cls ? ' ' + cls : '');
+  el.textContent = text;
+  msgs.appendChild(el);
+  lastFrom = null;
+}
+
+function addRow(from) {
+  var row = document.createElement('div');
+  row.className = 'row ' + from + (lastFrom !== from ? ' tail' : '');
+  lastFrom = from;
+  msgs.appendChild(row);
+  return row;
+}
+
+function addMsg(m, d) {
+  var from = m.me ? 'me' : 'them';
+  var row = addRow(from);
+  row.innerHTML = '<div class="bubble">' + format(m.text, d) +
+    '<span class="meta">' + m.t + (m.me ? ticks : '') + '</span></div>';
+  if (m.buttons) {
+    var btns = document.createElement('div');
+    btns.className = 'btns';
+    btns.innerHTML = m.buttons.map(function (b) { return '<button type="button" disabled>' + replyIcon + esc(b) + '</button>' }).join('');
+    row.appendChild(btns);
+  }
+  scroll();
+  return row;
+}
+
+// La clienta (o quien mira) elige un horario: devuelve el índice del botón
+function choose(row, m, s) {
+  var btns = row.querySelector('.btns'), buttons = btns.querySelectorAll('button');
+  if (instant) return Promise.resolve(m.pick);
+  btns.classList.add('live');
+  $('bar').innerHTML = s.choose;
+  return new Promise(function (r) {
+    var picked = false;
+    var pick = function (i) {
+      if (picked) return;
+      picked = true;
+      btns.classList.remove('live');
+      buttons.forEach(function (b) { b.disabled = true });
+      $('bar').innerHTML = SCRIPTS[lang].bar;
+      r(i);
+    };
+    buttons.forEach(function (b, i) {
+      b.disabled = false;
+      b.addEventListener('click', function (e) { e.stopPropagation(); pick(i) });
+    });
+    wait(9000).then(function () { pick(m.pick) });
+  });
+}
+
+function addRecap(s, d) {
+  var r = s.recap, el = document.createElement('div');
+  el.className = 'recap';
+  el.innerHTML = '<p class="k">' + esc(r.k) + '</p><h3>' + esc(r.title) + '</h3><ul>' +
+    r.items.map(function (x) { return '<li>' + esc(x) + '</li>' }).join('') + '</ul>' +
+    '<div class="agenda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>' +
+    '<div><b>' + esc(d.agenda + ' · ' + d.slot) + '</b><span>' + esc(r.who + ' · ' + r.what) + '</span></div></div>' +
+    '<div class="acts"><button type="button" class="again">' + esc(r.again) + '</button><a class="site" href="' + s.back + '">' + esc(r.site) + '</a></div>';
+  el.querySelector('.again').addEventListener('click', function (e) { e.stopPropagation(); play() });
+  msgs.appendChild(el);
+  scroll();
+}
+
+function markRead() {
+  msgs.querySelectorAll('.me .meta:not(.read)').forEach(function (el) { el.classList.add('read') });
+}
+
+async function play() {
+  var id = ++run, s = SCRIPTS[lang], d = dates(s.locale);
+  d.slot = '14h00';
+  if (skip) skip();
+  $('bar').innerHTML = s.bar;
+  var alive = function () { return id === run };
+  msgs.innerHTML = '';
+  lastFrom = null;
+  statusEl.textContent = s.online;
+  statusEl.className = '';
+  addChip(s.note, 'note');
+  addChip(s.today);
+  await wait(700);
+
+  for (var i = 0; i < s.msgs.length; i++) {
+    if (!alive()) return;
+    var m = s.msgs[i];
+    if (m.day) { await wait(900); if (!alive()) return; addChip(fill(m.day, d)); scroll(); continue; }
+    if (m.me) {
+      await wait(i === 0 ? 300 : 1500);
+      if (!alive()) return;
+      addMsg(m, d);
+      continue;
+    }
+    // Respuesta del salón: visto, "écrit…" y el mensaje
+    await wait(600);
+    if (!alive()) return;
+    markRead();
+    statusEl.textContent = s.typing;
+    statusEl.className = 'typing';
+    var prev = lastFrom, typing = addRow('them');
+    typing.innerHTML = '<div class="bubble"><span class="dots"><i></i><i></i><i></i></span></div>';
+    scroll();
+    await wait(Math.min(2600, 900 + m.text.length * 9));
+    if (!alive()) return;
+    typing.remove();
+    lastFrom = prev;
+    statusEl.textContent = s.online;
+    statusEl.className = '';
+    var row = addMsg(m, d);
+    // Horario: lo elige quien mira (o la clienta, si no toca nada)
+    if (m.choice) {
+      var i2 = await choose(row, m, s);
+      if (!alive()) return;
+      d.slot = m.buttons[i2];
+      row.querySelectorAll('.btns button')[i2].classList.add('picked');
+    }
+  }
+  markRead();
+  await wait(1400);
+  if (!alive()) return;
+  addRecap(s, d);
+}
+
+function setLang(next) {
+  lang = next;
+  var s = SCRIPTS[lang];
+  document.documentElement.lang = lang;
+  $('bar').innerHTML = s.bar;
+  $('placeholder').textContent = s.placeholder;
+  $('replay').setAttribute('aria-label', s.replay);
+  document.querySelector('.back').setAttribute('href', s.back);
+  document.querySelectorAll('.seg button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === lang)) });
+  var url = new URL(location.href);
+  if (lang === 'pt') url.searchParams.set('lang', 'pt'); else url.searchParams.delete('lang');
+  history.replaceState(null, '', url);
+  play();
+}
+
+document.querySelectorAll('.seg button').forEach(function (b) {
+  b.addEventListener('click', function () { if (b.dataset.lang !== lang) setLang(b.dataset.lang) });
+});
+$('replay').addEventListener('click', play);
+msgs.addEventListener('click', function () { if (skip) skip() });
+setLang(lang);
+</script>
+</body>
+</html>

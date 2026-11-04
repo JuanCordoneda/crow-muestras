@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- Miniatura al compartir por WhatsApp (1200×630). Se convierte en ../og.jpg con build-og.sh. -->
+<style>
+@font-face{font-family:"Fraunces";font-style:italic;font-weight:500 700;src:url(../fonts/Fraunces-500-700-italic-latin.woff2) format("woff2")}
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:500 700;src:url(../fonts/Fraunces-500-700-latin.woff2) format("woff2")}
+@font-face{font-family:"Manrope";font-weight:400 800;src:url(../fonts/Manrope-400-800-latin.woff2) format("woff2")}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden}
+body{position:relative;background:#fff8ec;color:#2b2017;font-family:Manrope,sans-serif}
+.txt{position:absolute;left:80px;top:96px;width:560px}
+.eyebrow{font-size:24px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#c8433a}
+h1{margin:14px 0 0;font-family:Fraunces,serif;font-style:italic;font-weight:700;font-size:88px;line-height:1;letter-spacing:-.02em}
+p{margin:26px 0 0;font-size:30px;line-height:1.35;color:#4a3b2e}
+.wa{display:inline-flex;align-items:center;gap:12px;margin-top:34px;padding:16px 26px;border-radius:18px;background:#168c47;color:#fff;font-size:26px;font-weight:800}
+.sun{position:absolute;right:56px;top:95px;width:440px;height:440px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#f7cd63,#f2b632 70%)}
+.plate{position:absolute;right:36px;top:112px;width:420px;filter:drop-shadow(0 18px 30px rgba(91,58,26,.2))}
+.d{position:absolute;border-radius:50%}
+.flag{position:absolute;left:0;right:0;bottom:0;display:flex;height:22px}
+.flag i{flex:2;background:#f2b632}.flag i+i{flex:1;background:#24498a}.flag i+i+i{background:#c8433a}
+</style>
+</head>
+<body>
+<div class="txt">
+  <div class="eyebrow">Restaurante colombiano · Clichy</div>
+  <h1>Tropicalisimo</h1>
+  <p>Menú del día, porciones generosas<br>y ambiente familiar.</p>
+  <div class="wa">Reserve por WhatsApp</div>
+</div>
+<div class="sun"></div>
+<i class="d" style="left:700px;top:84px;width:46px;height:46px;background:#24498a"></i>
+<i class="d" style="right:40px;top:470px;width:30px;height:30px;background:#c8433a"></i>
+<i class="d" style="left:720px;top:500px;width:22px;height:22px;background:#c8433a"></i>
+<div class="plate" id="plate"></div>
+<div class="flag"><i></i><i></i><i></i></div>
+<script src="../art.js"></script>
+<script>document.getElementById('plate').innerHTML = ART.bandeja</script>
+</body>
+</html>

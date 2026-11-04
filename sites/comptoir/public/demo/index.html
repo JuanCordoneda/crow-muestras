@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Démo · Le Comptoir du Pérou</title>
+<meta name="description" content="Démo : la page de réservation directe, l'assistant WhatsApp et l'agenda du Comptoir du Pérou.">
+<meta name="theme-color" content="#141210">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 48 48%27%3E%3Crect width=%2748%27 height=%2748%27 rx=%2710%27 fill=%27%23141210%27/%3E%3Cg fill=%27%23c9a24a%27%3E%3Ccircle cx=%2724%27 cy=%2724%27 r=%278%27/%3E%3Cpath d=%27M24 5l2.2 7h-4.4zM24 43l-2.2-7h4.4zM5 24l7-2.2v4.4zM43 24l-7 2.2v-4.4zM10.6 10.6l6.4 3.5-2.9 2.9zM37.4 37.4l-6.4-3.5 2.9-2.9zM10.6 37.4l3.5-6.4 2.9 2.9zM37.4 10.6l-3.5 6.4-2.9-2.9z%27/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preload" as="font" type="font/woff2" href="../fonts/dm-sans-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="../fonts/cormorant-garamond-latin.woff2" crossorigin>
+<style>
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500 700;font-display:swap;src:url(../fonts/cormorant-garamond-latin.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:500 600;font-display:swap;src:url(../fonts/cormorant-garamond-italic-latin.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(../fonts/dm-sans-latin.woff2) format("woff2")}
+:root{
+  --ink:#141210; --ink-2:#1f1b17; --ink-3:#3b342d;
+  --cream:#f6efe2; --cream-2:#ede3d0; --white:#fffbf4;
+  --gold:#c9a24a; --gold-l:#e3c67e; --gold-d:#8a6b22;
+  --red:#b4322b; --muted:#6f655b; --line:rgba(20,18,16,.12);
+  --f-display:"Cormorant Garamond",Garamond,"Times New Roman",serif;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  /* WhatsApp */
+  --wa-head:#0b6b5c; --wa-bg:#efe7dc; --wa-out:#d9fdd3; --wa-in:#ffffff; --wa-tick:#53bdeb; --wa-meta:#667781;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--white);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-text-size-adjust:100%;font-variant-numeric:lining-nums}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ================= coquille de la démo ================= */
+.shell{height:100%;height:100dvh;display:grid;grid-template-rows:auto 1fr auto;grid-template-columns:minmax(0,1fr)}
+.top{display:flex;align-items:center;gap:12px;padding:10px 16px;padding-top:max(10px,env(safe-area-inset-top));border-bottom:1px solid rgba(201,162,74,.18)}
+.top .mark{width:28px;height:28px;color:var(--gold);flex:none}
+.top .name{font-family:var(--f-display);font-weight:700;font-size:clamp(.95rem,4vw,1.1rem);letter-spacing:.05em;text-transform:uppercase;line-height:1.1;margin-right:auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .name small{display:block;font-family:var(--f-body);font-weight:500;font-size:.68rem;letter-spacing:.16em;color:var(--gold)}
+.seg{display:flex;background:rgba(255,251,244,.08);border-radius:999px;padding:3px;flex:none}
+.seg button{border:0;background:none;padding:.42rem .75rem;border-radius:999px;font-size:.8rem;font-weight:700;color:rgba(255,251,244,.7);position:relative}
+.seg button[aria-selected="true"]{background:var(--gold);color:var(--ink)}
+.seg button .dot{position:absolute;top:3px;right:5px;width:8px;height:8px;border-radius:50%;background:#e2554c;display:none}
+.seg button .dot.on{display:block}
+@media (max-width:440px){.top .name{display:none}.seg{margin-left:auto}}
+.stage{min-height:0;position:relative}
+.panel{position:absolute;inset:0;display:none}
+.panel.on{display:block}
+.foot{text-align:center;padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));font-weight:700;font-size:.95rem;letter-spacing:.02em;color:var(--gold-l);border-top:1px solid rgba(201,162,74,.18);display:flex;align-items:center;justify-content:center;gap:.5rem}
+.foot svg{width:18px;height:18px;flex:none}
+
+/* Aviso en el móvil cuando entra la reserva y la agenda no está a la vista */
+.toast{position:fixed;left:12px;right:12px;top:calc(max(10px,env(safe-area-inset-top)) + 58px);z-index:40;display:flex;align-items:center;gap:12px;padding:12px 12px 12px 14px;border-radius:16px;background:var(--ink-2);border:1px solid rgba(201,162,74,.4);box-shadow:0 18px 40px -12px rgba(0,0,0,.7);opacity:0;transform:translateY(-14px);pointer-events:none;transition:opacity .3s,transform .3s}
+.toast.on{opacity:1;transform:none;pointer-events:auto}
+.toast svg{width:22px;height:22px;color:var(--gold);flex:none}
+.toast p{margin:0;font-size:.85rem;line-height:1.35;flex:1}
+.toast p b{display:block;color:var(--gold-l)}
+.toast button{border:0;background:var(--gold);color:var(--ink);font-weight:700;font-size:.82rem;padding:.5rem .9rem;border-radius:999px;flex:none}
+
+/* Un écran = le contenu d'un téléphone. Sur mobile, il remplit la page. */
+.phone{height:100%}
+.screen{height:100%;position:relative;overflow:hidden;container-type:inline-size;background:var(--cream);color:var(--ink)}
+.cap{display:none}
+
+/* Ordenador: los tres teléfonos lado a lado */
+@media (min-width:1000px){
+  .seg,.toast{display:none}
+  .stage{display:flex;align-items:flex-start;justify-content:center;gap:clamp(24px,3vw,48px);padding:22px 16px 8px}
+  .panel,.panel.on{position:static;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .cap{display:flex;flex:none;height:38px;align-items:center;gap:.65rem;align-self:flex-start;padding-left:6px}
+  .cap b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:var(--ink);font-size:.75rem;flex:none}
+  .cap span{font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,251,244,.85);line-height:1.25}
+  .cap small{display:block;font-size:.8rem;font-weight:400;letter-spacing:0;text-transform:none;color:rgba(255,251,244,.55)}
+  .phone{--h:min(760px,calc(100dvh - 190px),calc((100vw - 200px) * .6838));height:var(--h);width:calc(var(--h) * .4875);min-width:0;flex:none;border-radius:46px;padding:11px;background:#0a0908;box-shadow:0 0 0 1.5px #3b342d,0 40px 80px -30px rgba(0,0,0,.8),0 0 120px -40px rgba(201,162,74,.25);position:relative}
+  .phone::before{content:"";position:absolute;top:20px;left:50%;transform:translateX(-50%);width:92px;height:25px;border-radius:20px;background:#0a0908;z-index:20}
+  .screen{border-radius:36px}
+  .panel.flash .phone{animation:flash 1.2s ease}
+  @keyframes flash{30%{box-shadow:0 0 0 3px var(--gold),0 40px 80px -30px rgba(0,0,0,.8),0 0 140px -20px rgba(201,162,74,.6)}}
+  .site-head,.wa-head,.ag-head{padding-top:44px!important}
+  .notif{top:46px!important}
+  .foot{border-top:0;padding-bottom:20px}
+}
+
+/* ================= la page du restaurant ================= */
+.site{height:100%;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;scroll-behavior:smooth;padding-bottom:84px}
+.site::-webkit-scrollbar{display:none}
+.site-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:.5rem;padding:10px 16px;background:rgba(20,18,16,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--white)}
+.site-head svg{width:26px;height:26px;color:var(--gold);flex:none}
+.site-head b{font-family:var(--f-display);font-weight:700;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;margin-right:auto;line-height:1}
+.site-head b i{display:block;font-weight:600;font-size:.86rem;letter-spacing:0;text-transform:none;color:var(--gold)}
+.lang{font-size:.7rem;font-weight:700;letter-spacing:.08em;padding:.25rem .5rem;border-radius:999px;background:rgba(255,251,244,.1)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border:0;border-radius:999px;padding:.95rem 1.4rem;font-weight:700;font-size:1rem;text-decoration:none;transition:transform .15s ease,background .2s ease;white-space:nowrap;position:relative}
+.btn:active{transform:scale(.97)}
+.btn svg{width:19px;height:19px;flex:none}
+.btn-gold{background:var(--gold);color:var(--ink);box-shadow:0 10px 26px -12px rgba(201,162,74,.95)}
+.btn-gold:hover{background:var(--gold-l)}
+.btn.tap{animation:tap .9s ease}
+.btn.tap::after{content:"";position:absolute;inset:0;border-radius:inherit;animation:ring .9s ease-out}
+@keyframes tap{35%{transform:scale(.95)}}
+@keyframes ring{from{box-shadow:0 0 0 0 rgba(227,198,126,.8)}to{box-shadow:0 0 0 18px rgba(227,198,126,0)}}
+
+.hero{position:relative;min-height:540px;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 20px 28px;color:var(--white);background:var(--ink);margin-top:-46px}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,18,16,.1) 0%,rgba(20,18,16,.25) 22%,rgba(20,18,16,.8) 46%,rgba(20,18,16,.94) 70%,var(--ink) 100%)}
+.hero>*:not(img){position:relative;z-index:1}
+.kicker{font-size:.72rem;font-weight:700;letter-spacing:clamp(.08em,.6cqi,.18em);text-transform:uppercase;color:var(--gold-l)}
+.hero h1{font-family:var(--f-display);font-weight:600;font-size:clamp(2rem,12.5cqi,2.7rem);line-height:.95;margin:.45rem 0 .7rem;text-transform:uppercase;letter-spacing:.01em}
+.hero h1 em{display:block;font-style:italic;font-weight:500;text-transform:none;color:var(--gold-l)}
+.hero p{margin:0 0 1rem;color:rgba(255,251,244,.86);font-size:.98rem}
+.rating{display:inline-flex;white-space:nowrap;align-items:center;gap:.5rem;align-self:flex-start;background:rgba(255,251,244,.1);border:1px solid rgba(255,251,244,.18);border-radius:999px;padding:.35rem .75rem;font-size:.85rem;margin-bottom:1.1rem}
+.rating strong{font-size:.95rem}
+.stars{position:relative;display:inline-block;font-size:.9rem;letter-spacing:1px;line-height:1;color:rgba(255,251,244,.28)}
+.stars::before{content:"★★★★★"}
+.stars span{position:absolute;inset:0 auto 0 0;overflow:hidden;white-space:nowrap;color:var(--gold)}
+.stars span::before{content:"★★★★★"}
+.hero .btn{width:100%}
+.hint{display:flex;align-items:center;justify-content:center;gap:.4rem;margin-top:.7rem;font-size:.8rem;color:rgba(255,251,244,.7)}
+.hint i{width:7px;height:7px;border-radius:50%;background:#e2554c;box-shadow:0 0 0 4px rgba(226,85,76,.2)}
+
+.facts{display:grid;grid-template-columns:1fr 1fr;background:var(--ink);color:var(--white);padding:0 20px 22px;gap:10px}
+.fact{background:var(--ink-2);border:1px solid rgba(201,162,74,.16);border-radius:14px;padding:12px}
+.fact small{display:block;font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.fact span{font-size:.86rem;line-height:1.35;display:block;margin-top:.25rem}
+
+.sec{padding:34px 20px 8px}
+.sec h2{font-family:var(--f-display);font-weight:600;font-size:2.1rem;line-height:1;margin:.35rem 0 .4rem;text-transform:uppercase}
+.sec h2 em{font-style:italic;font-weight:500;text-transform:none;color:var(--gold-d)}
+.sec .kicker{color:var(--red)}
+.sec>p{margin:0 0 1.1rem;color:var(--ink-3);font-size:.95rem}
+
+.dish{background:var(--white);border-radius:18px;overflow:hidden;box-shadow:0 1px 0 var(--line),0 14px 30px -22px rgba(20,18,16,.45);margin-bottom:14px}
+.dish .ph{aspect-ratio:16/10;position:relative;background:var(--ink)}
+.dish .ph img{width:100%;height:100%;object-fit:cover}
+.dish .ph .tag{position:absolute;left:12px;top:12px;background:rgba(20,18,16,.78);color:var(--gold-l);font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:.3rem .6rem;border-radius:999px}
+.dish .body{padding:14px 16px 16px}
+.dish h3{font-family:var(--f-display);font-weight:700;font-size:1.55rem;line-height:1;margin:0 0 .35rem}
+.dish p{margin:0;font-size:.9rem;color:var(--ink-3)}
+/* Todavía no hay foto del lomo saltado: un visual gráfico en su lugar */
+.ph.wok{background:radial-gradient(120% 90% at 30% 20%,#d9832e 0%,#b4322b 45%,#3a1410 100%);display:grid;place-items:center;overflow:hidden}
+.ph.wok svg{width:58%;color:rgba(255,236,200,.92);filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
+.ph.wok .flame{transform-origin:50% 100%;animation:flick 1.8s ease-in-out infinite alternate}
+.ph.wok .flame:nth-of-type(2){animation-delay:-.6s}.ph.wok .flame:nth-of-type(3){animation-delay:-1.1s}
+@keyframes flick{to{transform:scaleY(.82) translateY(2px);opacity:.75}}
+
+.chefs{margin:20px 20px 0;border-radius:18px;overflow:hidden;position:relative;color:var(--white);background:var(--ink)}
+.chefs img{width:100%;aspect-ratio:4/3;object-fit:cover;opacity:.9}
+.chefs div{position:absolute;inset:auto 0 0;padding:40px 16px 14px;background:linear-gradient(180deg,transparent,rgba(20,18,16,.92))}
+.chefs b{font-family:var(--f-display);font-size:1.5rem;font-weight:600;line-height:1.05;display:block}
+.chefs span{font-size:.85rem;color:rgba(255,251,244,.8)}
+
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -20px;padding:0 20px 6px;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip figure{margin:0;flex:0 0 72%;scroll-snap-align:start;position:relative;border-radius:16px;overflow:hidden;background:var(--ink)}
+.strip img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.strip figcaption{position:absolute;left:10px;bottom:10px;background:rgba(20,18,16,.75);color:var(--white);font-size:.78rem;font-weight:600;padding:.3rem .65rem;border-radius:999px}
+
+.score{display:flex;align-items:center;gap:14px;background:var(--white);border-radius:16px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 0 var(--line)}
+.score .big{font-family:var(--f-display);font-weight:700;font-size:2.6rem;line-height:1}
+.score .stars{font-size:1.05rem;color:rgba(20,18,16,.18)}
+.score small{display:block;font-size:.8rem;color:var(--muted);margin-top:.2rem}
+.review{background:var(--white);border-radius:16px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 0 var(--line)}
+.review header{display:flex;align-items:center;gap:10px;margin-bottom:.45rem}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.85rem;color:var(--white);flex:none}
+.review header b{display:block;font-size:.9rem;line-height:1.2}
+.review header .stars{font-size:.75rem;color:rgba(20,18,16,.18)}
+.review header time{margin-left:auto;font-size:.75rem;color:var(--muted)}
+.review p{margin:0;font-size:.9rem;color:var(--ink-3)}
+.note{font-size:.72rem;color:var(--muted);text-align:center;margin:.4rem 0 0}
+
+.site-foot{margin-top:30px;background:var(--ink);color:rgba(255,251,244,.8);padding:26px 20px 30px;font-size:.88rem}
+.site-foot b{font-family:var(--f-display);font-size:1.3rem;color:var(--white);letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:.5rem}
+.site-foot p{margin:.2rem 0}
+.site-foot a{color:var(--gold-l);font-weight:600}
+
+.sticky{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:12px 16px 14px;background:linear-gradient(180deg,rgba(246,239,226,0),var(--cream) 38%);transition:transform .3s ease,opacity .3s}
+.sticky .btn{width:100%;background:var(--ink);color:var(--white);box-shadow:0 12px 30px -14px rgba(20,18,16,.9)}
+.sticky .btn svg{color:var(--gold)}
+.sticky.hide{transform:translateY(100%);opacity:0;pointer-events:none}
+
+/* ================= WhatsApp ================= */
+.wa{height:100%;display:flex;flex-direction:column;background:var(--wa-bg);font-size:.92rem;color:#111b21}
+.wa-head{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--wa-head);color:#fff;flex:none}
+.wa-head .back{width:22px;height:22px;flex:none;opacity:.9}
+.wa-av{width:38px;height:38px;border-radius:50%;background:var(--ink);display:grid;place-items:center;flex:none}
+.wa-av svg{width:24px;height:24px;color:var(--gold)}
+.wa-who{min-width:0;margin-right:auto;line-height:1.2}
+.wa-who b{display:block;font-size:1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wa-who span{font-size:.76rem;opacity:.85}
+.wa-head .ic{width:21px;height:21px;opacity:.9;flex:none;margin-left:12px}
+.wa-body{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:12px 10px 16px;scroll-behavior:smooth;scrollbar-width:none;
+  background-image:radial-gradient(rgba(11,107,92,.07) 1.2px,transparent 1.3px),radial-gradient(rgba(180,50,43,.05) 1.2px,transparent 1.3px);
+  background-size:22px 22px,22px 22px;background-position:0 0,11px 11px}
+.wa-body::-webkit-scrollbar{display:none}
+.chip-day{display:table;margin:2px auto 10px;background:#fff;color:var(--wa-meta);font-size:.72rem;font-weight:600;padding:.28rem .65rem;border-radius:8px;box-shadow:0 1px .5px rgba(11,20,26,.13)}
+.chip-day.later{margin-top:16px}
+.sys{display:block;margin:0 auto 12px;max-width:88%;text-align:center;background:#fff6c5;color:#54656f;font-size:.72rem;padding:.4rem .7rem;border-radius:8px;line-height:1.35}
+.msg{display:flex;margin:2px 0}
+.msg.out{justify-content:flex-end}
+.msg.first{margin-top:8px}
+.bubble{position:relative;max-width:82%;padding:6px 8px 7px 9px;border-radius:9px;box-shadow:0 1px .5px rgba(11,20,26,.13);background:var(--wa-in);white-space:pre-line;line-height:1.38}
+.out .bubble{background:var(--wa-out)}
+.msg.first .bubble{border-top-left-radius:0}
+.msg.out.first .bubble{border-top-left-radius:9px;border-top-right-radius:0}
+.meta{float:right;margin:6px 0 -4px 10px;font-size:.66rem;color:var(--wa-meta);display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+.meta svg{width:16px;height:11px;color:#8696a0;transition:color .4s}
+.meta.read svg{color:var(--wa-tick)}
+.msg.pop{animation:pop .28s ease-out both}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}}
+.quick{display:flex;gap:6px;margin:6px 0 2px;flex-wrap:wrap}
+.quick span{border:1px solid rgba(11,107,92,.35);color:var(--wa-head);font-weight:600;font-size:.82rem;padding:.35rem .8rem;border-radius:999px;background:#fff;transition:background .3s,color .3s}
+.quick span.picked{background:var(--wa-head);color:#fff;border-color:var(--wa-head)}
+.card{border-left:3px solid var(--wa-head);background:rgba(11,107,92,.06);border-radius:6px;padding:7px 10px;margin:6px 0 2px;white-space:normal}
+.card b{display:block;font-size:.95rem}
+.card div{display:flex;gap:6px;align-items:center;font-size:.86rem;color:#3b4a54;margin-top:2px}
+.card svg{width:14px;height:14px;color:var(--wa-head);flex:none}
+.loc{display:block;width:250px;max-width:100%;text-decoration:none;color:inherit;white-space:normal}
+.map{height:118px;border-radius:6px;margin:-2px -4px 6px;position:relative;overflow:hidden;
+  background:linear-gradient(115deg,transparent 46%,#fff 46%,#fff 51%,transparent 51%),linear-gradient(25deg,transparent 60%,#fff 60%,#fff 64%,transparent 64%),linear-gradient(160deg,transparent 30%,#f8f3e6 30%,#f8f3e6 33%,transparent 33%),linear-gradient(0deg,#e8efe3,#e5ebe0);}
+.map::before{content:"";position:absolute;left:8%;top:12%;width:30%;height:30%;background:#cfe3c4;border-radius:6px}
+.map::after{content:"";position:absolute;right:6%;bottom:8%;width:26%;height:26%;background:#d6e5f0;border-radius:40% 10%}
+.pin{position:absolute;left:50%;top:50%;transform:translate(-50%,-100%);width:30px;height:30px;color:#e2554c;z-index:1;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
+.loc b{display:block;font-size:.9rem}
+.loc span{font-size:.8rem;color:#3b4a54}
+.loc em{display:block;margin-top:4px;font-style:normal;font-size:.8rem;color:#027eb5;font-weight:600}
+.typing .bubble{padding:11px 13px}
+.dots{display:flex;gap:4px}
+.dots i{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:dot 1.2s infinite ease-in-out}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,60%,100%{opacity:.35;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.replay{display:none;margin:16px auto 4px;border:0;background:rgba(11,107,92,.12);color:var(--wa-head);font-weight:700;font-size:.8rem;padding:.5rem .95rem;border-radius:999px;align-items:center;gap:.4rem}
+.replay.on{display:flex}
+.replay svg{width:15px;height:15px}
+.wa-input{display:flex;align-items:center;gap:8px;padding:8px 8px 10px;flex:none}
+.wa-input .field{flex:1;min-width:0;background:#fff;border-radius:22px;padding:.6rem 1rem;color:#8696a0;font-size:.9rem;display:flex;align-items:center;gap:.6rem;box-shadow:0 1px .5px rgba(11,20,26,.1)}
+.wa-input .field svg{width:20px;height:20px;flex:none}
+.wa-input .field span{overflow:hidden;white-space:nowrap;min-width:0}
+.wa-input .field.typing span{color:#111b21}
+.wa-input .mic{width:44px;height:44px;border-radius:50%;background:var(--wa-head);display:grid;place-items:center;color:#fff;flex:none}
+.wa-input .mic svg{width:20px;height:20px}
+.wa-input .mic .send{display:none}
+.wa-input.has-text .mic .send{display:block}
+.wa-input.has-text .mic .rec{display:none}
+@media (min-width:1000px){.wa-input{padding-bottom:18px}}
+
+/* ================= agenda del restaurante ================= */
+.ag{height:100%;display:flex;flex-direction:column;background:#f3efe8;color:var(--ink);font-size:.9rem}
+.ag-head{background:var(--ink);color:var(--white);padding:12px 16px 14px;flex:none}
+.ag-top{display:flex;align-items:center;gap:8px}
+.ag-top svg{width:22px;height:22px;color:var(--gold);flex:none}
+.ag-top b{font-weight:700;font-size:1rem;margin-right:auto}
+.ag-date{margin-top:10px;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+.ag-date strong{font-family:var(--f-display);font-size:1.45rem;font-weight:600;line-height:1.05}
+.ag-date span{font-size:.72rem;color:rgba(255,251,244,.6);display:inline-flex;align-items:center;gap:.35rem;white-space:nowrap}
+.ag-date span::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ccf7a;box-shadow:0 0 0 3px rgba(60,207,122,.2)}
+.ag-shift{display:flex;background:rgba(255,251,244,.1);border-radius:999px;padding:2px;flex:none}
+.ag-shift i{font-style:normal;font-size:.72rem;font-weight:700;padding:.25rem .6rem;border-radius:999px;color:rgba(255,251,244,.6)}
+.ag-shift i.on{background:var(--white);color:var(--ink)}
+.ag-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:12px 12px 4px;flex:none}
+.st{background:#fff;border-radius:12px;padding:9px 10px;box-shadow:0 1px 0 var(--line);transition:background .4s}
+.st b{display:block;font-size:1.35rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.st small{font-size:.68rem;color:var(--muted);font-weight:600;line-height:1.2;display:block}
+.st.direct{background:#fbf3df;box-shadow:inset 0 0 0 1.5px rgba(201,162,74,.55)}
+.st.direct small{color:var(--gold-d)}
+.st.bump b{animation:bump .7s ease}
+@keyframes bump{40%{transform:scale(1.25);color:var(--gold-d)}}
+.ag-list{flex:1;overflow-y:auto;scrollbar-width:none;padding:6px 12px 14px;scroll-behavior:smooth;position:relative}
+.ag-list::-webkit-scrollbar{display:none}
+.slot{display:flex;align-items:center;gap:8px;margin:12px 4px 6px}
+.slot b{font-size:.85rem;font-variant-numeric:tabular-nums}
+.slot span{font-size:.72rem;color:var(--muted)}
+.slot em{margin-left:auto;font-style:normal;font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);background:rgba(180,50,43,.08);padding:.18rem .5rem;border-radius:999px}
+.row{display:flex;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:9px 10px;margin-bottom:6px;box-shadow:0 1px 0 var(--line)}
+.row .ini{width:30px;height:30px;border-radius:50%;background:var(--cream-2);display:grid;place-items:center;font-weight:700;font-size:.78rem;flex:none}
+.row .who{min-width:0;margin-right:auto;line-height:1.25}
+.row .who b{display:block;font-size:.88rem}
+.row .who span{font-size:.74rem;color:var(--muted)}
+.row .who span.ok{color:#1d7a55;font-weight:600}
+.src{font-size:.68rem;font-weight:700;padding:.22rem .5rem;border-radius:999px;flex:none;white-space:nowrap}
+.src.wa{background:#dcf8e6;color:#0b6b3c}
+.src.web{background:#f6ead0;color:#7a5a12}
+.src.tel{background:#ebe7e1;color:#5a5249}
+.src.tf{background:#e6eaee;color:#4a5560}
+.row.new{animation:newrow 2.4s ease both;box-shadow:inset 0 0 0 1.5px var(--gold)}
+.row.new .ini{background:var(--gold);color:var(--ink)}
+.row .tagnew{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);background:var(--gold-l);padding:.12rem .4rem;border-radius:6px;margin-left:.35rem;vertical-align:1px}
+@keyframes newrow{0%{opacity:0;transform:translateX(24px);background:#fbf0d4}25%{opacity:1;transform:none;background:#fbf0d4}100%{background:#fff}}
+.ag-note{font-size:.7rem;color:var(--muted);text-align:center;margin:12px 0 0}
+.notif{position:absolute;left:10px;right:10px;top:10px;z-index:15;opacity:0;display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 14px 34px -10px rgba(20,18,16,.45);transform:translateY(-24px) scale(.96);transition:transform .45s cubic-bezier(.2,.9,.3,1.2),opacity .3s}
+.notif.on{transform:none;opacity:1}
+.notif .ico{width:34px;height:34px;border-radius:9px;background:var(--wa-head);display:grid;place-items:center;flex:none}
+.notif .ico svg{width:20px;height:20px;color:#fff}
+.notif div{min-width:0;font-size:.8rem;line-height:1.35}
+.notif div b{display:flex;justify-content:space-between;gap:6px;font-size:.8rem}
+.notif div b small{font-weight:500;color:var(--muted)}
+.notif div span{color:var(--ink-3)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-sun" viewBox="0 0 48 48"><g fill="currentColor"><circle cx="24" cy="24" r="8"/><path d="M24 5l2.2 7h-4.4zM24 43l-2.2-7h4.4zM5 24l7-2.2v4.4zM43 24l-7 2.2v-4.4zM10.6 10.6l6.4 3.5-2.9 2.9zM37.4 37.4l-6.4-3.5 2.9-2.9zM10.6 37.4l3.5-6.4 2.9 2.9zM37.4 10.6l-3.5 6.4-2.9-2.9z"/></g></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-ticks" viewBox="0 0 16 11"><path fill="currentColor" d="M11.07.65 10.43.15a.37.37 0 0 0-.52.06L5.1 6.37 3.07 4.45a.37.37 0 0 0-.52.01l-.48.5a.37.37 0 0 0 .01.52l2.82 2.65a.37.37 0 0 0 .55-.04l5.68-7.04a.37.37 0 0 0-.06-.4Zm4 0-.64-.5a.37.37 0 0 0-.52.06L9.1 6.370l-.73-.68-.95 1.17 1.45 1.36a.37.37 0 0 0 .55-.04l5.68-7.04a.37.37 0 0 0-.03-.49Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></g></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></g></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></g></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+</svg>
+
+<div class="shell">
+  <header class="top">
+    <svg class="mark" aria-hidden="true"><use href="#i-sun"/></svg>
+    <div class="name">Le Comptoir du Pérou<small>DÉMO</small></div>
+    <div class="seg" role="tablist" aria-label="Vista" lang="es">
+      <button role="tab" aria-selected="true" aria-controls="p-site" id="t-site">Página</button>
+      <button role="tab" aria-selected="false" aria-controls="p-wa" id="t-wa">WhatsApp</button>
+      <button role="tab" aria-selected="false" aria-controls="p-ag" id="t-ag">Agenda<i class="dot" id="ag-dot"></i></button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <!-- 1 · la page -->
+    <section class="panel on" id="p-site" role="tabpanel" aria-labelledby="t-site">
+      <div class="cap" lang="es"><b>1</b><span>La página<small>Lo que ve el cliente</small></span></div>
+      <div class="phone"><div class="screen">
+        <div class="site" id="site">
+          <div class="site-head">
+            <svg aria-hidden="true"><use href="#i-sun"/></svg>
+            <b>Le Comptoir<i>du Pérou</i></b>
+            <span class="lang">FR</span>
+          </div>
+
+          <div class="hero">
+            <img src="../img/comptoir/ceviche-charbon-800.webp" alt="Ceviche du Comptoir du Pérou" fetchpriority="high">
+            <span class="kicker">Péruvien · Paris 15e</span>
+            <h1>Le Comptoir <em>du Pérou</em></h1>
+            <p>Les grands classiques de Lima, préparés par nos chefs péruviens, rue de la Croix-Nivert.</p>
+            <div class="rating" aria-label="4,5 sur 5 sur Google, 710 avis">
+              <strong>4,5</strong><span class="stars" aria-hidden="true"><span style="width:90%"></span></span><span>710 avis Google</span>
+            </div>
+            <button class="btn btn-gold" data-book><svg aria-hidden="true"><use href="#i-chat"/></svg>Réserver en direct</button>
+            <div class="hint"><i></i>On affiche vite complet&nbsp;: pensez à réserver</div>
+          </div>
+
+          <div class="facts">
+            <div class="fact"><small>Horaires</small><span>Lun – sam<br>12h–15h · 19h–23h</span></div>
+            <div class="fact"><small>Adresse</small><span>41 rue de la Croix-Nivert<br>75015 Paris</span></div>
+          </div>
+
+          <section class="sec">
+            <span class="kicker">Nos incontournables</span>
+            <h2>Trois plats <em>de Lima</em></h2>
+            <p>Ce que nos habitués commandent les yeux fermés.</p>
+
+            <article class="dish">
+              <div class="ph"><img src="../img/comptoir/ceviche-classique-800.webp" alt="Ceviche classique" loading="lazy"><span class="tag">Le plus commandé</span></div>
+              <div class="body"><h3>Ceviche</h3><p>Poisson blanc mariné à la minute au citron vert, leche de tigre, oignon rouge, patate douce et maïs.</p></div>
+            </article>
+            <article class="dish">
+              <div class="ph"><img src="../img/comptoir/causa-thon-800.webp" alt="Causa au thon" loading="lazy"></div>
+              <div class="body"><h3>Causa</h3><p>Purée de pomme de terre jaune citronnée et relevée à l’ají amarillo, garnie de thon.</p></div>
+            </article>
+            <article class="dish">
+              <div class="ph wok" role="img" aria-label="Lomo saltado sauté au wok">
+                <svg viewBox="0 0 120 80" aria-hidden="true" fill="currentColor">
+                  <path class="flame" d="M38 70c-6-6-4-14 2-20 0 6 4 8 6 8-2-6 2-14 8-16-2 8 4 12 4 18 0 6-4 10-10 10s-8-0-10 0Z" opacity=".55"/>
+                  <path class="flame" d="M58 72c-7-7-4-17 3-23 0 7 4 9 6 9-2-8 3-16 9-18-2 9 5 14 5 21 0 7-5 11-11 11s-10 0-12 0Z" opacity=".7"/>
+                  <path class="flame" d="M76 70c-5-5-3-12 2-17 0 5 3 7 5 7-1-5 2-11 6-13-1 7 3 10 3 15s-3 8-8 8-6 0-8 0Z" opacity=".5"/>
+                  <path d="M14 30h92c0 14-14 26-46 26S14 44 14 30Z"/>
+                  <path d="M104 33l14-6" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>
+                  <circle cx="40" cy="24" r="5"/><circle cx="56" cy="21" r="6"/><circle cx="72" cy="24" r="5"/><rect x="47" y="12" width="5" height="12" rx="2" transform="rotate(-20 49 18)"/><rect x="64" y="10" width="5" height="13" rx="2" transform="rotate(18 66 16)"/>
+                </svg>
+                <span class="tag">Au wok</span>
+              </div>
+              <div class="body"><h3>Lomo saltado</h3><p>Bœuf sauté au wok à feu vif avec oignon et tomate, sauce soja, frites maison et riz blanc.</p></div>
+            </article>
+          </section>
+
+          <div class="chefs">
+            <img src="../img/comptoir/chefs-800.webp" alt="Les chefs du Comptoir du Pérou" loading="lazy">
+            <div><b>Des chefs péruviens en cuisine</b><span>Les recettes de chez eux, comme à Lima.</span></div>
+          </div>
+
+          <section class="sec">
+            <span class="kicker">Le lieu</span>
+            <h2>Comme <em>à Lima</em></h2>
+            <p>Une petite salle chaleureuse et une terrasse sur la rue de la Croix-Nivert.</p>
+            <div class="strip">
+              <figure><img src="../img/comptoir/salle-soir-800.webp" alt="La salle le soir" loading="lazy"><figcaption>La salle</figcaption></figure>
+              <figure><img src="../img/comptoir/terrasse-soir-800.webp" alt="La terrasse le soir" loading="lazy"><figcaption>La terrasse</figcaption></figure>
+              <figure><img src="../img/comptoir/pisco-sour-800.webp" alt="Pisco sour" loading="lazy"><figcaption>Pisco sour</figcaption></figure>
+            </div>
+          </section>
+
+          <section class="sec">
+            <span class="kicker">Avis</span>
+            <h2>Ils en <em>parlent</em></h2>
+            <div class="score">
+              <span class="big">4,5</span>
+              <div><span class="stars" aria-hidden="true"><span style="width:90%"></span></span><small>710 avis sur Google</small></div>
+            </div>
+            <article class="review">
+              <header><span class="av" style="background:#2f5d46">C</span><div><b>Camille R.</b><span class="stars" aria-label="5 sur 5"><span style="width:100%"></span></span></div><time>il y a 2 sem.</time></header>
+              <p>Le meilleur ceviche que j’ai mangé à Paris. Le leche de tigre est parfait, on se croirait à Lima.</p>
+            </article>
+            <article class="review">
+              <header><span class="av" style="background:#b4322b">J</span><div><b>Javier M.</b><span class="stars" aria-label="5 sur 5"><span style="width:100%"></span></span></div><time>il y a 1 mois</time></header>
+              <p>Je suis péruvien et j’approuve&nbsp;: la causa et le lomo saltado ont le goût de la maison. Équipe adorable.</p>
+            </article>
+            <article class="review">
+              <header><span class="av" style="background:#8a6b22">S</span><div><b>Sophie L.</b><span class="stars" aria-label="4 sur 5"><span style="width:80%"></span></span></div><time>il y a 1 mois</time></header>
+              <p>Petite salle toujours pleine, pensez à réserver&nbsp;! Service rapide et souriant, pisco sour excellent.</p>
+            </article>
+            <p class="note">Avis d’exemple pour la démo</p>
+          </section>
+
+          <footer class="site-foot">
+            <b>Le Comptoir du Pérou</b>
+            <p>41 rue de la Croix-Nivert, 75015 Paris</p>
+            <p>Lundi – samedi · 12h–15h et 19h–23h · fermé le dimanche</p>
+            <p style="margin-top:.7rem"><a id="itin" target="_blank" rel="noopener">Itinéraire →</a></p>
+          </footer>
+        </div>
+        <div class="sticky" id="sticky"><button class="btn" data-book><svg aria-hidden="true"><use href="#i-chat"/></svg>Réserver en direct</button></div>
+      </div></div>
+    </section>
+
+    <!-- 2 · WhatsApp -->
+    <section class="panel" id="p-wa" role="tabpanel" aria-labelledby="t-wa">
+      <div class="cap" lang="es"><b>2</b><span>WhatsApp<small>El asistente responde solo</small></span></div>
+      <div class="phone"><div class="screen">
+        <div class="wa">
+          <div class="wa-head">
+            <svg class="back" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M15 18l-6-6 6-6"/></svg>
+            <span class="wa-av"><svg aria-hidden="true"><use href="#i-sun"/></svg></span>
+            <div class="wa-who"><b>Le Comptoir du Pérou</b><span id="wa-status">en ligne</span></div>
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg>
+          </div>
+          <div class="wa-body" id="wa-chat" aria-live="polite"></div>
+          <div class="wa-input" id="wa-input" aria-hidden="true">
+            <div class="field"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></g></svg><span id="wa-draft">Message</span></div>
+            <span class="mic">
+              <svg class="rec" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v1a7 7 0 0 1-14 0v-1M12 18v4"/></g></svg>
+              <svg class="send" viewBox="0 0 24 24"><path fill="currentColor" d="M3.4 20.4 21.9 12 3.4 3.6 3.4 10l13 2-13 2z"/></svg>
+            </span>
+          </div>
+        </div>
+      </div></div>
+    </section>
+
+    <!-- 3 · agenda del restaurante -->
+    <section class="panel" id="p-ag" role="tabpanel" aria-labelledby="t-ag" lang="es">
+      <div class="cap"><b>3</b><span>La agenda<small>Lo que recibe el restaurante</small></span></div>
+      <div class="phone"><div class="screen">
+        <div class="notif" id="notif" role="status">
+          <span class="ico"><svg aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <div><b>Nueva reserva directa <small>ahora</small></b><span id="notif-txt"></span></div>
+        </div>
+        <div class="ag">
+          <div class="ag-head">
+            <div class="ag-top"><svg aria-hidden="true"><use href="#i-sun"/></svg><b>Agenda</b><span class="ag-shift"><i>Mediodía</i><i class="on">Noche</i></span></div>
+            <div class="ag-date"><strong id="ag-day"></strong><span>en vivo</span></div>
+          </div>
+          <div class="ag-stats">
+            <div class="st" id="st-cov"><b>0</b><small>cubiertos<br>esta noche</small></div>
+            <div class="st direct" id="st-dir"><b>0</b><small>directas<br>sin comisión</small></div>
+            <div class="st" id="st-tf"><b>0</b><small>por<br>TheFork</small></div>
+          </div>
+          <div class="ag-list" id="ag-list"></div>
+        </div>
+      </div></div>
+    </section>
+  </main>
+
+  <footer class="foot" lang="es"><svg aria-hidden="true"><use href="#i-sun"/></svg>Reservas directas, sin comisión</footer>
+</div>
+
+<div class="toast" id="toast" lang="es" role="status">
+  <svg aria-hidden="true"><use href="#i-bell"/></svg>
+  <p><b>Nueva reserva directa</b><span id="toast-txt"></span></p>
+  <button id="toast-go">Ver agenda</button>
+</div>
+
+<script>
+(function () {
+  var wide = matchMedia('(min-width:1000px)')
+  var still = matchMedia('(prefers-reduced-motion:reduce)').matches
+  var $ = function (id) { return document.getElementById(id) }
+  var chat = $('wa-chat'), status = $('wa-status'), site = $('site'), sticky = $('sticky')
+  var svg = function (id, cls) { return '<svg aria-hidden="true"' + (cls ? ' class="' + cls + '"' : '') + '><use href="#i-' + id + '"/></svg>' }
+
+  var ADDRESS = 'Le Comptoir du Pérou, 41 rue de la Croix-Nivert, 75015 Paris'
+  var maps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ADDRESS)
+  $('itin').href = maps
+
+  /* El sábado que viene (si hoy es sábado, el de la semana siguiente) */
+  var sat = new Date(); sat.setDate(sat.getDate() + ((6 - sat.getDay() + 7) % 7 || 7))
+  var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1) }
+  var samediLong = cap(sat.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }))
+  var sabado = cap(sat.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).replace(',', ''))
+  $('ag-day').textContent = sabado
+
+  /* ---------- pestañas (móvil) ---------- */
+  var names = ['site', 'wa', 'ag']
+  var current = 'site'
+  function show(name) {
+    current = name
+    names.forEach(function (k) {
+      $('t-' + k).setAttribute('aria-selected', String(k === name))
+      $('p-' + k).classList.toggle('on', k === name)
+    })
+    if (name === 'wa' && !started) play()
+    if (name === 'ag') { $('ag-dot').classList.remove('on'); hideToast(); focusMartin() }
+  }
+  names.forEach(function (k) { $('t-' + k).onclick = function () { show(k) } })
+
+  /* « Réserver en direct » → la conversación de WhatsApp */
+  function book() {
+    if (wide.matches) {
+      var p = $('p-wa'); p.classList.remove('flash'); void p.offsetWidth; p.classList.add('flash')
+    } else show('wa')
+    play()
+  }
+  document.querySelectorAll('[data-book]').forEach(function (b) { b.onclick = book })
+
+  /* La barra « Réserver » de abajo se esconde mientras se ve el botón de arriba */
+  var heroBtn = site.querySelector('.hero [data-book]')
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (e) { sticky.classList.toggle('hide', e[0].isIntersecting) }, { root: site, threshold: .2 }).observe(heroBtn)
+  }
+
+  /* ---------- agenda: servicio de la noche del sábado (datos de ejemplo) ---------- */
+  var SLOTS = ['19:00', '19:30', '20:00', '20:30', '21:00', '21:30']
+  var FULL = { '20:00': 1 }
+  var SRC = { wa: 'WhatsApp', web: 'Web', tel: 'Teléfono', tf: 'TheFork' }
+  var BOOKINGS = [
+    { t: '19:00', n: 'Dubois', p: 4, s: 'tf' },
+    { t: '19:00', n: 'Nguyen', p: 2, s: 'tel' },
+    { t: '19:30', n: 'García', p: 3, s: 'wa' },
+    { t: '20:00', n: 'Lefèvre', p: 6, s: 'tf' },
+    { t: '20:00', n: 'Moreau', p: 2, s: 'web' },
+    { t: '20:00', n: 'Rossi', p: 4, s: 'tf' },
+    { t: '20:00', n: 'Bernard', p: 2, s: 'wa' },
+    { t: '20:30', n: 'Petit', p: 2, s: 'web' },
+    { t: '20:30', n: 'Fontaine', p: 5, s: 'tf' },
+    { t: '21:00', n: 'Laurent', p: 3, s: 'tf' },
+    { t: '21:30', n: 'Roux', p: 2, s: 'web' }
+  ]
+  var MARTIN = { t: '21:00', n: 'Martin', p: 2, s: 'wa', martin: 1 }
+  var ag = { booked: false, confirmed: false }
+
+  function renderAgenda(animate) {
+    var list = BOOKINGS.concat(ag.booked ? [MARTIN] : [])
+    var cov = 0, dir = 0, tf = 0
+    list.forEach(function (b) { cov += b.p; if (b.s === 'tf') tf++; else dir++ })
+    $('st-cov').firstChild.textContent = cov
+    $('st-dir').firstChild.textContent = dir
+    $('st-tf').firstChild.textContent = tf
+    var html = ''
+    SLOTS.forEach(function (t) {
+      var rows = list.filter(function (b) { return b.t === t })
+      var c = rows.reduce(function (a, b) { return a + b.p }, 0)
+      html += '<div class="slot"><b>' + t + '</b><span>' + rows.length + (rows.length === 1 ? ' mesa · ' : ' mesas · ') + c + ' cub.</span>' + (FULL[t] ? '<em>Completo</em>' : '') + '</div>'
+      rows.forEach(function (b) {
+        var sub = b.p + ' pers.'
+        if (b.martin) sub = ag.confirmed ? '<span class="ok">✓ Confirmó asistencia</span>' : b.p + ' pers. · recordatorio 11:00'
+        html += '<div class="row' + (b.martin && animate ? ' new' : '') + '"' + (b.martin ? ' id="row-martin"' : '') + '>' +
+          '<span class="ini">' + b.n.charAt(0) + '</span>' +
+          '<div class="who"><b>' + b.n + (b.martin ? '<span class="tagnew">Nueva</span>' : '') + '</b><span>' + sub + '</span></div>' +
+          '<span class="src ' + b.s + '">' + SRC[b.s] + '</span></div>'
+      })
+    })
+    html += '<p class="ag-note">Datos de ejemplo</p>'
+    $('ag-list').innerHTML = html
+  }
+
+  function focusMartin() {
+    var r = $('row-martin'), l = $('ag-list')
+    if (r) l.scrollTop = r.offsetTop - l.clientHeight / 2 + r.offsetHeight / 2
+  }
+  function bump(id) { var e = $(id); e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump') }
+
+  var toastTimer, notifTimer
+  function hideToast() { $('toast').classList.remove('on') }
+  var EVENTS = {
+    booked: function () {
+      ag.booked = true
+      renderAgenda(true); bump('st-dir'); bump('st-cov'); focusMartin()
+      var txt = 'Martin · 2 pers. · ' + sabado.split(' ')[0].toLowerCase() + ' 21:00 · por WhatsApp'
+      $('notif-txt').textContent = txt
+      $('notif').classList.add('on')
+      clearTimeout(notifTimer); notifTimer = setTimeout(function () { $('notif').classList.remove('on') }, 4200)
+      if (!wide.matches && current !== 'ag') {
+        $('toast-txt').textContent = txt
+        $('toast').classList.add('on'); $('ag-dot').classList.add('on')
+        clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 6000)
+      }
+    },
+    confirmed: function () { ag.confirmed = true; renderAgenda(false); focusMartin() }
+  }
+  $('toast-go').onclick = function () { show('ag') }
+
+  /* ---------- la conversación ---------- */
+  // who: in = restaurante, out = cliente · wait = pausa antes (ms) · type = el restaurante « écrit… » (ms)
+  // day = separador de día · pick = respuesta rápida que elige el cliente · on = evento para la agenda
+  var SCRIPT = [
+    { who: 'out', t: '18:42', wait: 500, text: 'Bonjour ! Vous auriez une table pour 2 samedi à 20h ?' },
+    { who: 'in', t: '18:42', wait: 500, type: 1600, html: 'Bonjour et merci pour votre message 😊\nSamedi à 20h nous sommes complets, mais j’ai encore une table pour 2 à <b>19h30</b> ou à <b>21h</b>. Laquelle vous convient ?' +
+      '<div class="quick"><span>19h30</span><span data-q="21h">21h</span></div>' },
+    { who: 'out', t: '18:43', wait: 1400, pick: '21h', text: '21h c’est parfait, au nom de Martin 🙏' },
+    { who: 'in', t: '18:43', wait: 400, type: 1500, on: 'booked', html: 'C’est réservé ✅' +
+      '<div class="card"><b>Le Comptoir du Pérou</b><div>' + svg('cal') + samediLong + ' · 21h00</div><div>' + svg('users') + 'Table pour 2 · au nom de Martin</div></div>' },
+    { who: 'in', t: '18:43', wait: 300, type: 1100, html: '<a class="loc" href="' + maps + '" target="_blank" rel="noopener"><div class="map">' + svg('pin', 'pin') + '</div><b>Le Comptoir du Pérou</b><span>41 rue de la Croix-Nivert, 75015 Paris</span><em>Ouvrir dans Maps</em></a>' },
+    { who: 'in', t: '18:44', wait: 200, type: 1300, html: 'Pour modifier ou annuler, répondez simplement à ce message. Nous vous enverrons un petit rappel samedi matin.' },
+    { day: 'Samedi', wait: 2200 },
+    { who: 'in', t: '11:00', wait: 500, type: 1300, html: 'Bonjour Martin ! Petit rappel&nbsp;: on vous attend <b>ce soir à 21h</b>, table pour 2. Vous confirmez ?' +
+      '<div class="quick"><span data-q="ok">Je confirme</span><span>Annuler</span></div>' },
+    { who: 'out', t: '11:04', wait: 1400, pick: 'ok', text: 'Je confirme ✅' },
+    { who: 'in', t: '11:04', wait: 300, type: 1100, on: 'confirmed', html: 'Merci, à ce soir ! 🇵🇪' }
+  ]
+
+  var started = false, run = 0, timers = []
+  var later = function (fn, ms) { timers.push(setTimeout(fn, still ? 0 : ms)) }
+  var scroll = function () { chat.scrollTop = chat.scrollHeight }
+  var input = $('wa-input'), draft = $('wa-draft'), field = input.querySelector('.field')
+
+  function bubble(who, html, t, first) {
+    var el = document.createElement('div')
+    el.className = 'msg ' + who + (first ? ' first' : '') + (still ? '' : ' pop')
+    el.innerHTML = '<div class="bubble">' + html + (t ? '<span class="meta">' + t + (who === 'out' ? svg('ticks') : '') + '</span>' : '') + '</div>'
+    chat.insertBefore(el, replayBtn)
+    scroll()
+    return el
+  }
+  function setDraft(s) {
+    draft.textContent = s || 'Message'
+    draft.scrollLeft = draft.scrollWidth
+    field.classList.toggle('typing', !!s); input.classList.toggle('has-text', !!s)
+  }
+  // El cliente escribe en la barra antes de enviar
+  function typeOut(text, id, done) {
+    var chars = Array.from(text), per = Math.min(45, 1300 / chars.length), n = 0
+    ;(function tick() {
+      if (id !== run) return
+      setDraft(chars.slice(0, ++n).join(''))
+      if (n < chars.length) later(tick, per)
+      else later(function () { if (id === run) { setDraft(''); done() } }, 280)
+    })()
+  }
+
+  function play() {
+    if (started && !replayBtn.classList.contains('on')) return  // ya está en curso
+    started = true
+    var id = ++run
+    timers.forEach(clearTimeout); timers = []
+    ag.booked = ag.confirmed = false; renderAgenda(false)
+    chat.innerHTML = '<span class="chip-day">Aujourd’hui</span><span class="sys">Assistant de réservation · répond 7j/7</span>'
+    chat.appendChild(replayBtn); replayBtn.classList.remove('on')
+    setDraft(''); status.textContent = 'en ligne'
+    var prev = null
+    ;(function step(i) {
+      if (id !== run) return
+      if (i >= SCRIPT.length) { replayBtn.classList.add('on'); scroll(); return }
+      var s = SCRIPT[i]
+      later(function () {
+        if (id !== run) return
+        if (s.day) {
+          var d = document.createElement('span'); d.className = 'chip-day later'; d.textContent = s.day
+          chat.insertBefore(d, replayBtn); scroll(); prev = null; return step(i + 1)
+        }
+        var first = !prev || prev !== s.who
+        if (s.pick) chat.querySelectorAll('[data-q="' + s.pick + '"]').forEach(function (q) { q.classList.add('picked') })
+        if (s.who === 'in') {
+          status.textContent = 'écrit…'
+          var dots = bubble('in typing', '<span class="dots"><i></i><i></i><i></i></span>', '', first)
+          later(function () {
+            if (id !== run) return
+            dots.remove(); status.textContent = 'en ligne'
+            // el restaurante leyó: los tildes del cliente pasan a azul
+            chat.querySelectorAll('.out .meta').forEach(function (m) { m.classList.add('read') })
+            bubble('in', s.html, s.t, first); prev = 'in'
+            if (s.on) EVENTS[s.on]()
+            step(i + 1)
+          }, s.type)
+        } else {
+          typeOut(s.text, id, function () { bubble('out', s.text, s.t, first); prev = 'out'; step(i + 1) })
+        }
+      }, s.wait)
+    })(0)
+  }
+
+  var replayBtn = document.createElement('button')
+  replayBtn.className = 'replay'
+  replayBtn.innerHTML = svg('replay') + 'Rejouer la conversation'
+  replayBtn.onclick = play
+  chat.appendChild(replayBtn)
+  renderAgenda(false)
+
+  // ?vue=whatsapp / ?vue=agenda abren esa pestaña (para mandar el enlace al móvil)
+  var vue = (location.search.match(/[?&]vue=(\w+)/) || [])[1]
+  if (vue === 'whatsapp') show('wa')
+  else if (vue === 'agenda') show('ag')
+
+  // En el ordenador se ven los tres teléfonos: se «toca» el botón y arranca solo.
+  if (wide.matches && !started) {
+    setTimeout(function () { heroBtn.classList.add('tap') }, 700)
+    setTimeout(book, 1500)
+  }
+})()
+</script>
+</body>
+</html>

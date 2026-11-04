@@ -13,6 +13,13 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/ltb-concept/` | LTB Concept | HTML estático + `config.js` |
 | `/atelie-queijos/` | Ateliê de queijos · PariSabor | Vite + Preact, HTML prerenderizado |
 | `/barberia/` | Barbería · app de turnos (demo con datos de ejemplo) | HTML + JS sin build (`sites/barberia`) |
+| `/sol-y-luna-whatsapp/` | El Sol & La Luna · web + asistente de WhatsApp (demo) | HTML + JS sin build (`sites/sol-y-luna-whatsapp`) |
+| `/la-escondida/` | La Escondida · web + chats de WhatsApp (demo móvil) | Un solo HTML sin build (`sites/la-escondida`) |
+| `/pangus/` | Pangus · web en francés + chats de WhatsApp (demo) | HTML sin build (`sites/pangus`) |
+| `/latins/` | Latin's Barber Shop · WhatsApp que contesta solo (demo) | Un solo HTML (`sites/latins`) |
+| `/reijane/` | Lissage brésilien Paris by Reijane + demo del asistente de WhatsApp | HTML sin build (`sites/reijane`) |
+| `/inca/` | INCA fusion latina · web en francés + chats de WhatsApp (demo) | HTML + JS sin build (`sites/inca`) |
+| `/tropicalisimo/` | Tropicalisimo · web ES/FR + chats de WhatsApp (demo móvil) | HTML + JS sin build (`sites/tropicalisimo`) |
 
 ## Dónde está
 
@@ -48,7 +55,7 @@ Instala las dependencias de cada web de Vite la primera vez (`npm ci` en `sites/
 - Bajo una subcarpeta **no se registra el service worker** (con scope `/` se metería en las otras
   muestras) y Mexi-and-Co no pide `/api/menu`: pinta la carta empaquetada.
 - Las claves de `localStorage` llevan el prefijo de cada web (`mexiandco:`, `sculptdetox:`,
-  `parisabor:`, `barberia:`): las cinco comparten dominio.
+  `parisabor:`, `barberia:`, `solwa:`): las cinco comparten dominio.
 
 ## Variables
 
