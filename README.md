@@ -28,6 +28,10 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 en la raíz); `railway.json` queda como referencia, porque los servicios nuevos ya no leen Config as
 Code. Variable cargada: `SITE_URL=https://crow-muestras-production.up.railway.app`.
 
+Le Comptoir tiene además su propio servicio en el mismo proyecto, `comptoir-du-perou`, con
+`ROOT_SITE=comptoir`: mismo repo y mismo build, pero Caddy sirve solo esa muestra en la raíz de
+**https://comptoirduperou.up.railway.app** (Railway da un solo dominio propio por servicio).
+
 ## Build y prueba en local
 
 ```bash

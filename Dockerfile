@@ -12,6 +12,7 @@ COPY . .
 # Railway pasa sus variables al build: con el dominio público, og:image y canónicos apuntan a la muestra.
 ARG SITE_URL
 ARG RAILWAY_PUBLIC_DOMAIN
+ARG ROOT_SITE
 RUN node scripts/build.mjs
 
 # 2) Solo Caddy y los ficheros estáticos

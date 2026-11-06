@@ -91,6 +91,9 @@ export const SITES = [
   },
 ]
 
+// ROOT_SITE: el servicio de Railway que sirve una sola muestra en la raíz de su propio dominio
+// (p. ej. comptoir en comptoirduperou.up.railway.app). Sus URLs absolutas van sin la carpeta.
+const rootSite = process.env.ROOT_SITE || ''
 const siteUrl = (process.env.SITE_URL || (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '')).replace(/\/+$/, '')
 
 const NOINDEX = '<meta name="robots" content="noindex, nofollow" />'
@@ -149,7 +152,7 @@ async function buildSite(site) {
   }
 
   // URLs del dominio del cliente → la muestra. En las estáticas también el JS (config.js de LTB).
-  const target = siteUrl ? `${siteUrl}/${site.name}` : site.origin === '__ORIGIN__' ? `/${site.name}` : null
+  const target = siteUrl ? (site.name === rootSite ? siteUrl : `${siteUrl}/${site.name}`) : site.origin === '__ORIGIN__' ? `/${site.name}` : null
   if (target) {
     const exts = site.kind === 'static' ? ['.html', '.js'] : ['.html']
     await rewrite(out, exts, (text) => text.replaceAll(site.origin, target))

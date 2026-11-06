@@ -6,7 +6,8 @@
 }
 
 :{$PORT:8080} {
-	root * /srv
+	# Con ROOT_SITE (servicio de una sola muestra, en su propio dominio) la raíz es esa carpeta.
+	root * /srv/{$ROOT_SITE}
 	encode zstd gzip
 
 	# Muestras para clientes: ningún buscador las indexa hasta que se publiquen en su dominio.
