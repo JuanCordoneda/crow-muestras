@@ -7,7 +7,7 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | Ruta | Web | Hecha con |
 | --- | --- | --- |
 | `/` | Índice con las muestras (uso interno) | `scripts/index-page.mjs` |
-| `/comptoir/` | Le Comptoir du Pérou | HTML estático (`sites/comptoir/public`) |
+| `/comptoir/` | Le Comptoir du Pérou · más `admin/` (página interna para cambiar la carta, demo en `localStorage`), `qr/` (QR para mesas) y `cuentas/` (la cuenta de TheFork) | HTML estático (`sites/comptoir/public`); la carta está en `carte.js` |
 | `/sol-y-luna/` | El Sol & La Luna · Mexi & Co (Le 1492 oculto, ver su README) | Vite + Preact |
 | `/sculpt-detox/` | Sculpt Detox (Ibiza) | Vite + Preact, HTML prerenderizado |
 | `/ltb-concept/` | LTB Concept | HTML estático + `config.js` |

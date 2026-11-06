@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QR para reservar · Le Comptoir du Pérou</title>
+<meta name="theme-color" content="#141210">
+<!--
+  QR de mesas y vidriera. Se arma con la dirección de esta misma página (../#reserver), así que el
+  día que la web pase a su dominio el QR sale bien sin tocar nada. qrcode.js: qrcode-generator 1.4.4
+  de Kazuhiko Arase (MIT).
+-->
+<style>
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:500 700;font-display:swap;src:url(../fonts/cormorant-garamond-latin.woff2) format("woff2")}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:500 600;font-display:swap;src:url(../fonts/cormorant-garamond-italic-latin.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(../fonts/dm-sans-latin.woff2) format("woff2")}
+:root{--ink:#141210;--ink-3:#3b342d;--cream:#f6efe2;--cream-2:#ede3d0;--white:#fffbf4;--gold:#c9a24a;--gold-l:#e3c67e;--gold-d:#8a6b22;--muted:#6b6157;--line:rgba(20,18,16,.12);
+  --f-display:"Cormorant Garamond",Garamond,"Times New Roman",serif;--f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream-2);color:var(--ink);font-family:var(--f-body);line-height:1.45}
+.bar{max-width:520px;margin:0 auto;padding:20px 16px 0}
+.bar h1{font-family:var(--f-display);font-size:2rem;line-height:1.05;margin:0 0 4px}
+.bar p{margin:0 0 14px;color:var(--ink-3);font-size:.95rem}
+.seg{display:flex;background:var(--white);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+.seg button{flex:1;border:0;background:none;border-radius:999px;padding:9px 8px;font:inherit;font-size:.92rem;font-weight:700;color:var(--ink-3);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--white)}
+.actions{display:flex;gap:8px;margin-top:10px}
+.actions button{flex:1;border:1.5px solid var(--ink);background:none;border-radius:999px;padding:11px;font:inherit;font-weight:700;cursor:pointer}
+.actions .main{background:var(--gold);border-color:var(--gold)}
+.url{margin-top:10px;font-size:.8rem;color:var(--muted);word-break:break-all}
+
+.stage{display:grid;place-items:center;padding:20px 16px 40px}
+.card{width:min(100%,380px);background:var(--ink);color:var(--white);border-radius:22px;padding:30px 28px 26px;text-align:center;position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(20,18,16,.7)}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 100% 0,rgba(201,162,74,.28),transparent 55%),radial-gradient(circle at 0 100%,rgba(180,50,43,.3),transparent 50%);pointer-events:none}
+.card>*{position:relative}
+.card .k{font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-l)}
+.card h2{font-family:var(--f-display);font-weight:600;font-size:2.4rem;line-height:.98;margin:8px 0 6px;text-transform:uppercase}
+.card h2 em{display:block;font-style:italic;font-weight:500;text-transform:none;color:var(--gold)}
+.card .sub{margin:0 0 18px;font-size:.92rem;color:rgba(255,251,244,.78)}
+.qr{background:var(--white);border-radius:16px;padding:14px;width:78%;margin:0 auto;aspect-ratio:1}
+.qr svg{display:block;width:100%;height:100%}
+.card .foot{margin-top:18px;font-size:.84rem;color:rgba(255,251,244,.72)}
+.card .foot b{display:block;font-family:var(--f-display);font-size:1.35rem;font-weight:600;color:var(--white)}
+
+@media print{
+  @page{size:A5;margin:0}
+  body{background:#fff}
+  .bar{display:none}
+  .stage{padding:0;min-height:100vh}
+  .card{box-shadow:none;width:118mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="bar">
+  <h1>QR para mesas y vidriera</h1>
+  <p>El cliente lo escanea y cae directo en la web del Comptoir, sin pasar por TheFork.</p>
+  <div class="seg" role="group" aria-label="A dónde lleva el QR">
+    <button type="button" data-to="reserver" aria-pressed="true">Reservar</button>
+    <button type="button" data-to="carte" aria-pressed="false">Ver la carta</button>
+  </div>
+  <div class="actions">
+    <button type="button" class="main" id="print">Imprimir</button>
+    <button type="button" id="png">Descargar imagen</button>
+  </div>
+  <div class="url" id="url"></div>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="k">Le Comptoir du Pérou</div>
+    <h2 id="title">Réservez <em>votre table</em></h2>
+    <p class="sub" id="sub">Directement chez nous, en 30 secondes.</p>
+    <div class="qr" id="qr"></div>
+    <div class="foot"><b>Scannez-moi</b>41 rue de la Croix-Nivert · Paris 15e</div>
+  </div>
+</div>
+
+<script src="qrcode.js"></script>
+<script>
+(function(){
+"use strict";
+var TEXTS={
+  reserver:{title:'Réservez <em>votre table</em>',sub:"Directement chez nous, en 30 secondes."},
+  carte:{title:'Notre <em>carte</em>',sub:"Ceviches, causas & pisco. Et réservez en 30 secondes."}
+};
+var to="reserver",cells=null;
+function target(){return new URL("../?qr="+to+"#"+to,location.href).href;}
+function draw(){
+  var url=target(),qr=qrcode(0,"M");qr.addData(url);qr.make();
+  var n=qr.getModuleCount(),d="";
+  for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(qr.isDark(r,c))d+="M"+c+" "+r+"h1v1h-1z";
+  cells={qr:qr,n:n};
+  document.getElementById("qr").innerHTML='<svg viewBox="0 0 '+n+' '+n+'" shape-rendering="crispEdges" role="img" aria-label="QR: '+url+'"><path fill="#141210" d="'+d+'"/></svg>';
+  document.getElementById("title").innerHTML=TEXTS[to].title;
+  document.getElementById("sub").textContent=TEXTS[to].sub;
+  document.getElementById("url").textContent="Lleva a: "+url;
+}
+document.querySelectorAll("[data-to]").forEach(function(b){b.addEventListener("click",function(){
+  to=b.dataset.to;document.querySelectorAll("[data-to]").forEach(function(x){x.setAttribute("aria-pressed",String(x===b));});draw();
+});});
+document.getElementById("print").addEventListener("click",function(){window.print();});
+// imagen solo del QR (con margen blanco), para mandarla a una imprenta o ponerla en un cartel
+document.getElementById("png").addEventListener("click",function(){
+  var n=cells.n,quiet=4,px=24,size=(n+quiet*2)*px,cv=document.createElement("canvas");cv.width=cv.height=size;
+  var g=cv.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,size,size);g.fillStyle="#141210";
+  for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(cells.qr.isDark(r,c))g.fillRect((c+quiet)*px,(r+quiet)*px,px,px);
+  var a=document.createElement("a");a.download="comptoir-qr-"+to+".png";a.href=cv.toDataURL("image/png");a.click();
+});
+draw();
+})();
+</script>
+</body>
+</html>

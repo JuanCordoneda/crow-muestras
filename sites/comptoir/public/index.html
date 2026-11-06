@@ -844,6 +844,7 @@ dialog.st.paused .st-bars i.now b,dialog.st.paused .st-img{animation-play-state:
 </dialog>
 <div class="peek" id="peek" aria-hidden="true"><img alt=""></div>
 
+<script src="carte.js"></script>
 <script>
 (function(){
 "use strict";
@@ -1002,65 +1003,28 @@ es:{
 var IMG = {entrees:"causa-thon", ceviches:"ceviche-classique", plats:"poke-bowl", cocktails:"pisco-sour"};
 // chaque photo existe en 800, 1400 et 2000 px (amplifiées par Real-ESRGAN) : le navigateur prend celle qui suffit
 var FULL={"salle-bar":1600,"ceviche-agrumes":1600,"ceviche-salade":1920};
-function srcsetOf(n){return "img/comptoir/"+n+"-800.webp 800w, img/comptoir/"+n+"-1400.webp 1400w, img/comptoir/"+n+".webp "+(FULL[n]||2000)+"w";}
-function imgAttrs(name,sizes,alt){return {src:"img/comptoir/"+name+".webp",srcset:srcsetOf(name),sizes:sizes,alt:alt,loading:"lazy"};}
-function D(fr,en,es){return {fr:fr,en:en,es:es};}
-var CAUSA = D("Purée de pomme de terre jaune citronnée","Lime-seasoned yellow potato mash","Masa de papa amarilla con limón");
-var MENU = [
- {id:"entrees", name:D("Entrées","Starters","Entradas"), img:"entrees", intro:D("Pour commencer, à partager ou pas.","To start, to share (or not).","Para empezar, para compartir (o no)."), items:[
-  {n:"Pulpo al carbón", p:15, d:D("Poulpe grillé au charbon.","Charcoal-grilled octopus.","Pulpo a la brasa.")},
-  {n:"Pulpo al olivo", p:13, d:D("Poulpe, crème d'olive noire.","Octopus, black olive cream.","Pulpo en crema de aceituna.")},
-  {n:"Causa de palta y camarones", p:12, d:D(CAUSA.fr+", avocat et crevettes.",CAUSA.en+", avocado and prawns.",CAUSA.es+", palta y camarones.")},
-  {n:"Causa de atún", p:11, img:"causa-thon", d:D(CAUSA.fr+" et thon.",CAUSA.en+" with tuna.",CAUSA.es+" y atún.")},
-  {n:"Tacos de atún", p:12, img:"tacos-thon"},
-  {n:"Velouté Kantuta", p:9}
- ]},
- {id:"ceviches", name:D("Ceviches","Ceviches","Ceviches"), img:"ceviches", intro:D("Poisson cru mariné minute au citron vert : le plat national du Pérou.","Raw fish cured to order in lime juice: Peru's national dish.","Pescado crudo marinado al momento en limón: el plato bandera del Perú."), items:[
-  {n:"Ceviche clásico", p:15, img:"ceviche-classique"},
-  {n:"Ceviche fresa salvaje", p:16},
-  {n:"Ceviche aux 3 piments au charbon", p:17},
-  {n:"Ceviche saumon ají amarillo", p:17},
-  {n:"Ceviche nikkei", p:18},
-  {n:"Ceviche mixto", p:20, d:D("Poulpe & crevettes.","Octopus & prawns.","Pulpo y camarones.")},
-  {n:"Ceviche à la mangue", p:20, tag:"fav"},
-  {n:"Ceviche ají amarillo y palta", p:20}
- ]},
- {id:"plats", name:D("Plats","Mains","Platos"), img:"plats", items:[
-  {n:"Empanadas de bœuf", p:15},
-  {n:"Poké bowl végétarien avocat", p:15, v:1, img:"poke-bowl"}
- ]},
- {id:"desserts", name:D("Desserts","Desserts","Postres"), intro:D("Les douceurs de Lima.","Sweet treats from Lima.","Los dulces de Lima."), items:[
-  {n:"Postre del día", p:7, d:D("Le dessert du jour, selon l'humeur du chef.","Dessert of the day, ask us!","Pregunta por el postre del día.")},
-  {n:"Dulce de leche", p:8},
-  {n:"Mazamorra morada", p:8, d:D("Crème de maïs violet aux fruits.","Purple corn pudding with fruit.","Postre de maíz morado con frutas.")},
-  {n:"Arroz zambito", p:8, d:D("Riz au lait à la chancaca, le sucre de canne péruvien.","Rice pudding with chancaca, Peruvian cane sugar.","Arroz con leche a la chancaca.")},
-  {n:"Marquise au chocolat", p:10}
- ]},
- {id:"cocktails", name:D("Cocktails","Cocktails","Cócteles"), img:"cocktails", intro:D("Le pisco, l'eau-de-vie de raisin du Pérou, dans tous ses états.","Pisco, Peru's grape brandy, every which way.","El pisco, en todas sus formas."), items:[
-  {n:"Pisco sour", p:10, img:"pisco-sour", d:D("Pisco, citron vert, blanc d'œuf, angostura.","Pisco, lime, egg white, angostura.","Pisco, limón, clara de huevo, amargo de angostura.")},
-  {n:"Mojito", p:10},
-  {n:"Cuba libre", p:10},
-  {n:"Chilcano", p:12, d:D("Pisco, ginger ale, citron vert.","Pisco, ginger ale, lime.","Pisco, ginger ale, limón.")},
-  {n:"Pisco maracuyá", p:12},
-  {n:D("Pisco mangue","Pisco mango","Pisco mango"), p:12},
-  {n:D("Pisco fraise","Pisco strawberry","Pisco fresa"), p:12},
-  {n:"Shot de pisco", p:5}
- ]},
- {id:"boissons", name:D("Bières & softs","Beers & soft drinks","Cervezas y bebidas"), items:[
-  {n:D("Cusqueña blonde / brune","Cusqueña lager / dark","Cusqueña rubia / negra"), p:6, d:D("La bière de Cusco.","The beer from Cusco.","La cerveza del Cusco.")},
-  {n:"Chicha morada", p:6, d:D("Boisson péruvienne au maïs violet.","Peruvian purple corn drink.","La de siempre, de maíz morado.")},
-  {n:"Inca Kola", p:5, d:D("Le soda doré du Pérou.","Peru's golden soda.","La bebida de sabor nacional.")},
-  {n:"Milk-shake maca", p:8, d:D("Mangue, fraise ou maracuyá.","Mango, strawberry or passion fruit.","Mango, fresa o maracuyá.")}
- ]}
-];
-
-/* les incontournables : uniquement des plats dont on a la vraie photo */
-var MUST = [
- {img:"ceviche-classique", n:"Ceviche clásico", p:15, d:D("Le grand classique de Lima.","Lima's great classic.","El gran clásico limeño.")},
- {img:"causa-thon", n:"Causa de atún", p:11, d:D("Pomme de terre jaune citronnée et thon.","Lime-seasoned yellow potato and tuna.","Papa amarilla con limón y atún.")},
- {img:"tacos-thon", n:"Tacos de atún", p:12, d:D("Frais et croquants, à partager.","Fresh and crunchy, for sharing.","Frescos y crocantes, para compartir.")},
- {img:"pisco-sour", n:"Pisco sour", p:10, d:D("Le cocktail national, shaké minute.","Peru's national cocktail, shaken to order.","El cóctel bandera, batido al momento.")}
-];
+// une photo envoyée depuis la page interne arrive en data: URL, en une seule taille
+function isData(n){return /^data:/.test(n);}
+function imgSrc(n,size){return isData(n)?n:"img/comptoir/"+n+(size?"-"+size:"")+".webp";}
+function srcsetOf(n){if(isData(n))return "";return "img/comptoir/"+n+"-800.webp 800w, img/comptoir/"+n+"-1400.webp 1400w, img/comptoir/"+n+".webp "+(FULL[n]||2000)+"w";}
+function imgAttrs(name,sizes,alt){return {src:imgSrc(name),srcset:srcsetOf(name),sizes:sizes,alt:alt,loading:"lazy"};}
+/* la carte vient de carte.js ; si elle a été modifiée depuis la page interne (admin/), c'est cette version-là.
+   Démo : la page interne la garde dans le navigateur (localStorage), la vraie l'enregistrera sur le serveur. */
+var CARTE_KEY="comptoir-carte", MENU, MUST;
+function loadCarte(){
+  var base=window.COMPTOIR_CARTE, ed=null;
+  try{ed=JSON.parse(localStorage.getItem(CARTE_KEY)||"null");}catch(_){}
+  var src=(ed&&ed.menu)||base.menu, byId={};
+  MENU=src.map(function(c){
+    var items=c.items.filter(function(it){byId[it.id]=it;return !it.off;});
+    var o={};for(var k in c)o[k]=c[k];o.items=items;return o;
+  }).filter(function(c){return c.items.length;});
+  MUST=base.must.map(function(m){
+    var it=byId[m.ref];if(!it)return m;if(it.off)return null;
+    return {img:it.img||m.img,n:it.n,p:it.p,d:m.d};
+  }).filter(Boolean);
+}
+loadCarte();
 
 /* ---------------- helpers ---------------- */
 var lang = "fr", LOC = {fr:"fr-FR", en:"en-GB", es:"es-ES"};
@@ -1120,9 +1084,9 @@ function renderStar(){
 function renderMust(){
   var ul=document.getElementById("must");ul.innerHTML="";
   MUST.forEach(function(m){
-    var pic=el("button",{type:"button",class:"pic","aria-label":t("dish.photo")+" : "+m.n},[el("img",imgAttrs(m.img,"(min-width:900px) 270px, 70vw",m.n)),el("span",{class:"price-tag",text:euro(m.p)})]);
-    pic.addEventListener("click",function(){openStories(MUST.map(function(x){return {img:x.img,cap:x.n+" · "+euro(x.p)};}),MUST.indexOf(m));});
-    ul.appendChild(el("li",{},[el("figure",{},[pic,el("figcaption",{},[el("b",{text:m.n}),el("span",{text:L(m.d)})])])]));
+    var pic=el("button",{type:"button",class:"pic","aria-label":t("dish.photo")+" : "+L(m.n)},[el("img",imgAttrs(m.img,"(min-width:900px) 270px, 70vw",L(m.n))),el("span",{class:"price-tag",text:euro(m.p)})]);
+    pic.addEventListener("click",function(){openStories(MUST.map(function(x){return {img:x.img,cap:L(x.n)+" · "+euro(x.p)};}),MUST.indexOf(m));});
+    ul.appendChild(el("li",{},[el("figure",{},[pic,el("figcaption",{},[el("b",{text:L(m.n)}),el("span",{text:L(m.d)})])])]));
   });
 }
 var catObs;
@@ -1376,8 +1340,8 @@ function stShow(i){
   if(i>=stItems.length){st.close();return;}
   stI=i;var it=stItems[i];
   stImg.style.animation="none";void stImg.offsetWidth;stImg.style.animation="";
-  stImg.srcset=srcsetOf(it.img);stImg.sizes="(min-width:700px) 470px, 100vw";stImg.src="img/comptoir/"+it.img+".webp";stImg.alt=it.cap;
-  stBlur.src="img/comptoir/"+it.img+"-800.webp";
+  stImg.srcset=srcsetOf(it.img);stImg.sizes="(min-width:700px) 470px, 100vw";stImg.src=imgSrc(it.img);stImg.alt=it.cap;
+  stBlur.src=imgSrc(it.img,800);
   document.getElementById("stCap").textContent=it.cap;
   [].forEach.call(stBars.children,function(bar,k){
     bar.className=k<i?"done":"";
@@ -1409,7 +1373,7 @@ var peek=document.getElementById("peek"),canHover=window.matchMedia&&matchMedia(
 document.getElementById("menuBody").addEventListener("mouseover",function(e){
   if(!canHover)return;var li=e.target.closest(".dish.has-pic");if(!li)return;
   var n=li.dataset.img,img=peek.firstChild;
-  if(img.dataset.n!==n){img.dataset.n=n;img.srcset=srcsetOf(n);img.sizes="210px";img.src="img/comptoir/"+n+"-800.webp";}
+  if(img.dataset.n!==n){img.dataset.n=n;img.srcset=srcsetOf(n);img.sizes="210px";img.src=imgSrc(n,800);}
   peek.classList.add("on");
 });
 document.getElementById("menuBody").addEventListener("mouseout",function(e){var li=e.target.closest(".dish.has-pic");if(li&&!li.contains(e.relatedTarget))peek.classList.remove("on");});
@@ -1452,6 +1416,10 @@ initDates();setPeople(2);
 var saved=null;try{saved=localStorage.getItem("comptoir-lang");}catch(_){}
 applyLang(saved||"fr");
 setInterval(function(){updateStatus();updateHeroCta();},60000);
+/* une modification faite depuis la page interne (dans un autre onglet) s'affiche ici sans recharger */
+function refreshCarte(){loadCarte();renderStar();renderMust();renderMenu();}
+window.addEventListener("storage",function(e){if(e.key===CARTE_KEY||e.key===null)refreshCarte();});
+window.addEventListener("pageshow",function(e){if(e.persisted)refreshCarte();});
 })();
 </script>
 </body>
