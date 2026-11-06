@@ -152,8 +152,9 @@ async function buildSite(site) {
   }
 
   // URLs del dominio del cliente → la muestra. En las estáticas también el JS (config.js de LTB).
-  const target = siteUrl ? (site.name === rootSite ? siteUrl : `${siteUrl}/${site.name}`) : site.origin === '__ORIGIN__' ? `/${site.name}` : null
-  if (target) {
+  const prefix = site.name === rootSite ? '' : `/${site.name}`
+  const target = siteUrl ? `${siteUrl}${prefix}` : site.origin === '__ORIGIN__' ? prefix : null
+  if (target !== null) {
     const exts = site.kind === 'static' ? ['.html', '.js'] : ['.html']
     await rewrite(out, exts, (text) => text.replaceAll(site.origin, target))
   }
