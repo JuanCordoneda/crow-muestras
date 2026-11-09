@@ -94,6 +94,11 @@ export const SITES = [
     include: ['index.html', 'styles.css', 'app.js', 'og.jpg', 'img', 'fonts'],
     title: 'El Sol & La Luna · Web + WhatsApp', what: 'Restaurante colombiano y mexicano + WhatsApp · París 5e', origin: '__ORIGIN__',
   },
+  {
+    name: 'maona', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'Maona', what: 'Restaurante + WhatsApp en alemán · Portocolom, Mallorca', origin: '__ORIGIN__',
+  },
 ]
 
 // ROOT_SITE: el servicio de Railway que sirve una sola muestra en la raíz de su propio dominio

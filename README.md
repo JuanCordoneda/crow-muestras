@@ -21,6 +21,7 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/reijane/` | Lissage brésilien Paris by Reijane + demo del asistente de WhatsApp | HTML sin build (`sites/reijane`) |
 | `/inca/` | INCA fusion latina · web en francés + chats de WhatsApp (demo) | HTML + JS sin build (`sites/inca`) |
 | `/tropicalisimo/` | Tropicalisimo · web ES/FR + chats de WhatsApp (demo móvil) | HTML + JS sin build (`sites/tropicalisimo`) |
+| `/maona/` | Maona (Portocolom, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/maona`) |
 
 ## Dónde está
 
