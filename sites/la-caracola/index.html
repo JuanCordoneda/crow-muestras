@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Caracola – Restaurante en Cala Ratjada, Mallorca</title>
+<meta name="description" content="Ejemplo de cómo atendería un asistente de WhatsApp a los turistas de La Caracola, restaurante en Cala Ratjada, Mallorca.">
+<meta name="theme-color" content="#f2b441">
+<link rel="canonical" href="__ORIGIN__/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Caracola">
+<meta property="og:title" content="La Caracola – Restaurante en Cala Ratjada, Mallorca">
+<meta property="og:description" content="Ejemplo: una reserva por WhatsApp en alemán.">
+<meta property="og:url" content="__ORIGIN__/">
+<meta property="og:image" content="__ORIGIN__/og.jpg?v=1">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="__ORIGIN__/og.jpg?v=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230e5a6b'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-family='Georgia,serif' font-size='38' fill='%23f4ecdd'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="preload" as="font" type="font/woff2" href="fonts/dm-sans-latin.woff2" crossorigin>
+<style>
+@font-face{font-family:"Fraunces";font-style:normal;font-weight:500 800;font-display:swap;src:url(fonts/fraunces-latin.woff2) format("woff2")}
+@font-face{font-family:"DM Sans";font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/dm-sans-latin.woff2) format("woff2")}
+:root{
+  color-scheme:light;
+  --sand:#f4ecdd; --ink:#12262c; --sea:#0e5a6b; --sea-d:#0a3f4c; --sun:#f2b441;
+  --f-display:"Fraunces",Georgia,"Times New Roman",serif;
+  --f-body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:#0a2e38;color:var(--ink);font:16px/1.55 var(--f-body);-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%}
+svg{display:block;max-width:100%}
+button{font:inherit;color:inherit;cursor:pointer}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* El "celular": a pantalla completa en el móvil, enmarcado en el ordenador */
+.device{position:relative;height:100dvh;max-width:440px;margin:0 auto;background:var(--sand);overflow:hidden;display:flex;flex-direction:column}
+@media (min-width:600px) and (min-height:700px){
+  body{display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 30% 20%,#14596a,#07222a 70%)}
+  .device{width:400px;height:min(860px,calc(100dvh - 48px));border-radius:44px;box-shadow:0 0 0 10px #061a20,0 0 0 11px #2b5a66,0 30px 80px rgba(0,0,0,.55)}
+}
+
+/* Cartel y línea de abajo (para enseñárselo al dueño, en castellano) */
+.ejemplo{flex:none;display:flex;align-items:center;justify-content:center;height:44px;background:var(--sun);color:var(--ink);font:700 16px/1 var(--f-body);letter-spacing:.02em}
+.langs{flex:none;margin:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--sea-d);color:var(--sand);font:600 16px/1.3 var(--f-display);text-align:center}
+
+/* ───────── WhatsApp ───────── */
+.chat{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;background:#efeae2}
+.chat header{flex:none;display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f7f5f2;border-bottom:1px solid #ddd6cc}
+.chat header .avatar{width:38px;height:38px;border-radius:50%;background:var(--sea);color:var(--sand);display:grid;place-items:center;font:700 20px/1 var(--f-display);flex:none}
+.chat header div{flex:1;min-width:0;line-height:1.2}
+.chat header strong{display:block;font-size:16px}
+.chat header span{font-size:12.5px;color:#667781}
+.chat header .icons{display:flex;gap:18px;color:#0a7cff}
+.chat header .icons svg{width:22px;height:22px}
+.log{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:10px 12px 16px;display:flex;flex-direction:column;gap:3px;background-color:#efeae2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' fill='none' stroke='%23d8cfc0' stroke-width='1.4' stroke-linecap='round'%3E%3Ccircle cx='20' cy='22' r='7'/%3E%3Cpath d='M70 14c6 0 10 4 10 10M96 60l8 8m0-8-8 8M30 82c4-6 12-6 16 0M78 96h14M86 89v14'/%3E%3Cpath d='M12 56l6-6 6 6-6 6z'/%3E%3C/svg%3E")}
+.log>*{flex:none}
+.sys{align-self:center;max-width:88%;margin:6px 0 10px;padding:7px 12px;border-radius:8px;background:#fff3c4;color:#54656f;font-size:12.5px;text-align:center;line-height:1.4;box-shadow:0 1px .5px rgba(0,0,0,.08)}
+.day{align-self:center;margin:4px 0 8px;padding:5px 12px;border-radius:8px;background:#fff;color:#54656f;font-size:12.5px;box-shadow:0 1px .5px rgba(0,0,0,.08)}
+.msg{position:relative;max-width:82%;padding:6px 9px 7px;border-radius:10px;font-size:15.5px;line-height:1.38;box-shadow:0 1px .5px rgba(0,0,0,.13);white-space:pre-line;overflow-wrap:anywhere;animation:pop .22s ease-out}
+.msg.in{align-self:flex-start;background:#fff;border-top-left-radius:3px}
+.msg.out{align-self:flex-end;background:#d9fdd3;border-top-right-radius:3px}
+.msg.in+.msg.in,.msg.out+.msg.out{border-radius:10px;margin-top:-1px}
+.msg.out+.msg.in,.msg.in+.msg.out,.sys+.msg,.day+.msg{margin-top:8px}
+.msg time{float:right;margin:6px 0 -4px 10px;font-size:11px;color:#667781;display:inline-flex;align-items:center;gap:3px;line-height:1}
+.msg time svg{width:16px;height:11px;color:#8696a0;transition:color .3s}
+.msg time svg.read{color:#53bdeb}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+.typing{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;background:#fff;border-radius:10px;border-top-left-radius:3px;margin-top:8px;box-shadow:0 1px .5px rgba(0,0,0,.13)}
+.typing i{width:7px;height:7px;border-radius:50%;background:#9aa6ad;animation:blink 1.1s infinite}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,60%,100%{opacity:.35;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.card{white-space:normal;min-width:230px;padding:0;overflow:hidden}
+.card .head{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#e7f6e4;color:#0d6b3b;font-weight:700;font-size:15px}
+.card .head svg{width:20px;height:20px}
+.card dl{margin:0;padding:8px 12px 2px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14.5px}
+.card dt{color:#667781}
+.card dd{margin:0;font-weight:600}
+.card time{margin:2px 9px 7px 10px}
+/* La ubicación compartida: un dibujo genérico, no el plano real */
+.loc{display:block;width:250px;padding:3px;white-space:normal;color:inherit;text-decoration:none}
+.loc svg.map{width:100%;height:120px;border-radius:8px}
+.loc strong{display:block;padding:7px 7px 0;font-size:15.5px}
+.loc span{display:block;padding:0 7px;font-size:13.5px;color:#667781}
+.loc time{margin:0 7px 5px 10px}
+.composer{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f7f5f2;border-top:1px solid #ddd6cc}
+.composer .field{flex:1;min-height:38px;display:flex;align-items:center;padding:8px 14px;border-radius:20px;background:#fff;border:1px solid #e3ddd3;font-size:15.5px;color:#111b21;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.composer .field:empty::before{content:attr(data-ph);color:#8696a0}
+.composer .send{width:38px;height:38px;border-radius:50%;border:0;background:#008069;color:#fff;display:grid;place-items:center;flex:none}
+.composer .send svg{width:18px;height:18px}
+.replay{position:absolute;right:12px;bottom:66px;z-index:3;display:inline-flex;align-items:center;gap:6px;border:0;border-radius:999px;padding:8px 13px;background:rgba(18,38,44,.86);color:#fff;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .3s}
+.replay.show{opacity:1;pointer-events:auto}
+.replay svg{width:15px;height:15px}
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="ejemplo">Ejemplo</div>
+
+  <main class="chat" lang="de" aria-label="WhatsApp-Gespräch: Tischreservierung">
+    <header>
+      <span class="avatar">C</span>
+      <div><strong>La Caracola</strong><span>Geschäftskonto</span></div>
+      <span class="icons" aria-hidden="true"><svg><use href="#i-video"/></svg><svg><use href="#i-phone"/></svg></span>
+    </header>
+    <div class="log" aria-live="polite"></div>
+    <button class="replay" type="button" lang="es"><svg aria-hidden="true"><use href="#i-replay"/></svg>Repetir</button>
+    <div class="composer" aria-hidden="true"><div class="field" data-ph="Nachricht"></div><span class="send"><svg><use href="#i-send"/></svg></span></div>
+  </main>
+
+  <p class="langs">También en inglés y español</p>
+</div>
+
+<!-- Íconos -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-video" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="14" height="12" rx="3"/><path d="m16 10 6-3.5v11L16 14"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path fill="currentColor" d="M3.4 20.4 21 12 3.4 3.6 3.4 10l12.6 2-12.6 2z"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" fill="#25a244" stroke="none"/><path d="m7.5 12.2 3 3 6-6" stroke="#fff"/></symbol>
+  <symbol id="i-ticks" viewBox="0 0 16 11"><path fill="currentColor" d="M11.1.6a.5.5 0 0 1 .1.7L5.4 8.6a.5.5 0 0 1-.8 0L1.2 5.2a.5.5 0 1 1 .7-.7l3 3L10.4.7a.5.5 0 0 1 .7-.1Zm3.6 0a.5.5 0 0 1 .1.7L9 8.6a.5.5 0 0 1-.8 0l-.7-.7.7-.7.4.4L14 .7a.5.5 0 0 1 .7-.1Z"/></symbol>
+  <symbol id="i-map" viewBox="0 0 250 120" preserveAspectRatio="xMidYMid slice">
+    <rect width="250" height="120" fill="#e8e2d2"/>
+    <path d="M-5 92c40-14 62 8 104-4s72-30 156-16v60H-5Z" fill="#a9d6e5"/>
+    <path d="M-5 34 255 52M72-5l-14 110M178-5l10 90" stroke="#fffaf1" stroke-width="7" fill="none"/>
+    <g transform="translate(125 58)"><path d="M0 20C-12 6-14 0-14-6a14 14 0 0 1 28 0c0 6-2 12-14 26Z" fill="#e0483a"/><circle cy="-6" r="5" fill="#fffaf1"/></g>
+  </symbol>
+</svg>
+
+<script>
+(() => {
+  const $ = (s, el = document) => el.querySelector(s)
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)]
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const MAPS = 'https://www.google.com/maps/search/?api=1&query=La+Caracola+Cala+Ratjada+Mallorca'
+
+  /* La conversación. out = el turista, in = el asistente de La Caracola. */
+  const CHAT = {
+    day: 'Heute',
+    sys: 'La Caracola antwortet über einen digitalen Assistenten.',
+    msgs: [
+      { out: 'Hallo! Habt ihr am Donnerstag um 20 Uhr einen Tisch für 4 Personen?', t: '20:41' },
+      { in: 'Hallo! Ja, Donnerstag um 20:00 Uhr für 4 Personen ist frei. Auf welchen Namen darf ich reservieren?', t: '20:41' },
+      { out: 'Auf Müller, danke!', t: '20:42' },
+      { in: 'Perfekt, Herr Müller! Ihr Tisch ist reserviert: Donnerstag, 20:00 Uhr, 4 Personen. Hier ist unser Standort:', t: '20:42' },
+      { loc: { name: 'La Caracola', place: 'Cala Ratjada, Mallorca' }, t: '20:42' },
+    ],
+  }
+
+  const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  const ticks = '<svg viewBox="0 0 16 11" aria-label="gelesen"><use href="#i-ticks"/></svg>'
+  const bubble = (m) => {
+    if (m.loc) {
+      const a = document.createElement('a')
+      a.className = 'msg in loc'
+      a.href = MAPS; a.target = '_blank'; a.rel = 'noopener'
+      a.innerHTML = `<svg class="map" aria-hidden="true"><use href="#i-map"/></svg><strong>${esc(m.loc.name)}</strong><span>${esc(m.loc.place)}</span><time>${m.t}</time>`
+      return a
+    }
+    const el = document.createElement('div')
+    if (m.card) {
+      el.className = 'msg in card'
+      el.innerHTML = `<div class="head"><svg aria-hidden="true"><use href="#i-check"/></svg>${m.card.title}</div><dl>${m.card.rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl><time>${m.t}</time>`
+    } else {
+      el.className = 'msg ' + (m.out ? 'out' : 'in')
+      el.innerHTML = `${esc(m.out || m.in)}<time>${m.t}${m.out ? ticks : ''}</time>`
+    }
+    return el
+  }
+
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms))
+  let run = 0 // cambia al repetir: corta la animación que estaba en curso
+
+  async function play() {
+    const token = ++run
+    const log = $('.log'), field = $('.field'), replay = $('.replay')
+    const alive = () => token === run
+    const down = () => log.scrollTo({ top: log.scrollHeight, behavior: reduce ? 'auto' : 'smooth' })
+    const read = () => $$('.msg.out time svg', log).forEach((s) => s.classList.add('read'))
+    replay.classList.remove('show'); field.textContent = ''
+    log.innerHTML = `<div class="day">${CHAT.day}</div><div class="sys">${CHAT.sys}</div>`
+    if (reduce) {
+      CHAT.msgs.forEach((m) => log.append(bubble(m)))
+      read(); replay.classList.add('show'); down(); return
+    }
+    await wait(600)
+    for (const m of CHAT.msgs) {
+      if (!alive()) return
+      if (m.out) {
+        // El turista escribe en la caja y envía
+        const text = m.out
+        const steps = Math.min(text.length, 24)
+        for (let i = 1; i <= steps; i++) { if (!alive()) return; field.textContent = text.slice(0, Math.round(text.length * i / steps)); await wait(28) }
+        await wait(250); if (!alive()) return
+        field.textContent = ''
+        log.append(bubble(m)); down()
+        await wait(700)
+      } else {
+        // El asistente "escribe" y contesta
+        const typing = document.createElement('div')
+        typing.className = 'typing'; typing.innerHTML = '<i></i><i></i><i></i>'
+        log.append(typing); down(); read()
+        const len = (m.in || '').length || 120
+        await wait(Math.min(800 + len * 6, 1800))
+        if (!alive()) return
+        typing.remove(); log.append(bubble(m)); down()
+        await wait(Math.min(500 + len * 9, 1900))
+      }
+    }
+    if (alive()) replay.classList.add('show')
+  }
+  $('.replay').addEventListener('click', play)
+  play()
+})()
+</script>
+</body>
+</html>

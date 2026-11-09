@@ -23,6 +23,8 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/tropicalisimo/` | Tropicalisimo · web ES/FR + chats de WhatsApp (demo móvil) | HTML + JS sin build (`sites/tropicalisimo`) |
 | `/celina-tours/` | Celina Tours · tours en Lisboa PT/EN + chat de WhatsApp (demo) | Un solo HTML (`sites/celina-tours`) |
 | `/maona/` | Maona (Portocolom, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/maona`) |
+| `/la-tabla/` | La Tabla (Cala Bona, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/la-tabla`) |
+| `/la-caracola/` | La Caracola (Cala Ratjada, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/la-caracola`) |
 
 ## Dónde está
 

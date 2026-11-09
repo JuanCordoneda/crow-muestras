@@ -104,6 +104,16 @@ export const SITES = [
     include: ['index.html', 'og.jpg', 'fonts'],
     title: 'Maona', what: 'Restaurante + WhatsApp en alemán · Portocolom, Mallorca', origin: '__ORIGIN__',
   },
+  {
+    name: 'la-tabla', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'La Tabla', what: 'Restaurante + WhatsApp en alemán · Cala Bona, Mallorca', origin: '__ORIGIN__',
+  },
+  {
+    name: 'la-caracola', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'La Caracola', what: 'Restaurante + WhatsApp en alemán · Cala Ratjada, Mallorca', origin: '__ORIGIN__',
+  },
 ]
 
 // ROOT_SITE: el servicio de Railway que sirve una sola muestra en la raíz de su propio dominio
