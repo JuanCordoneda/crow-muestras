@@ -95,6 +95,11 @@ export const SITES = [
     title: 'El Sol & La Luna · Web + WhatsApp', what: 'Restaurante colombiano y mexicano + WhatsApp · París 5e', origin: '__ORIGIN__',
   },
   {
+    name: 'celina-tours', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'crow-icon.png', 'crow-wordmark.png', 'img', 'fonts'],
+    title: 'Celina Tours', what: 'Tours en Lisboa + WhatsApp (demo)', origin: '__ORIGIN__',
+  },
+  {
     name: 'maona', kind: 'static', from: '.',
     include: ['index.html', 'og.jpg', 'fonts'],
     title: 'Maona', what: 'Restaurante + WhatsApp en alemán · Portocolom, Mallorca', origin: '__ORIGIN__',

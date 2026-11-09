@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Celina Tours · Passeios em Lisboa</title>
+<meta name="description" content="Exemplo: passeios em Lisboa com a Celina Tours e um assistente de WhatsApp que deixa a reserva pronta para o Nelson Baptista confirmar.">
+<link rel="canonical" href="__ORIGIN__/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:locale:alternate" content="en_GB">
+<meta property="og:site_name" content="Celina Tours">
+<meta property="og:title" content="Celina Tours · Passeios em Lisboa">
+<meta property="og:description" content="Exemplo: às 23h, o WhatsApp deixa a reserva pronta para o Nelson Baptista confirmar.">
+<meta property="og:url" content="__ORIGIN__/">
+<meta property="og:image" content="__ORIGIN__/og.jpg?v=1">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#14264f">
+<link rel="icon" href="crow-icon.png" type="image/png">
+<style>
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(fonts/cormorant-italic-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:500 600;font-display:swap;src:url(fonts/cormorant-italic-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 600;font-display:swap;src:url(fonts/cormorant-normal-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:500 600;font-display:swap;src:url(fonts/cormorant-normal-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/inter-normal-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/inter-normal-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+/* Cores de Lisboa: azul de azulejo e amarelo de elétrico, sobre papel creme. */
+:root{
+  --papel:#f7f3ea; --papel2:#efe8d9; --cartao:#fffdf9; --tinta:#14264f; --tinta2:#43506f; --mudo:#68728a; --linha:#e3dccd;
+  --azul:#1f4e9c; --azul-esc:#173b78; --azul-cl:#e6edf8; --terra:#b9482a; --terra-esc:#983a21; --amarelo:#f2b632; --verde:#2f7d57; --verde-cl:#e6f3ec;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif; --sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --r:14px; --sombra:0 1px 2px rgba(20,38,79,.06),0 8px 24px rgba(20,38,79,.07);
+  --wa-bg:#0b141a; --wa-bar:#202c33; --wa-in:#202c33; --wa-out:#005c4b; --wa-ink:#e9edef;
+  --wa-meta:rgba(233,237,239,.6); --wa-icon:#aebac1; --wa-sub:#8696a0; --wa-link:#53bdeb; --wa-green:#00a884;
+  --wa-font:-apple-system,BlinkMacSystemFont,'Helvetica Neue','Segoe UI',Roboto,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:116px}
+body{margin:0;background:var(--papel);color:var(--tinta);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{max-width:100%;display:block}
+a{color:var(--azul);text-underline-offset:3px}
+svg{width:1.2em;height:1.2em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.1;letter-spacing:-.01em}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--azul);outline-offset:2px;border-radius:6px}
+.wrap{width:100%;max-width:1160px;margin:0 auto;padding:0 20px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--tinta);color:#fff;padding:8px 14px;border-radius:8px;z-index:100}
+.skip:focus{left:8px}
+
+/* Cartaz «Exemplo» */
+.exemplo-faixa{background:var(--amarelo);color:#2a1e00;font-size:13.5px;line-height:1.35}
+.exemplo-faixa .wrap{display:flex;align-items:center;justify-content:center;gap:10px;padding-top:6px;padding-bottom:6px;text-align:center}
+.exemplo{display:inline-block;flex:none;background:var(--tinta);color:#fff;font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:5px 9px;border-radius:999px}
+
+/* Botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;background:var(--terra);color:#fff;border:0;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;transition:background .15s,transform .15s;min-height:48px}
+.btn:hover{background:var(--terra-esc)}
+.btn:active{transform:translateY(1px)}
+.btn-claro{background:var(--cartao);color:var(--tinta);border:1.5px solid var(--linha)}
+.btn-claro:hover{background:#fff;border-color:var(--tinta2)}
+.btn-vidro{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.5)}
+.btn-vidro:hover{background:rgba(255,255,255,.26)}
+
+/* Cabeçalho */
+.topo{position:sticky;top:0;z-index:20;background:rgba(247,243,234,.95);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid rgba(227,220,205,.7)}
+.topo-in{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.marca{font:600 27px/1 var(--serif);color:var(--tinta);text-decoration:none;white-space:nowrap}
+.marca i{color:var(--terra)}
+.topo nav{display:flex;align-items:center;gap:22px;font-size:15px}
+.topo nav a{color:var(--tinta);text-decoration:none;font-weight:500}
+.topo nav a:hover{color:var(--azul)}
+.linguas{display:inline-flex;border:1.5px solid var(--linha);border-radius:999px;padding:2px;background:var(--cartao)}
+.linguas button{border:0;background:none;border-radius:999px;font-size:13px;font-weight:600;padding:0 11px;min-height:40px;min-width:44px;cursor:pointer;color:var(--tinta2)}
+.linguas button[aria-pressed="true"]{background:var(--tinta);color:#fff}
+@media (max-width:640px){.topo nav a{display:none}.marca{font-size:25px}}
+
+/* Hero */
+.hero{position:relative;color:#fff;isolation:isolate;overflow:hidden;background:var(--tinta)}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(14,24,56,.3) 0%,rgba(14,24,56,.55) 50%,rgba(14,24,56,.9) 100%)}
+@media (min-width:900px){.hero::after{background:linear-gradient(90deg,rgba(14,24,56,.9) 0%,rgba(14,24,56,.68) 42%,rgba(14,24,56,0) 72%)}}
+.hero-txt{padding-top:clamp(150px,20vw,210px);padding-bottom:clamp(56px,8vw,96px)}
+.sobre-titulo{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin:0 0 12px;color:rgba(255,255,255,.88)}
+.hero h1{font-size:clamp(44px,6.4vw,72px);max-width:14ch;text-wrap:balance}
+.hero h1 em{color:#ffd77e;font-style:italic}
+.lead{font-size:clamp(17px,2vw,19px);max-width:46ch;margin:14px 0 24px;color:rgba(255,255,255,.94)}
+.acoes{display:flex;flex-wrap:wrap;gap:10px}
+
+/* Azulejos */
+.azulejos{height:42px;background:url(img/azulejo.svg) 0 0/42px 42px}
+
+/* Secções */
+.secao{padding:64px 0}
+.titulo-secao{font-size:clamp(32px,4vw,44px);margin-bottom:8px}
+.sub-secao{color:var(--tinta2);font-size:17px;margin-bottom:26px;max-width:60ch}
+
+/* Cartões de passeios */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:18px}
+.card{position:relative;display:flex;flex-direction:column;background:var(--cartao);border-radius:18px;overflow:hidden;color:inherit;border:1px solid var(--linha)}
+.card img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.card .exemplo{position:absolute;top:12px;left:12px}
+.card-txt{padding:18px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:28px;margin-bottom:8px}
+.card p{margin:0 0 14px;color:var(--tinta2);font-size:15px}
+.card-pe{margin-top:auto!important;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px!important}
+.card-pe span{color:var(--mudo)}
+.card-pe a{color:var(--terra);font-weight:600;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.card-pe a:hover{text-decoration:underline}
+
+/* Secção do WhatsApp */
+.noite{background:var(--tinta);color:#fff;padding:64px 0 72px}
+.noite-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,410px);grid-template-areas:"texto chat" "nelson chat";grid-template-rows:auto 1fr;gap:28px 56px;align-items:start}
+.noite-txt{grid-area:texto}
+.noite .hora-grande{font:600 clamp(60px,9vw,96px)/1 var(--serif);color:var(--amarelo);margin-bottom:6px}
+.noite h2{font-size:clamp(32px,4vw,44px);margin-bottom:12px;max-width:17ch}
+.noite-txt>p{color:rgba(255,255,255,.85);font-size:17px;max-width:48ch}
+.notas{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:9px;font-size:15px;color:rgba(255,255,255,.9)}
+.notas li{display:flex;gap:10px;align-items:flex-start}
+.notas svg{margin-top:3px;width:18px;height:18px;color:var(--amarelo);stroke-width:2.6}
+.coluna-chat{grid-area:chat;min-width:0}
+.nelson{grid-area:nelson;background:var(--cartao);color:var(--tinta);border-radius:20px;padding:20px 22px;box-shadow:var(--sombra)}
+.nelson.chegou{animation:pop .4s ease-out both}
+.nelson-cab{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.nelson-cab h3{font-size:26px}
+.selo-status{display:inline-block;font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;background:#fff4e0;color:#7a4b00}
+.ficha{margin:14px 0 0;border-top:1px solid var(--linha)}
+.ficha div{display:grid;grid-template-columns:128px 1fr;gap:12px;padding:8px 0;border-bottom:1px solid var(--linha);font-size:15px}
+.ficha dt{color:var(--mudo)}
+.ficha dd{margin:0;font-weight:500}
+.nelson-pe{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13.5px;color:var(--mudo)}
+@media (max-width:860px){.noite-in{grid-template-columns:minmax(0,1fr);grid-template-areas:"texto" "chat" "nelson";grid-template-rows:none}}
+
+/* Chat de WhatsApp */
+.wa{border-radius:22px;overflow:hidden;background:var(--wa-bg);border:1px solid #1d272d;box-shadow:0 24px 60px -24px rgba(0,0,0,.8),0 0 0 6px #0a1329;font-family:var(--wa-font);color:var(--wa-ink);display:flex;flex-direction:column}
+.wa-top{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 8px;background:var(--wa-bar)}
+.wa-top .back{width:22px;height:22px;color:var(--wa-icon)}
+.wa-avatar{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--azul);color:#fff;font:600 16px/1 var(--serif)}
+.wa-who{flex:1;min-width:0}
+.wa-name{font-size:15.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wa-status{font-size:12.5px;color:var(--wa-sub);transition:color .2s}
+.wa-status.is-typing{color:var(--wa-green)}
+.wa .exemplo{background:var(--amarelo);color:#2a1e00}
+.wa-body{height:min(590px,72vh);overflow-y:auto;padding:12px 10px 14px;display:flex;flex-direction:column;gap:3px;background-color:var(--wa-bg);background-image:radial-gradient(rgba(255,255,255,.035) 1px,transparent 1.2px);background-size:18px 18px;scrollbar-width:thin;scrollbar-color:#2a3942 transparent}
+.wa-body:focus-visible{outline-offset:-3px}
+.wa-date{align-self:center;flex:none;margin:2px 0 10px;padding:5px 12px;border-radius:8px;background:#182229;color:var(--wa-sub);font-size:12px;text-transform:uppercase;letter-spacing:.02em}
+.msg{position:relative;display:flex;flex:none;flex-direction:column;max-width:86%}
+.msg.in{align-self:flex-start}
+.msg.out{align-self:flex-end;align-items:flex-end}
+.msg.gap{margin-top:9px}
+.bubble{position:relative;padding:6px 8px 7px 9px;border-radius:8px;font-size:14.6px;line-height:1.38;box-shadow:0 1px .5px rgba(0,0,0,.13);overflow-wrap:anywhere}
+.in .bubble{background:var(--wa-in)}
+.out .bubble{background:var(--wa-out)}
+.bubble strong{font-weight:600}
+.bubble p+p{margin-top:4px}
+.tail.in .bubble{border-top-left-radius:0}
+.tail.out .bubble{border-top-right-radius:0}
+.tail.in .bubble::before,.tail.out .bubble::before{content:"";position:absolute;top:0;width:8px;height:13px}
+.tail.in .bubble::before{left:-8px;background:var(--wa-in);clip-path:polygon(100% 0,0 0,100% 100%)}
+.tail.out .bubble::before{right:-8px;background:var(--wa-out);clip-path:polygon(0 0,100% 0,0 100%)}
+.meta{float:right;display:inline-flex;align-items:center;gap:3px;margin:6px 0 -4px 10px;font-size:11px;color:var(--wa-meta);line-height:1}
+.ticks{width:16px;height:11px;color:var(--wa-meta);stroke-width:1.6;transition:color .3s}
+.ticks.read{color:var(--wa-link)}
+.opt{margin-top:6px;padding:8px 10px;border-radius:7px;background:rgba(255,255,255,.06);border-left:3px solid var(--wa-green)}
+.opt small{display:block;font-size:13px;color:rgba(233,237,239,.78);line-height:1.34;margin-top:1px}
+.pedido{margin-top:6px;padding:8px 10px;border-radius:7px;background:rgba(255,255,255,.06)}
+.pedido p+p{margin-top:2px}
+.pend{margin-top:7px!important;color:#ffd58a;font-weight:500}
+.dots{display:none;padding:12px 14px;border-radius:0 8px 8px 8px;background:var(--wa-in);gap:4px}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--wa-sub);animation:blink 1.2s infinite both}
+.dots i:nth-child(2){animation-delay:.18s}
+.dots i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-2px)}}
+.wa-compose{display:flex;align-items:center;gap:8px;padding:8px;background:var(--wa-bg)}
+.wa-input{flex:1;padding:10px 14px;border-radius:24px;background:var(--wa-bar);color:var(--wa-sub);font-size:15px}
+.wa-mic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--wa-green);color:#0b141a;flex:none}
+.wa-mic svg{width:20px;height:20px;stroke-width:2.2}
+
+/* Reprodução: as mensagens aparecem por ordem e o chat acompanha, sem mexer na página */
+.wa.armed [data-step]{display:none}
+.wa.armed [data-step].shown{display:flex;animation:pop .28s ease-out both}
+.wa.armed [data-step].typing{display:flex}
+.wa.armed [data-step].typing>.bubble{display:none}
+.wa.armed [data-step].typing .dots{display:flex}
+@keyframes pop{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+.sob-chat{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:16px;font-size:13px;color:rgba(255,255,255,.72)}
+.replay{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:none;color:#fff;font:500 13px/1 var(--sans);cursor:pointer}
+.replay:hover{background:rgba(255,255,255,.1)}
+.replay[hidden]{display:none}
+.noite :focus-visible{outline-color:var(--amarelo)}
+
+/* Como funciona */
+.passos{list-style:none;counter-reset:p;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px}
+.passos li{counter-increment:p;background:var(--cartao);border:1px solid var(--linha);border-radius:var(--r);padding:20px}
+.passos li::before{content:counter(p);width:36px;height:36px;border-radius:50%;background:var(--azul-cl);color:var(--azul-esc);display:grid;place-items:center;font-weight:600;margin-bottom:12px}
+.passos h3{font-size:25px;margin-bottom:6px}
+.passos p{color:var(--tinta2);font-size:15px}
+
+/* Contacto */
+.contacto{padding-top:0}
+.faixa{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;background:var(--azul);color:#fff;border-radius:24px;padding:32px clamp(20px,4vw,44px)}
+.faixa h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:6px}
+.faixa p{color:rgba(255,255,255,.88);max-width:52ch}
+
+/* Rodapé */
+.rodape{background:var(--tinta);color:rgba(255,255,255,.75);padding:44px 0 24px;font-size:15px}
+.rodape-in{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+.rodape .marca{color:#fff;display:block;margin-bottom:10px}
+.rodape .marca i{color:var(--amarelo)}
+.rodape h2{font-family:var(--sans);font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#fff;margin:4px 0 12px}
+.rodape ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.rodape a{color:rgba(255,255,255,.85);text-decoration:none}
+.rodape a:hover{color:#fff;text-decoration:underline}
+.credito{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);font-size:13px}
+.crow{display:inline-flex;align-items:center;gap:8px;opacity:.75}
+@media (max-width:760px){.rodape-in{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#conteudo" data-t="skip">Saltar para o conteúdo</a>
+
+<header class="topo">
+  <div class="exemplo-faixa"><div class="wrap"><span class="exemplo">Exemplo</span><span data-t="faixa">Demonstração: os passeios, os nomes e as datas são ilustrativos.</span></div></div>
+  <div class="wrap topo-in">
+    <a class="marca" href="#conteudo">Celina <i>Tours</i></a>
+    <nav aria-label="Principal">
+      <a href="#passeios" data-t="nav1">Passeios</a>
+      <a href="#whatsapp">WhatsApp</a>
+      <a href="#contacto" data-t="nav3">Contacto</a>
+      <span class="linguas" role="group" aria-label="Idioma / Language">
+        <button type="button" data-lang="pt" aria-pressed="true">PT</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </span>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo">
+  <section class="hero">
+    <img src="img/lisboa.svg" alt="" fetchpriority="high">
+    <div class="wrap hero-txt">
+      <p class="sobre-titulo" data-t="heroTop">Celina Tours · Lisboa</p>
+      <h1 data-t="heroH">Lisboa, vista <em>de perto</em>.</h1>
+      <p class="lead" data-t="heroP">Escolha o passeio, indique o dia e o Nelson Baptista confirma a reserva consigo.</p>
+      <div class="acoes">
+        <a class="btn" href="#passeios" data-t="heroB1">Ver passeios</a>
+        <a class="btn btn-vidro" href="#whatsapp" data-t="heroB2">O WhatsApp às 23h</a>
+      </div>
+    </div>
+  </section>
+  <div class="azulejos" aria-hidden="true"></div>
+
+  <section class="secao" id="passeios" aria-labelledby="passeios-t">
+    <div class="wrap">
+      <h2 id="passeios-t" class="titulo-secao" data-t="passH">Passeios</h2>
+      <p class="sub-secao" data-t="passP">Dois passeios de exemplo, para mostrar como fica esta página.</p>
+      <div class="cards">
+        <article class="card">
+          <img src="img/alfama.svg" alt="" loading="lazy">
+          <span class="exemplo">Exemplo</span>
+          <div class="card-txt">
+            <h3 data-t="t1">Alfama e Mouraria</h3>
+            <p data-t="t1p">Ruas estreitas, miradouros e histórias de dois dos bairros mais antigos de Lisboa.</p>
+            <p class="card-pe"><span data-t="preco">Preço a confirmar com o Nelson</span><a href="#whatsapp" data-t="pedir">Pedir pelo WhatsApp</a></p>
+          </div>
+        </article>
+        <article class="card">
+          <img src="img/belem.svg" alt="" loading="lazy">
+          <span class="exemplo">Exemplo</span>
+          <div class="card-txt">
+            <h3 data-t="t2">Belém à beira-Tejo</h3>
+            <p data-t="t2p">Os monumentos de Belém e um passeio a pé junto ao rio.</p>
+            <p class="card-pe"><span data-t="preco">Preço a confirmar com o Nelson</span><a href="#whatsapp" data-t="pedir">Pedir pelo WhatsApp</a></p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="noite" id="whatsapp" aria-labelledby="whatsapp-t">
+    <div class="wrap noite-in">
+      <div class="noite-txt">
+        <p class="hora-grande">23h</p>
+        <h2 id="whatsapp-t" data-t="noiteH">O Nelson já descansa. A reserva fica pronta na mesma.</h2>
+        <p data-t="noiteP">Uma turista escreve no WhatsApp da Celina Tours. O assistente responde na língua dela e deixa tudo pronto.</p>
+        <ul class="notas">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-t="n1">Propõe dois passeios para as duas pessoas.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-t="n2">Confirma a data de sábado e regista o pedido.</span></li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg><span data-t="n3">Não indica preços nem confirma sozinho: essa decisão é do Nelson.</span></li>
+        </ul>
+      </div>
+
+      <div class="coluna-chat">
+        <div class="wa" lang="en" data-chat>
+          <div class="wa-top">
+            <svg class="back" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            <div class="wa-avatar" aria-hidden="true">C</div>
+            <div class="wa-who">
+              <div class="wa-name">Celina Tours</div>
+              <div class="wa-status" data-status>online</div>
+            </div>
+            <span class="exemplo">Exemplo</span>
+          </div>
+          <div class="wa-body" tabindex="0" role="log" aria-label="WhatsApp">
+            <div class="wa-date">Today</div>
+
+            <div class="msg out tail" data-step>
+              <div class="bubble"><p>Hi! Do you do tours in Lisbon? We're 2 people and we'd love to go this Saturday.</p><span class="meta">23:04 <svg class="ticks" viewBox="0 0 16 11"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+            </div>
+
+            <div class="msg in tail gap" data-step>
+              <div class="bubble"><p>Hi, and welcome to Celina Tours! 👋 I'm the virtual assistant, and I can get your request ready tonight.</p><span class="meta">23:04</span></div>
+              <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="msg in" data-step>
+              <div class="bubble">
+                <p>Here are two options for 2 people:</p>
+                <div class="opt"><strong>1. Alfama &amp; Mouraria</strong><small>Narrow streets, viewpoints and stories from two of Lisbon's oldest neighbourhoods.</small></div>
+                <div class="opt"><strong>2. Belém by the river</strong><small>Belém's monuments and a walk along the Tagus.</small></div>
+                <span class="meta">23:04</span>
+              </div>
+              <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="msg out tail gap" data-step>
+              <div class="bubble"><p>The first one sounds lovely!</p><span class="meta">23:05 <svg class="ticks" viewBox="0 0 16 11"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+            </div>
+
+            <div class="msg in tail gap" data-step>
+              <div class="bubble"><p>Great choice! So that's <strong data-sabado>Saturday 14 November</strong>, right? Would you prefer the morning or the afternoon?</p><span class="meta">23:05</span></div>
+              <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="msg out tail gap" data-step>
+              <div class="bubble"><p>Yes, that's the one. Morning, please.</p><span class="meta">23:06 <svg class="ticks" viewBox="0 0 16 11"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+            </div>
+
+            <div class="msg in tail gap" data-step>
+              <div class="bubble"><p>Perfect. What name should I put on the booking?</p><span class="meta">23:06</span></div>
+              <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="msg out tail gap" data-step>
+              <div class="bubble"><p>Emily, thanks!</p><span class="meta">23:06 <svg class="ticks" viewBox="0 0 16 11"><path d="M1 6l3 3 6-7.5M6.5 8.5 7 9l6-7.5"/></svg></span></div>
+            </div>
+
+            <div class="msg in tail gap" data-step data-final>
+              <div class="bubble">
+                <p>Thank you, Emily! Your booking is ready for Nelson Baptista:</p>
+                <div class="pedido">
+                  <p><strong>Alfama &amp; Mouraria</strong></p>
+                  <p><span data-sabado>Saturday 14 November</span>, morning</p>
+                  <p>2 people</p>
+                </div>
+                <p class="pend">🕓 Waiting for Nelson's confirmation</p>
+                <p>He'll confirm it with you here, along with the exact time and the price.</p>
+                <span class="meta">23:07</span>
+              </div>
+              <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+          </div>
+          <div class="wa-compose" aria-hidden="true">
+            <div class="wa-input">Message</div>
+            <div class="wa-mic"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></div>
+          </div>
+        </div>
+        <div class="sob-chat">
+          <span data-t="sobChat">A turista escreve em inglês. O assistente responde em inglês.</span>
+          <button class="replay" type="button" data-replay data-t="replay">Ver de novo</button>
+        </div>
+      </div>
+
+      <section class="nelson" data-nelson aria-labelledby="nelson-t">
+        <div class="nelson-cab">
+          <h3 id="nelson-t" data-t="nelH">O que o Nelson recebe</h3>
+          <span class="selo-status" data-t="nelEstado">Por confirmar</span>
+        </div>
+        <dl class="ficha">
+          <div><dt data-t="f1">Passeio</dt><dd data-t="t1">Alfama e Mouraria</dd></div>
+          <div><dt data-t="f2">Data</dt><dd data-sabado-pagina>sábado, 14 de novembro</dd></div>
+          <div><dt data-t="f3">Período</dt><dd data-t="f3v">De manhã</dd></div>
+          <div><dt data-t="f4">Pessoas</dt><dd>2</dd></div>
+          <div><dt data-t="f5">Nome</dt><dd>Emily</dd></div>
+          <div><dt data-t="f6">Língua</dt><dd data-t="f6v">Inglês</dd></div>
+          <div><dt data-t="f7">Hora e preço</dt><dd data-t="f7v">A definir pelo Nelson</dd></div>
+        </dl>
+        <p class="nelson-pe"><span class="exemplo">Exemplo</span><span data-t="nelPe">Pedido recebido às 23:07</span></p>
+      </section>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="como-t">
+    <div class="wrap">
+      <h2 id="como-t" class="titulo-secao" data-t="comoH">Como funciona</h2>
+      <p class="sub-secao" data-t="comoP">Do primeiro contacto à reserva, sem perder mensagens durante a noite.</p>
+      <ol class="passos">
+        <li><h3 data-t="p1">Quem visita escreve</h3><p data-t="p1p">A qualquer hora, pelo WhatsApp da Celina Tours.</p></li>
+        <li><h3 data-t="p2">O assistente prepara</h3><p data-t="p2p">Sugere passeios, recolhe a data, o número de pessoas e o nome.</p></li>
+        <li><h3 data-t="p3">O Nelson confirma</h3><p data-t="p3p">Vê o pedido pronto, indica a hora e o preço e confirma com o cliente.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="secao contacto" id="contacto" aria-labelledby="contacto-t">
+    <div class="wrap">
+      <div class="faixa">
+        <div>
+          <h2 id="contacto-t" data-t="contH">Fale com o Nelson Baptista</h2>
+          <p data-t="contP">O seu contacto na Celina Tours para passeios em Lisboa.</p>
+        </div>
+        <a class="btn btn-claro" href="#whatsapp" data-t="contB">Ver o exemplo no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  <div class="wrap rodape-in">
+    <div>
+      <span class="marca">Celina <i>Tours</i></span>
+      <p data-t="rodP">Passeios em Lisboa.</p>
+    </div>
+    <div>
+      <h2 data-t="nav1">Passeios</h2>
+      <ul>
+        <li><a href="#passeios" data-t="t1">Alfama e Mouraria</a></li>
+        <li><a href="#passeios" data-t="t2">Belém à beira-Tejo</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2 data-t="nav3">Contacto</h2>
+      <ul><li>Nelson Baptista</li></ul>
+    </div>
+  </div>
+  <div class="wrap credito">
+    <span>© Celina Tours</span>
+    <span class="crow"><small data-t="credito">Design e desenvolvimento</small><img src="crow-icon.png" alt="" width="18" height="18"><img src="crow-wordmark.png" alt="Crow Agency" width="90" height="14"></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var EN = {
+    skip: 'Skip to content',
+    faixa: 'Demo: the tours, names and dates are for illustration only.',
+    nav1: 'Tours', nav3: 'Contact',
+    heroTop: 'Celina Tours · Lisbon',
+    heroH: 'Lisbon, seen <em>up close</em>.',
+    heroP: 'Choose your tour, tell us the day, and Nelson Baptista will confirm your booking with you.',
+    heroB1: 'See the tours', heroB2: 'WhatsApp at 11 pm',
+    passH: 'Tours',
+    passP: 'Two example tours, to show how this page will look.',
+    t1: 'Alfama &amp; Mouraria',
+    t1p: "Narrow streets, viewpoints and stories from two of Lisbon's oldest neighbourhoods.",
+    t2: 'Belém by the river',
+    t2p: "Belém's monuments and a walk along the Tagus.",
+    preco: 'Price to be confirmed with Nelson', pedir: 'Ask on WhatsApp',
+    noiteH: 'Nelson is off for the night. The booking still gets ready.',
+    noiteP: 'A tourist writes to Celina Tours on WhatsApp. The assistant replies in her language and gets everything ready.',
+    n1: 'It suggests two tours for the two of them.',
+    n2: 'It confirms the Saturday date and records the request.',
+    n3: "It doesn't quote prices or confirm on its own: that's Nelson's call.",
+    sobChat: 'The tourist writes in English. The assistant replies in English.',
+    replay: 'Watch again',
+    nelH: 'What Nelson receives', nelEstado: 'To be confirmed',
+    f1: 'Tour', f2: 'Date', f3: 'Time of day', f3v: 'Morning', f4: 'People', f5: 'Name', f6: 'Language', f6v: 'English',
+    f7: 'Time and price', f7v: 'To be set by Nelson',
+    nelPe: 'Request received at 23:07',
+    comoH: 'How it works',
+    comoP: 'From first message to booking, without losing anyone overnight.',
+    p1: 'The visitor writes', p1p: 'At any hour, on the Celina Tours WhatsApp.',
+    p2: 'The assistant prepares', p2p: 'It suggests tours and collects the date, the number of people and the name.',
+    p3: 'Nelson confirms', p3p: 'He sees the request ready, sets the time and price, and confirms with the customer.',
+    contH: 'Talk to Nelson Baptista',
+    contP: 'Your contact at Celina Tours for tours in Lisbon.',
+    contB: 'See the WhatsApp example',
+    rodP: 'Tours in Lisbon.',
+    credito: 'Design and development'
+  }
+  var META = {
+    pt: { title: document.title, desc: document.querySelector('meta[name=description]').content },
+    en: { title: 'Celina Tours · Tours in Lisbon', desc: 'Example: tours in Lisbon with Celina Tours and a WhatsApp assistant that gets the booking ready for Nelson Baptista to confirm.' }
+  }
+
+  // O próximo sábado, para o exemplo nunca ficar com uma data passada.
+  var sabado = new Date()
+  sabado.setDate(sabado.getDate() + ((6 - sabado.getDay() + 7) % 7 || 7))
+  var mes = function (loc) { return sabado.toLocaleDateString(loc, { month: 'long' }) }
+  var sabEN = 'Saturday ' + sabado.getDate() + ' ' + mes('en-GB')
+  var sabPT = 'sábado, ' + sabado.getDate() + ' de ' + mes('pt-PT')
+  document.querySelectorAll('[data-sabado]').forEach(function (e) { e.textContent = sabEN })
+
+  var traduzidos = [].slice.call(document.querySelectorAll('[data-t]'))
+  traduzidos.forEach(function (e) { e._pt = e.innerHTML })
+
+  function setLang(l) {
+    document.documentElement.lang = l === 'en' ? 'en' : 'pt-PT'
+    traduzidos.forEach(function (e) { e.innerHTML = l === 'en' ? EN[e.dataset.t] : e._pt })
+    document.querySelector('[data-sabado-pagina]').textContent = l === 'en' ? sabEN : sabPT
+    document.title = META[l].title
+    document.querySelector('meta[name=description]').content = META[l].desc
+    document.querySelectorAll('[data-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.lang === l)) })
+  }
+  document.querySelectorAll('[data-lang]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      setLang(b.dataset.lang)
+      var url = new URL(location.href)
+      if (b.dataset.lang === 'en') url.searchParams.set('lang', 'en'); else url.searchParams.delete('lang')
+      history.replaceState(null, '', url)
+    })
+  })
+  setLang(new URLSearchParams(location.search).get('lang') === 'en' ? 'en' : 'pt')
+
+  // ——— Chat ———
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms) }) }
+  var chat = document.querySelector('[data-chat]')
+  var body = chat.querySelector('.wa-body')
+  var status = chat.querySelector('[data-status]')
+  var nelson = document.querySelector('[data-nelson]')
+  var steps = [].slice.call(chat.querySelectorAll('[data-step]'))
+  var run = 0
+
+  function setStatus(typing) {
+    status.textContent = typing ? 'typing…' : 'online'
+    status.classList.toggle('is-typing', typing)
+  }
+  function ticks(read) {
+    chat.querySelectorAll('.ticks').forEach(function (t) { t.classList.toggle('read', read) })
+  }
+  function bottom() { body.scrollTop = body.scrollHeight }
+
+  async function play() {
+    var mine = ++run
+    steps.forEach(function (s) { s.classList.remove('shown', 'typing') })
+    ticks(false); setStatus(false); nelson.classList.remove('chegou')
+    chat.classList.add('armed')
+    body.scrollTop = 0
+    await wait(400)
+    for (var i = 0; i < steps.length; i++) {
+      var step = steps[i]
+      if (step.classList.contains('out')) {
+        await wait(i === 0 ? 200 : 1100)
+        if (mine !== run) return
+        step.classList.add('shown')
+      } else {
+        await wait(step.classList.contains('tail') ? 700 : 250)
+        if (mine !== run) return
+        setStatus(true); step.classList.add('typing'); bottom()
+        await wait(Math.min(1700, Math.max(800, step.querySelector('.bubble').textContent.length * 16)))
+        if (mine !== run) return
+        step.classList.remove('typing'); step.classList.add('shown')
+        setStatus(false); ticks(true)
+      }
+      bottom()
+    }
+    nelson.classList.add('chegou')
+  }
+
+  if (reduce || !('IntersectionObserver' in window)) {
+    ticks(true)
+  } else {
+    chat.classList.add('armed')
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { io.disconnect(); play() }
+    }, { threshold: 0.35 })
+    io.observe(chat)
+    document.querySelector('[data-replay]').addEventListener('click', play)
+  }
+  if (reduce) document.querySelector('[data-replay]').hidden = true
+})()
+</script>
+</body>
+</html>

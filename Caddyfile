@@ -20,12 +20,12 @@
 	header @html Cache-Control "no-cache"
 
 	# /comptoir → /comptoir/: sin la barra final, las rutas relativas (img/…) apuntarían a la raíz.
-	@bare path_regexp ^/(comptoir|sol-y-luna|sculpt-detox|ltb-concept|atelie-queijos|barberia|pangus|reijane|latins|ultras-barber|la-escondida|inca|tropicalisimo|sol-y-luna-whatsapp|maona)$
+	@bare path_regexp ^/(comptoir|sol-y-luna|sculpt-detox|ltb-concept|atelie-queijos|barberia|pangus|reijane|latins|ultras-barber|la-escondida|inca|tropicalisimo|sol-y-luna-whatsapp|maona|celina-tours)$
 	redir @bare {path}/ 308
 
 	# Dentro de cada muestra: el fichero, la página prerenderizada (/sitio/en → en/index.html) y,
 	# si no existe, la 404 de la web o su portada (las apps de una sola página se enrutan solas).
-	@site path_regexp site ^/(comptoir|sol-y-luna|sculpt-detox|ltb-concept|atelie-queijos|barberia|pangus|reijane|latins|ultras-barber|la-escondida|inca|tropicalisimo|sol-y-luna-whatsapp|maona)/
+	@site path_regexp site ^/(comptoir|sol-y-luna|sculpt-detox|ltb-concept|atelie-queijos|barberia|pangus|reijane|latins|ultras-barber|la-escondida|inca|tropicalisimo|sol-y-luna-whatsapp|maona|celina-tours)/
 	handle @site {
 		try_files {path} {path}/index.html /{re.site.1}/404.html /{re.site.1}/index.html
 		file_server
