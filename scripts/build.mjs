@@ -65,6 +65,11 @@ export const SITES = [
     title: "Latin's Barber Shop · WhatsApp", what: 'Barbería · París 17e', origin: '__ORIGIN__',
   },
   {
+    name: 'ultras-barber', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'Ultras Barber · WhatsApp', what: 'Barbería · París 18e', origin: '__ORIGIN__',
+  },
+  {
     name: 'reijane', kind: 'static', from: '.',
     include: ['index.html', 'whatsapp.html', 'base.css', 'og.jpg', 'fonts'],
     title: 'Lissage brésilien Paris by Reijane', what: 'Salón de alisado brasileño + demo de WhatsApp · París 16e', origin: '__ORIGIN__',

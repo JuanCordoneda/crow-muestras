@@ -17,6 +17,7 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/la-escondida/` | La Escondida · web + chats de WhatsApp (demo móvil) | Un solo HTML sin build (`sites/la-escondida`) |
 | `/pangus/` | Pangus · web en francés + chats de WhatsApp (demo) | HTML sin build (`sites/pangus`) |
 | `/latins/` | Latin's Barber Shop · WhatsApp que contesta solo (demo) | Un solo HTML (`sites/latins`) |
+| `/ultras-barber/` | Ultras Barber · ejemplo de WhatsApp en francés (demo) | Un solo HTML (`sites/ultras-barber`) |
 | `/reijane/` | Lissage brésilien Paris by Reijane + demo del asistente de WhatsApp | HTML sin build (`sites/reijane`) |
 | `/inca/` | INCA fusion latina · web en francés + chats de WhatsApp (demo) | HTML + JS sin build (`sites/inca`) |
 | `/tropicalisimo/` | Tropicalisimo · web ES/FR + chats de WhatsApp (demo móvil) | HTML + JS sin build (`sites/tropicalisimo`) |
