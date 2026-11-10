@@ -116,7 +116,7 @@ export const SITES = [
   },
   {
     name: 'dj-dadicool', kind: 'static', from: '.',
-    include: ['index.html', 'og.jpg', 'fonts'],
+    include: ['index.html', 'og.jpg', 'img', 'video', 'fonts'],
     title: 'DJ Dadicool', what: 'DJ de casamientos · landing para anuncios + WhatsApp · París', origin: '__ORIGIN__',
   },
 ]
