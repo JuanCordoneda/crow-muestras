@@ -25,6 +25,7 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/maona/` | Maona (Portocolom, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/maona`) |
 | `/la-tabla/` | La Tabla (Cala Bona, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/la-tabla`) |
 | `/la-caracola/` | La Caracola (Cala Ratjada, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/la-caracola`) |
+| `/dj-dadicool/` | DJ Dadicool (París e Île-de-France) · landing de casamientos en francés para anuncios + demo de WhatsApp | Un solo HTML (`sites/dj-dadicool`) |
 
 ## Dónde está
 
