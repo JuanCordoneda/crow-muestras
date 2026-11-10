@@ -91,7 +91,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .stage{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(130% 55% at 50% 72%,#5a2470 0,#2a1238 45%,transparent 75%),var(--night)}
 .stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 video::-webkit-media-controls-start-playback-button{display:none}
-.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(13,8,18,.6),rgba(13,8,18,.15) 26%,rgba(13,8,18,.66) 50%,rgba(13,8,18,.9) 72%,var(--night))}
+.stage::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(13,8,18,.82),rgba(13,8,18,.2) 20%,rgba(13,8,18,.72) 46%,rgba(13,8,18,.92) 66%,var(--night))}
 .brand{font:500 25px/1 var(--f-display);letter-spacing:.02em}
 .brand em{color:var(--gold)}
 .hero-copy{max-width:640px}
@@ -221,11 +221,7 @@ footer{padding:18px 20px calc(18px + env(safe-area-inset-bottom));text-align:cen
 
   <section class="hero">
     <div class="stage" aria-hidden="true">
-      <!-- En el celular, el mismo video recodificado a 540p: el original pesa 50 MB -->
-      <video autoplay muted loop playsinline preload="metadata" poster="img/hero.jpg">
-        <source media="(max-width:719px)" src="video/hero-mobile.mp4" type="video/mp4">
-        <source src="https://djdadicool.com/wp-content/uploads/2026/05/dj-dadicool-mariage-marocain-mixte-seine-musicale-hero.mp4#t=1" type="video/mp4">
-      </video>
+      <video autoplay muted loop playsinline preload="metadata" poster="img/hero.jpg" src="https://djdadicool.com/wp-content/uploads/2026/06/dj-mariage-algerien-femmes-tenues-traditionnelles-dancefloor-dj-dadicool.mp4"></video>
     </div>
     <div class="brand">DJ <em>Dadicool</em></div>
     <div class="hero-copy">
@@ -431,8 +427,16 @@ footer{padding:18px 20px calc(18px + env(safe-area-inset-bottom));text-align:cen
     if (!window.open(url, '_blank')) location.href = url
   })
 
+  /* Portada: siempre en marcha, también con «reducir movimiento». Si iOS bloquea el autoplay (modo ahorro), arranca al primer toque */
+  const hero = $('.stage video')
+  const startHero = () => { if (hero.paused) { hero.muted = true; hero.play().catch(() => {}) } }
+  startHero()
+  hero.addEventListener('canplay', startHero)
+  addEventListener('pageshow', startHero)
+  for (const t of ['touchend', 'click', 'visibilitychange']) document.addEventListener(t, startHero, { passive: true })
+
   /* Videos: corren solo cerca de la pantalla. Con preload="metadata" Chrome igual baja varios MB, por eso el src va aquí */
-  const videos = $$('video')
+  const videos = $$('.vid video')
   if (reduce || navigator.connection?.saveData) {
     videos.forEach((v) => { v.autoplay = false; v.pause() })
   } else {
