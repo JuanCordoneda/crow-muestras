@@ -26,6 +26,7 @@ estático). Ninguna se indexa: `noindex, nofollow` en cada página, `X-Robots-Ta
 | `/la-tabla/` | La Tabla (Cala Bona, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/la-tabla`) |
 | `/la-caracola/` | La Caracola (Cala Ratjada, Mallorca) · chat de WhatsApp en alemán (ejemplo) | Un solo HTML (`sites/la-caracola`) |
 | `/dj-dadicool/` | DJ Dadicool (París e Île-de-France) · landing de casamientos en francés para anuncios + demo de WhatsApp | Un solo HTML (`sites/dj-dadicool`) |
+| `/the-paris-photographer/` | The Paris Photographer (París 16e) · presentación en inglés del asistente de WhatsApp e Instagram, con demo de 5 escenarios | Un solo HTML (`sites/the-paris-photographer`) |
 
 ## Dónde está
 

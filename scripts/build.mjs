@@ -119,6 +119,11 @@ export const SITES = [
     include: ['index.html', 'og.jpg', 'img', 'fonts'],
     title: 'DJ Dadicool', what: 'DJ de casamientos · landing para anuncios + WhatsApp · París', origin: '__ORIGIN__',
   },
+  {
+    name: 'the-paris-photographer', kind: 'static', from: '.',
+    include: ['index.html', 'og.jpg', 'fonts'],
+    title: 'The Paris Photographer', what: 'Estudio de fotos y video · demo del asistente de WhatsApp e Instagram · París 16e', origin: '__ORIGIN__',
+  },
 ]
 
 // ROOT_SITE: el servicio de Railway que sirve una sola muestra en la raíz de su propio dominio
